@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite</title>
+    <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!--Boostrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!--Styles-->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <!--Font Awesome-->
+    <script src="https://kit.fontawesome.com/e0095c3355.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-degradado">
+
+    <header>
+        <nav class="navbar navbar-light navbar-expand-md py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-5" href="/index.html">
+                    <i class="fas fa-arrow-left degradado-naranja"></i>
+                    <img src="/assets/images/Logo-Vite.png" />
+                </a>
+
+
+                <select id="selectTipoRegistro">
+                    <option value="empresa">Empresa</option>
+                    <option value="motorista">Motorista</option>
+                    <option value="cliente">Cliente</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <main>
+        <!--Proveedor-->
+        <section id="empresa" style="display: block;">
+            <div class="container">
+                <div class="row justify-content-center align-items-center vh-100">
+                    <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
+                        <!--Titulo-->
+                        <section>
+                            <div class="text-center mb-5">
+                                <h1 class="display-3 degradado-naranja">¡Te damos la Bienvenida!</h1>
+                                <h2>Registremos tu cuenta de Empresa</h2>
+                            </div>
+                        </section>
+                        <!--Formulario-->
+                        <section>
+                            <form class="row g-3">
+                                <!--Input Nombre Empresa-->
+                                <div class="col-12">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">Nombre Empresa</span>
+                                        <div id="input-source-nombres">
+                                            <div class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-user"></i>
+                                                <input id="inputNombreEmpresa" class="w-100 p-2" type="text" placeholder="Rosquilas la loca"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input ID-->
+                                <div class="col-12">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">ID de sanidad</span>
+                                        <div id="input-source-apellidos">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fa-solid fa-id-card"></i>
+                                                <input id="inputIDSanidad" class="w-100 p-2" type="text" placeholder="SN1234" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!--Inputs Area y telefono-->
+                                    <div class="col-4 col-md-3">
+                                        <div class="input-source-group"><span class="degradado-naranja ms-3">Télefono</span>
+                                            <div id="input-source-postal">
+                                                <div class="d-flex flex-row justify-content-between align-items-center input-source-simple">
+                                                    <select class="mx-auto" id="" style="all: unset;">
+                                                        <option value="+504">+504</option>
+                                                        <option value="+506">+506</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-8 col-md-9">
+                                        <div class="input-source-group"><span class="degradado-naranja ms-3"></span>
+                                            <div id="input-source-numero">
+                                                <div class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                    <i class="fas fa-phone"></i>
+                                                    <input id="inputNumero" class="w-100 p-2" type="text" placeholder="9999-0000" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <!--Input Correo electronico-->
+                                <div class="col-12">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">Correo
+                                            Electrónico</span>
+                                        <div id="input-source-correo">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-envelope"></i>
+                                                <input class="flex-fill p-2" id="inputCorreo" type="email"
+                                                    placeholder="hola@gmail.com" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input Contraseña-->
+
+                                <div class="col-12">
+                                    <div class="input-source-group">
+                                        <div class="d-flex justify-content-between mx-3"><span
+                                                class="degradado-naranja">Contraseña</span><span>mínimo 8
+                                                caracteres</span>
+                                        </div>
+                                        <div id="input-source-contrasena">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-lock"></i>
+                                                <input id="inputContrasena" class="w-100 p-2" type="password"
+                                                    placeholder="Contraseña" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <button class="btn btn-primary and-icon mx-auto" onclick="registrar('Empresa')">
+                                        Registrarse
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Motorista-->
+        <section id="motorista" style="display: none;">
+            <div class="container">
+                <div class="row justify-content-center align-items-center vh-100">
+                    <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
+                        <!--Titulo-->
+                        <section>
+                            <div class="text-center mb-5">
+                                <h1 class="display-3 degradado-naranja">¡Te damos la Bienvenida!</h1>
+                                <h2>Registremos tu cuenta de Motorista</h2>
+                            </div>
+                        </section>
+                        <!--Formulario-->
+                        <section>
+                            <form class="row g-3">
+                                <!--Input Nombres-->
+                                <div class="col-6">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">Nombres</span>
+                                        <div id="input-source-nombres">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-user"></i>
+                                                <input id="inputNombreMotorista" class="w-100 p-2" type="text"
+                                                    placeholder="Yamir" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Input Apellidos-->
+                                <div class="col-6">
+                                    <div class="input-source-group"><span
+                                            class="degradado-naranja ms-3">Apellidos</span>
+                                        <div id="input-source-apellidos">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-user"></i>
+                                                <input id="inputApellidoMotorista" class="w-100 p-2" type="text"
+                                                    placeholder="Rodas" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input ID-->
+                                <div class="col-12">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">ID</span>
+                                        <div id="input-source-apellidos">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fa-solid fa-id-card"></i>
+                                                <input id="inputIDMotorista" class="w-100 p-2" type="text"
+                                                    placeholder="0816-2001-xxxx" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input Correo electronico-->
+                                <div class="col-12">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">Correo
+                                            Electrónico</span>
+                                        <div id="input-source-correo">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-envelope"></i>
+                                                <input class="flex-fill p-2" id="inputCorreo" type="email"
+                                                    placeholder="hola@gmail.com" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input Contraseña-->
+
+                                <div class="col-12">
+                                    <div class="input-source-group">
+                                        <div class="d-flex justify-content-between mx-3"><span
+                                                class="degradado-naranja">Contraseña</span><span>mínimo 8
+                                                caracteres</span>
+                                        </div>
+                                        <div id="input-source-contrasena">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-lock"></i>
+                                                <input id="inputContrasena" class="w-100 p-2" type="password"
+                                                    placeholder="Contraseña" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <button class="btn btn-primary and-icon mx-auto" onclick="registrar('Motorista')">
+                                        Registrarse
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Cliente-->
+        <section id="cliente" style="display: none;">
+            <div class="container">
+                <div class="row justify-content-center align-items-center vh-100">
+                    <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
+                        <!--Titulo-->
+                        <section>
+                            <div class="text-center mb-5">
+                                <h1 class="display-3 degradado-naranja">¡Te damos la Bienvenida!</h1>
+                                <h2>Registremos tu cuenta</h2>
+                            </div>
+                        </section>
+                        <!--Formulario-->
+                        <section>
+                            <form class="row g-3">
+                                <div class="col-6">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">Nombres</span>
+                                        <div id="input-source-nombres">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-user"></i>
+                                                <input id="inputNombre" class="w-100 p-2" type="text"
+                                                    placeholder="Yamir" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-source-group"><span
+                                            class="degradado-naranja ms-3">Apellidos</span>
+                                        <div id="input-source-apellidos">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-user"></i>
+                                                <input id="inputApellido" class="w-100 p-2" type="text"
+                                                    placeholder="Rodas" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input Correo electronico-->
+                                <div class="col-12">
+                                    <div class="input-source-group"><span class="degradado-naranja ms-3">Correo
+                                            Electrónico</span>
+                                        <div id="input-source-correo">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-envelope"></i>
+                                                <input class="flex-fill p-2" id="inputCorreo" type="email"
+                                                    placeholder="hola@gmail.com" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Input Contraseña-->
+
+                                <div class="col-12">
+                                    <div class="input-source-group">
+                                        <div class="d-flex justify-content-between mx-3"><span
+                                                class="degradado-naranja">Contraseña</span><span>mínimo 8
+                                                caracteres</span>
+                                        </div>
+                                        <div id="input-source-contrasena">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center input-source">
+                                                <i class="fas fa-lock"></i>
+                                                <input id="inputContrasena" class="w-100 p-2" type="password"
+                                                    placeholder="Contraseña" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <button class="btn btn-primary and-icon mx-auto" onclick="registrar('Cliente')">
+                                        Registrarse
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center mt-5 footerResponsive">
+        <span>¿Ya tienes una cuenta? <a href="/assets/pages/log-in.html">inicia sesión</a></span>
+    </footer>
+
+    <!--Boostrap JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <!--Custom JS-->
+    <script src="/assets/js/controlador.js"></script>
+</body>
+
+</html>
