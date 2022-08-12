@@ -1,0 +1,77 @@
+var mongoose = require('mongoose');
+motorista = {
+    "_id": ObjectId(),
+    "nombre": "Cristian",
+    "apellido": "Ramirez",
+    "correo": "cris@gmail.com",
+    "contraseña": "Cris1234",
+    "aprobado": true,
+    "imagen": "10.jpg",
+    "ordenes": [{
+        "tomadas":[
+                "5a9b4b9b0f5ae10001c2b5b2",
+                "5a9b4b9b0f5ae10001c2b5b3"
+        ],
+        "entregadas":[
+                "5a9b4b9b0f5ae10001c2b5b4",
+                "5a9b4b9b0f5ae10001c2b5b5"
+        ]
+    }]
+},
+{
+    "_id": ObjectId(),
+    "nombre": "Mauricio",
+    "apellido": "Avila",
+    "correo": "mavila1234@gmail.com",
+    "contraseña": "Mauricio1234",
+    "aprobado": true,
+    "imagen": "11.jpg",
+    "ordenes": [{
+        "tomadas":[
+                "5a9b4b9b0f5ae10001c2b5b2",
+                "5a9b4b9b0f5ae10001c2b5b3"
+        ],
+        "entregadas":[
+                "5a9b4b9b0f5ae10001c2b5b4",
+                "5a9b4b9b0f5ae10001c2b5b5"
+        ]
+    }]
+},
+{
+    "_id": ObjectId(),
+    "nombre": "Ramiro",
+    "apellido": "Gonzalez",
+    "correo": "goramiro12@gmail.com",
+    "contraseña": "Ramiro1234",
+    "aprobado": true,
+    "imagen": "12.jpg",
+    "ordenes": [{
+        "tomadas":[
+                "5a9b4b9b0f5ae10001c2b5b2",
+                "5a9b4b9b0f5ae10001c2b5b3"
+        ],
+        "entregadas":[
+                "5a9b4b9b0f5ae10001c2b5b4",
+                "5a9b4b9b0f5ae10001c2b5b5"
+        ]
+    }]
+},
+{
+    "_id": ObjectId(),
+    "nombre": "Eduardo",
+    "apellido": "Garcia",
+    "correo": "edgardr@gmail.com",
+    "contraseña": "Eduardo1234",
+    "aprobado": false,
+    "imagen": "9.jpg",
+    "ordenes": [{
+        "tomadas":[
+                "5a9b4b9b0f5ae10001c2b5b2",
+                "5a9b4b9b0f5ae10001c2b5b3"
+        ],
+        "entregadas":[
+                "5a9b4b9b0f5ae10001c2b5b4",
+                "5a9b4b9b0f5ae10001c2b5b5"
+        ]
+    }]
+}

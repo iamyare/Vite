@@ -1,0 +1,189 @@
+var mongoose = require('mongoose');
+administracion = {
+    "_id": ObjectId(),
+    "nombre": "adm",
+    "contraseña": "adm",
+    "motoristas": {
+        "aprobados": [
+            ObjectId("62f67abbba9dd13936b47627"),
+            ObjectId("62f67af3ba9dd13936b47628")
+        ],
+        "pendientes": [
+            ObjectId("62f67b29ba9dd13936b47629")
+        ],
+        "rechazados": [
+            ObjectId("62f67b6eba9dd13936b4762a")
+        ]
+    },
+    "clientes": [
+        ObjectId("62f676caba9dd13936b4761b"),
+        ObjectId("62f6773bba9dd13936b4761d"),
+        ObjectId("62f67793ba9dd13936b4761f"),
+        ObjectId("62f67836ba9dd13936b47621"),
+        ObjectId("62f678beba9dd13936b47623"),
+        ObjectId("62f67922ba9dd13936b47625")
+    ],
+    "proveedores": [
+        ObjectId("62f66f3fba9dd13936b475ff"),
+        ObjectId("62f670acba9dd13936b47603"),
+        ObjectId("62f672acba9dd13936b4760c"),
+        ObjectId("62f67342ba9dd13936b47612"),
+        ObjectId("62f674c8ba9dd13936b47618")
+        
+    ],
+    "ordenes": [
+        {
+            "_id": ObjectId(),
+            "estado": "en el origen",
+            "direccion": {
+                "latitud": 14.123456,
+                "longitud": -87.123456
+            },
+            "productos": [
+                ObjectId("62f66f3fba9dd13936b47600"),
+                ObjectId("62f66f3fba9dd13936b47601"),
+                ObjectId("62f670acba9dd13936b47604")
+            ],
+            "factura": {
+                "tarjeta": "visa",
+                "numeroTarjeta": "123456789",
+                "fechaVencimiento": "12/12/2020",
+                "codigoSeguridad": "123",
+                "nombreTitular": "Roberto Perez",
+                "subtotal": "1000",
+                "total": "1200",
+                "comision": {
+                    "motorista": "100",
+                    "adm": "100"
+                }
+            }
+        }, {
+            "_id": ObjectId(),
+            "estado": "en el origen",
+            "direccion": {
+                "latitud": 14.123456,
+                "longitud": -87.123456
+            },
+            "productos": [
+                ObjectId("62f672acba9dd13936b4760d"),
+                ObjectId("62f67342ba9dd13936b47613")
+            ],
+            "factura": {
+                "tarjeta": "visa",
+                "numeroTarjeta": "123456789",
+                "fechaVencimiento": "12/12/2020",
+                "codigoSeguridad": "123",
+                "nombreTitular": "Miguel Sanchez",
+                "subtotal": "1000",
+                "total": "1200",
+                "comision": {
+                    "motorista": "100",
+                    "adm": "100"
+                }
+            }
+        },
+        {
+            "_id": ObjectId(),
+            "estado": "en el origen",
+            "direccion": {
+                "latitud": 14.123456,
+                "longitud": -87.123456
+            },
+            "productos": [
+                ObjectId("62f672acba9dd13936b4760d"),
+                ObjectId("62f67342ba9dd13936b47614"),
+                ObjectId("62f67342ba9dd13936b47615")
+            ],
+            "factura": {
+                "tarjeta": "visa",
+                "numeroTarjeta": "123456789",
+                "fechaVencimiento": "12/12/2020",
+                "codigoSeguridad": "123",
+                "nombreTitular": "Miguel Sanchez",
+                "subtotal": "1000",
+                "total": "1200",
+                "comision": {
+                    "motorista": "100",
+                    "adm": "100"
+                }
+            }
+        },
+        {
+            "_id": ObjectId(),
+            "estado": "en el origen",
+            "direccion": {
+                "latitud": 14.123456,
+                "longitud": -87.123456
+            },
+            "productos": [
+                ObjectId("62f67342ba9dd13936b47616")
+            ],
+            "factura": {
+                "tarjeta": "visa",
+                "numeroTarjeta": "123456789",
+                "fechaVencimiento": "12/12/2020",
+                "codigoSeguridad": "123",
+                "nombreTitular": "Miguel Sanchez",
+                "subtotal": "1000",
+                "total": "1200",
+                "comision": {
+                    "motorista": "100",
+                    "adm": "100"
+                }
+            }
+        },
+        {
+            "_id": ObjectId(),
+            "estado": "en el destino",
+            "direccion": {
+                "latitud": 14.123456,
+                "longitud": -87.123456
+            },
+            "productos": [
+                ObjectId("62f67342ba9dd13936b47616"),
+                ObjectId("62f67342ba9dd13936b47615")
+            ],
+            "factura": {
+                "tarjeta": "visa",
+                "numeroTarjeta": "123456789",
+                "fechaVencimiento": "12/12/2020",
+                "codigoSeguridad": "123",
+                "nombreTitular": "Miguel Sanchez",
+                "subtotal": "1000",
+                "total": "1200",
+                "comision": {
+                    "motorista": "100",
+                    "adm": "100"
+                }
+            }
+        },
+        {
+            "_id": ObjectId(),
+            "estado": "tomada",
+            "direccion": {
+                "latitud": 14.123456,
+                "longitud": -87.123456
+            },
+            "productos": [
+                ObjectId("62f674c8ba9dd13936b47619")
+            ],
+            "factura": {
+                "tarjeta": "visa",
+                "numeroTarjeta": "123456789",
+                "fechaVencimiento": "12/12/2020",
+                "codigoSeguridad": "123",
+                "nombreTitular": "Miguel Sanchez",
+                "subtotal": "1000",
+                "total": "1200",
+                "comision": {
+                    "motorista": "100",
+                    "adm": "100"
+                }
+            }
+        }
+
+    ],
+    "tarjetas": ["visa", "mastercard", "american express"],
+    "categorias": ["Buffet", "Comida Rapida", "Familiar"],
+    "estados": ["en el origen", "en camino", "tomada", "en el destino"],
+}
