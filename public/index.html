@@ -1488,7 +1488,7 @@
                                                     <td>L. 4000</td>
                                                     <td>En camino</td>
                                                     <td>
-                                                        <button class="btn btn-warning">Mostrar</button>
+                                                        <button class="btn btn-primary" type="button" onclick="mostrarOrdenAdministracion('adios')">Mostrar</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1503,6 +1503,84 @@
                 </div>
             </div>
         </div>
+        <!--/Modal-->
+
+        <!--Modal editor Orden-->
+        <div class="modal fade" id="modalEditorOrdenAdministracion" tabindex="-1" aria-labelledby="modalEditorOrdenAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditorOrdenAdministracionLabel">Orden</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="productos-administracion-modal">
+                            <!--Tabla-->
+                            <div class="table-responsive table-vertical w-100">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio</th>
+                                            <th>Total</th>
+                                            <th>Conf</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaModalEditorOrdenAdministracion">
+                                        <tr>
+                                            <td>63721673217321</td>
+                                            <td>Producto 1</td>
+                                            <td>1</td>
+                                            <td>L. 1000</td>
+                                            <td>L. 1000</td>
+                                            <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Mostrar</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>63721673217321</td>
+                                            <td>Producto 2</td>
+                                            <td>1</td>
+                                            <td>L. 1000</td>
+                                            <td>L. 1000</td>
+                                            <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Mostrar</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>63721673217321</td>
+                                            <td>Producto 3</td>
+                                            <td>1</td>
+                                            <td>L. 1000</td>
+                                            <td>L. 1000</td>
+                                            <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Mostrar</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>63721673217321</td>
+                                            <td>Producto 4</td>
+                                            <td>1</td>
+                                            <td>L. 1000</td>
+                                            <td>L. 1000</td>
+                                            <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Mostrar</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--Estado-->
+                            <div class="mb-3">
+                                <label class="form-label" for="estado-administracion-modal">Estado</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="estado-administracion-modal">
+                                        <option value="1">En camino</option>
+                                        <option value="2">Entregado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button></div>
+                </div>
+            </div>
+        </div>
+
 
         <!--Modal editar perfil cliente-->
         <!--Modal editar Cliente Administrador-->
