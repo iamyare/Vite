@@ -9,12 +9,16 @@ body {
     min-width: 305px;
 }
 
-.vh-90{
+.vh-90 {
     height: 90vh;
 }
 
 .bg-degradado {
     background: linear-gradient(-50deg, #FFDAC5 0%, white 100%);
+}
+
+.bg-degradado-2 {
+    background: linear-gradient(180deg, #FDA600 27.08%, #F54C48 100%);
 }
 
 .navbar-light .navbar-nav .nav-link.active,
@@ -34,11 +38,11 @@ body {
 }
 
 .avatar {
-    all: unset;
     height: 3rem;
     width: 3rem;
     position: relative;
     display: inline-block !important;
+    margin-left: 10px;
 }
 
 .avatar-img {
@@ -46,12 +50,22 @@ body {
     height: 100%;
     -o-object-fit: cover;
     object-fit: cover;
-    transition: all 0.3s;
-
 }
 
-.avatar-img:hover {
-    box-shadow: 0 0 0.5rem #FF7900;
+.img-perfil {
+    border-radius: 100%;
+}
+.img-cover{
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.avatar-logo {
+    height: 5rem;
+    width: 5rem;
+    position: relative;
+    display: inline-block !important;
+    margin-left: 10px;
 }
 
 
@@ -554,4 +568,92 @@ h1 {
 
 .cantCircle {
     cursor: default;
+}
+
+.card-administrador {
+    background: #ffe7c8;
+    border-radius: 10px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
+}
+
+.nav-pills .nav-link.active {
+    background-color: rgba(245, 76, 72, 0.4);
+}
+
+.nav-pills .nav-link2.active {
+    background-color: rgb(255, 162, 0);
+    width: 100%;
+    border-radius: var(--bs-nav-pills-border-radius);
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: white;
+    text-decoration: none;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.nav-link2 {
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.sidebar {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.card-proveedores {
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.img-card-proveedores {
+    height: 150px !important;
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    object-fit: cover;
+}
+
+.contenido-scroll {
+    overflow-y: scroll;
+    height: 90vh;
+}
+
+.contenido-scroll-80 {
+    overflow-y: scroll;
+    height: 85vh;
+}
+
+.contenido-scroll-100 {
+    overflow-y: scroll;
+    height: 100vh;
+}
+
+.menu-administracion {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+p {
+    margin: 0px;
+}
+
+.table-vertical {
+    overflow-y: auto;
+    max-height: 150px;
+}
+
+.card-proveedores:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+    box-shadow: 0px 5px 5px rgba(255, 77, 77, 0.26);
 }

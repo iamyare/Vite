@@ -70,15 +70,14 @@
                         <div class="nav-item w-100">
                             <form class="position-relative">
                                 <div class="d-flex justify-content-end">
-                                    <div
-                                        class="d-flex flex-row justify-content-between align-items-center inputBusqueda">
-                                        <div
-                                            class="d-flex flex-row justify-content-start align-items-center input-group-Busqueda">
-                                            <i class="fas fa-search degradado-naranja"></i><input class="busqueda-input"
-                                                type="search" placeholder="Busqueda" />
+                                    <div class="d-flex flex-row justify-content-between align-items-center inputBusqueda">
+                                        <div class="d-flex flex-row justify-content-start align-items-center input-group-Busqueda">
+                                            <i class="fas fa-search degradado-naranja"></i>
+                                            <input class="busqueda-input" type="search" placeholder="Busqueda"/>
                                         </div>
-                                        <a data-bs-target="#carrito" data-bs-toggle="modal"><i
-                                                class="fas fa-shopping-cart degradado-naranja"></i></a>
+                                        <a data-bs-target="#modal-carrito" data-bs-toggle="modal">
+                                            <i class="fas fa-shopping-cart degradado-naranja"></i>
+                                        </a>
                                     </div>
                                     <div id="globoCarrito" style="display: none;">
                                         <span>2</span>
@@ -138,7 +137,7 @@
     <!--/Navbar Home-->
 
     <!--Navbar Formulario-->
-    <header>
+    <header style="display: none;">
         <nav class="navbar navbar-light navbar-expand-md py-3" style="display: block;">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center gap-5" href="/">
@@ -396,6 +395,7 @@
                         </div>
                     </div>
                 </section>
+
             </section>
             <!--/ Landing Page-->
 
@@ -787,18 +787,408 @@
         <!-- /Formularios -->
 
         <!-- Administracion -->
-        <section id="contenido-administracion">
+        <section id="contenido-administracion" style="display: block;">
+                <!--SideBar-->
+                <section class="d-flex">
+                    <ul class="nav nav-pills nav-justified d-flex flex-column vh-100 bg-degradado-2 col-2 col-lg-3 col-xxl-2" role="tablist">
+                        <div class="text-center my-5">
+                            <img class="w-50" src="assets/img/recursos/Logo_Vite_Comp_White.png" alt="Logo Vite">
+                        </div>
+                        <li class="nav-item text-start w-100 w-100" role="presentation">
+                            <a onclick="llenarCategoriaAdministracion('tablero')" class="nav-link active link-light fs-4 menu-administracion d-md-flex justify-content-sm-center justify-content-lg-start" role="tab" data-bs-toggle="pill" href="#contenido-tablero">
+                                <i class="fas fa-th-large"></i>
+                                <span class="d-none d-md-block m-0">Tablero</span>
+        
+                            </a>
+                        </li>
+        
+                        <li class="nav-item text-start w-100" role="presentation">
+                            <a onclick="llenarCategoriaAdministracion('proveedores')" class="nav-link link-light fs-4 menu-administracion d-md-flex justify-content-sm-center justify-content-lg-start" role="tab" data-bs-toggle="pill" href="#contenido-proveedores">
+                                <i class="fas fa-hamburger"></i>
+                                <span class="d-none d-md-block m-0">Proveedores</span>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item text-start w-100" role="presentation">
+                            <a onclick="llenarCategoriaAdministracion('ordenes')" class="nav-link link-light fs-4 menu-administracion d-md-flex justify-content-sm-center justify-content-lg-start" role="tab" data-bs-toggle="pill" href="#contenido-ordenes">
+                                <i class="far fa-list-alt"></i>
+                                <span class="d-none d-md-block m-0">Ordenes</span>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item text-start w-100" role="presentation">
+                            <a onclick="llenarCategoriaAdministracion('motoristas')" class="nav-link link-light fs-4 menu-administracion d-md-flex justify-content-sm-center justify-content-lg-start" role="tab" data-bs-toggle="pill" href="#contenido-motoristas">
+                                <i class="fas fa-motorcycle"></i>
+                                <span class="d-none d-md-block m-0">Motoristas</span>
+                            </a>
+                        </li>
+                    </ul>
+        
+                    <!--Contenido-->
+                    <section class="tab-content col-10 col-lg-9 col-xxl-10">
+                        
+                        <!--Tablero-->
+                        <section id="contenido-tablero" class="tab-pane fade show active" role="tabpanel">
+                   
+                            <!-- Tablero -->
+                            <section class="contenido-scroll-100">
+                                <div class="container">
+                                    <h1 class="m-3 degradado-naranja">Tablero</h1>
+                                    <div class="row gy-5">
+                                        <div class="col-6">
+                                            <div class="text-center p-3 card-administrador"><i class="fas fa-globe-americas fs-1 my-2"></i>
+                                                <h4>10 Años</h4>
+                                                <p class="fw-bold">El ganador de este año es Vite. <span
+                                                        style="color: rgb(245, 76, 72);">Felicidades!</span></p>
+                                                <p class="pb-4">Por su gran esfuerzo, Vite se ha colocado en la primera posición de
+                                                    servicios delivery del país.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-center p-3 card-administrador"><i class="fas fa-globe-americas fs-1 my-2"></i>
+                                                <h4>10 Años</h4>
+                                                <p class="fw-bold">El ganador de este año es Vite. <span
+                                                        style="color: rgb(245, 76, 72);">Felicidades!</span></p>
+                                                <p class="pb-4">Por su gran esfuerzo, Vite se ha colocado en la primera posición de
+                                                    servicios delivery del país.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-xxl-6">
+                                            <h4 class="m-0">Estadísticas</h4>
+                                            <div class="row gy-3 m-1">
+                                                <div class="col-md-12 col-lg-6">
+                                                    <div class="d-flex justify-content-between align-items-center card-administrador p-3"><i
+                                                            class="fas fa-truck-loading fs-1"></i>
+                                                        <div class="text-center">
+                                                            <p class="fw-bold"><span style="color: rgb(245, 76, 72);">342</span></p>
+                                                            <p class="text-break m-0" style="width: 94.828px;">Ordenes recibidas</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-6">
+                                                    <div class="d-flex justify-content-between align-items-center card-administrador p-3"><i
+                                                            class="fas fa-motorcycle fs-1"></i>
+                                                        <div class="text-center">
+                                                            <p class="fw-bold"><span style="color: rgb(127, 245, 72);">342</span></p>
+                                                            <p class="text-break m-0" style="width: 94.828px;">Entregas de hoy</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                    
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-xxl-6">
+                                            <h4 class="m-0">Clientes</h4>
+                                            <div class="row gy-3 my-1" id="contenido-clientes-administracion" style="overflow-y: scroll;max-height: 250px;">
+                                            
+                                                <!-- Cliente item -->
+                                                <div class="col-12">
+                                                    <div class="d-flex justify-content-between align-items-center card-administrador p-3">
+                                                        <div class="d-flex align-items-center">
+                                                            <img class="avatar img-perfil" src="assets/img/profile-pics/02.jpg" />
+                                                            <div class="ms-2">
+                                                                <h5 class="m-0">Lola la loca</h5>
+                                                                <p class="text-break m-0 m-0">2 Ordenes</p>
+                                                            </div>
+                                                        </div>
+                                                        <div><button class="btn btn-warning btn-sm" type="button">Ver</button></div>
+                                                    </div>
+                                                </div>
+                                                <!-- /Cliente item -->
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <h4>Lista de Ordenes Recibidas</h4>
+                                            <div class="row gy-3">
+                                                <div class="col">
+                                                    <!-- Tabla -->
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <!-- Cabecera -->
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Cliente</th>
+                                                                    <th>ID</th>
+                                                                    <th>Orden</th>
+                                                                    <th>Total</th>
+                                                                    <th>Estado</th>
+                                                                    <th>Conf</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <!-- /Cabecera -->
 
+                                                            <!-- Cuerpo -->
+                                                            <tbody>
+
+                                                                <!-- Item -->
+                                                                <tr>
+                                                                    <td>Yamir Alejandro Rodas</td>
+                                                                    <td>#dnsaj321bh321</td>
+                                                                    <td>#432423</td>
+                                                                    <td>L. 2000</td>
+                                                                    <td class="text-success">Pagado</td>
+                                                                    <td>
+                                                                        <button class="btn btn-warning" data-bs-target="#modalProductos"
+                                                                            data-bs-toggle="modal">Mostrar</button>
+                                                                    </td>
+                                                                </tr>
+                                                                <!-- /Item -->
+                                                                
+                                                            </tbody>
+                                                            <!-- /Cuerpo -->
+                                                        </table>
+                                                    </div>
+                                                    <!-- /Tabla -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                        </section>
+                        <!-- /Tablero -->
+                    
+                        <!-- Proovedores -->
+                        <section id="contenido-proveedores" class="tab-pane fade" role="tabpanel">
+                            <div class="container-fluid contenido-scroll-100">
+                                <h1 class="m-3 degradado-naranja">Proveedores</h1>
+                                <div class="row gy-4">
+                    
+                                    <!--Item: Empresas-->
+                                    <div class="col-sm-12 col-md-6 col-xxl-4">
+                                        <div class="card card-proveedores">
+                                            <img class="card-img-top w-100 d-block img-card-proveedores"
+                                                src="assets/img/empresas/banners/burger-king.jpg" />
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h4>Burger Kinng</h4>
+                                                        <p>Descripcion: dsajndnsajdnjasdas</p>
+                                                        <p><i class="fas fa-star icon-reference"></i> 4.8</p>
+                                                    </div><img class="avatar-logo avatar-img" src="assets/img/empresas/logos/burger-king.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Fin Item-->
+
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /Proovedores -->
+                    
+                        <!-- Ordenes -->
+                        <section id="contenido-ordenes" class="tab-pane fade contenido-scroll-100" role="tabpanel">
+                            <div class="container">
+                                <h1 class="m-3 degradado-naranja">Ordenes</h1>
+                                <div>
+                                    <ul class="nav nav-pills nav-justified" role="tablist">
+                                        <li class="nav-item" role="presentation"><a
+                                                onclick="llenarOrdenesAdministracion('Ordenes disponibles')" class="nav-link2 active"
+                                                role="tab" data-bs-toggle="pill" href="#content-ordenes-sin-tomar">Ordenes disponibles</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation"><a
+                                                onclick="llenarOrdenesAdministracion('Ordenes asignadas')" class="nav-link2" role="tab"
+                                                data-bs-toggle="pill" href="#content-ordenes-tomadas">Ordenes asignadas</a></li>
+                                        <li class="nav-item" role="presentation"><a
+                                                onclick="llenarOrdenesAdministracion('Ordenes en camino')" class="nav-link2" role="tab"
+                                                data-bs-toggle="pill" href="#content-en-camino">Ordenes en camino</a></li>
+                                        <li class="nav-item" role="presentation"><a
+                                                onclick="llenarOrdenesAdministracion('Ordenes entregadas')" class="nav-link2" role="tab"
+                                                data-bs-toggle="pill" href="#content-ordenes-entregadas">Ordenes entregadas</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <!-- Ordenes disponibles -->
+                                        <div id="content-ordenes-sin-tomar" class="tab-pane fade show active" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2">
+
+                                                    <!--Item: Ordenes-->
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                                                        </div>
+                                                    </div>
+                                                    <!--Fin Item-->
+                    
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes asignadas -->
+                                        <div id="content-ordenes-tomadas" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes en camino -->
+                                        <div id="content-en-camino" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2">
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes entregadas -->
+                                        <div id="content-ordenes-entregadas" class="tab-pane fade" role="tabpanel"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /Ordenes -->
+
+                        <!-- Motorista-->
+                        <section id="contenido-motoristas" class="tab-pane fade" role="tabpanel">
+                            <div class="container">
+                                <h1 class="m-3 degradado-naranja">Motoristas</h1>
+                                <div>
+                                    <ul class="nav nav-pills nav-justified" role="tablist">
+                                        <li class="nav-item" role="presentation"><a onclick="llenarMotoristasAdm('Motoristas pendientes')"
+                                                class="nav-link2 active" role="tab" data-bs-toggle="pill"
+                                                href="#content-motoristas-pendientes">Motoristas pendientes</a></li>
+                                        <li class="nav-item" role="presentation"><a onclick="llenarMotoristasAdm('Motoristas aprobados')"
+                                                class="nav-link2" role="tab" data-bs-toggle="pill"
+                                                href="#content-motoristas-aprobados">Motoristas aprobados</a></li>
+                                        <li class="nav-item" role="presentation"><a onclick="llenarMotoristasAdm('Motoristas rechazados')"
+                                                class="nav-link2" role="tab" data-bs-toggle="pill"
+                                                href="#content-motoristas-rechazados">Motoristas rechazados</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                    
+                                        <!-- Motoristas pendientes-->
+                                        <div id="content-motoristas-pendientes" class="tab-pane fade show active" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2">
+                                                    <!--Item: Motoristas-->
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Nombre motorista</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">Id 372817832178</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button" data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-editar-motorista">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--Fin Item-->
+                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Motoristas pendientes-->
+                    
+                                        <!-- Motoristas aprobados -->
+                                        <div id="content-motoristas-aprobados" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row">
+                                                    <!--Item: motoristas-->
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Nombre motorista</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">Id 372817832178</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                                                        </div>
+                                                    </div>
+                                                    <!--Fin Item-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Motoristas Aprobados-->
+        
+                                        <!-- Motoristas rechazados -->
+                                        <div id="content-motoristas-rechazados" class="tab-pane fade" role="tabpanel">
+                                            Motorista rechazados
+                                        </div>
+                                        <!--/Motoristas rechazados -->
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- /Motorista-->
+
+                    </section>
+                </section>
         </section>
+
         
     </main>
 
     <!--Modales-->
     <section>
+
         <!--Carrito-->
-        <div id="carrito" class="modal fade" role="dialog" tabindex="-1">
+        <div id="modal-carrito" class="modal fade" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-fullscreen" role="document">
+
                 <div class="modal-content">
+
                     <div class="modal-header d-flex flex-column">
                         <div class="w-100 d-flex flex-row justify-content-between">
                             <h4 class="modal-title">Carrito de Compras</h4>
@@ -811,21 +1201,25 @@
                             <option value="pago">Pago</option>
                         </select>
                     </div>
+
+                    <!--Modal Body-->
                     <div class="modal-body">
 
                         <!--Productos-->
-                        <section class="d-none">
+                        <section style="display: none;">
+
                             <!--Item Producto-->
-                            <div class="container my-2">
-                                <div class="row">
-                                    <div class="col-5 col-md-3 d-flex"><img class="img-fluid h-100 mx-auto" /></div>
+                            <div class="container my-4">
+                                <div class="row gy-3">
+                                    <div class="col-5 col-md-3 d-flex">
+                                        <img class="img-fluid img-cover h-100 mx-auto rounded-4" src="assets/img/empresas/productos/whooper.jpg"/>
+                                    </div>
                                     <div
                                         class="col-7 col-md-6 col-lg-6 col-xxl-6 d-flex flex-column justify-content-between gap-4">
-                                        <h3>Heading</h3>
+                                        <h3>Nombre producto</h3>
                                         <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                            SKU:
-                                            321412232132131</p><a class="btn-eliminarModal" href="#"><i
-                                                class="fas fa-times"></i>  Eliminar</a>
+                                            SKU: 321412232132131</p>
+                                            <a class="btn-eliminarModal" href="#"><i class="fas fa-times"></i> Eliminar</a>
                                     </div>
                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xxl-3 d-flex flex-column my-auto gap-4">
                                         <div>
@@ -852,47 +1246,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container my-2">
-                                <div class="row">
-                                    <div class="col-5 col-md-3 d-flex"><img class="img-fluid h-100 mx-auto" /></div>
-                                    <div
-                                        class="col-7 col-md-6 col-lg-6 col-xxl-6 d-flex flex-column justify-content-between gap-4">
-                                        <h3>Heading</h3>
-                                        <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                            SKU:
-                                            321412232132131</p><a class="btn-eliminarModal" href="#"><i
-                                                class="fas fa-times"></i>  Eliminar</a>
-                                    </div>
-                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xxl-3 d-flex flex-column my-auto gap-4">
-                                        <div>
-                                            <h6>Cant</h6>
-                                            <div class="d-flex flex-row gap-2"><button class="btn btn-dark btn-sm cant"
-                                                    type="button"><i class="fas fa-minus"></i></button>
-                                                <div
-                                                    class="text-center d-flex justify-content-center align-items-center cantCircle">
-                                                    <span>32</span>
-                                                </div><button class="btn btn-dark btn-sm cant" type="button"><i
-                                                        class="fas fa-plus"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <h6 class="m-0">Precio</h6>
-                                                <p class="idProductoModal">$52.90</p>
-                                            </div>
-                                            <div>
-                                                <h6 class="m-0">Total:</h6>
-                                                <p class="idProductoModal">$105.80</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--Fin Item Producto-->
+
                         </section>
                         <!--/Productos-->
 
                         <!--Despacho-->
-                        <section class="d-none">
+                        <section style="display: none;">
                             <div class="container">
                                 <div class="row gy-2">
                                     <!--Form del despacho, que contiene: un mapa que obtiene la localizacion actual, input direccion, longitud, altitud-->
@@ -941,7 +1301,7 @@
                         <!--/Despacho-->
 
                         <!--Pago-->
-                        <section class="d-block">
+                        <section style="display: block;">
                             <div class="container">
                                 <div class="row gy-2">
                                     <!--Select para saber que tipo de tarjeta de credito es-->
@@ -990,10 +1350,13 @@
                             </div>
                         </section>
                         <!--/Pago-->
+
                     </div>
+                    <!--/Contenido-->
+
                     <div class="modal-footer">
                         <!--Factura-->
-                        <div class="container d-none">
+                        <div class="container mx-auto" style="display: none;">
                             <div class="row py-2">
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Subtotal</h5>
@@ -1030,7 +1393,7 @@
                         <!--/Factura-->
 
                         <!--Botones Despacho-->
-                        <div class="container-fluid d-none">
+                        <div class="container-fluid" style="display: none;">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12 col-md-6 col-xl-4 text-center">
                                     <button class="btn btn-secundary w-100" type="submit">Guardar</button>
@@ -1040,7 +1403,7 @@
                         <!--/Botones-->
 
                         <!--Botones Pago-->
-                        <div class="container-fluid d-block">
+                        <div class="container-fluid" style="display: block;">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12 col-md-6 col-xl-4 text-center">
                                     <button class="btn btn-success w-100" type="submit">Pagar</button>
@@ -1049,10 +1412,97 @@
                         </div>
                         <!--/Botones-->
                     </div>
+
                 </div>
+
             </div>
         </div>
         <!--/Modal-->
+
+        <!--Modal editar Cliente Administrador-->
+        <div class="modal fade" id="modalEditarClienteAdministrador" tabindex="-1" aria-labelledby="modalEditarClienteAdministradorLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarClienteAdministradorLabel">Editar Cliente</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="cliente-administracion-modal">
+                            <!--Imagen-->
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-cliente-administracion-modal">Imagen</label>
+                                <img class="avatar img-perfil" src="assets/img/profile-pics/01.jpg" alt="">
+                                <button class="btn btn-primary" type="button">Editar</button>
+                            </div>
+                            <!--Nombre-->
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre-cliente-administracion-modal">Nombre</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="nombre-cliente-administracion-modal" value="Yamir Alejandro">
+                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('nombre-cliente-administracion-modal');">Editar</button>
+                                </div>
+                            </div>
+                            <!--Apellido-->
+                            <div class="mb-3">
+                                <label class="form-label" for="apellido-cliente-administracion-modal">Apellido</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="apellido-cliente-administracion-modal" value="Rodas">
+                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('apellido-cliente-administracion-modal');">Editar</button>
+                                </div>
+                            </div>
+                            <!--Correo-->
+                            <div class="mb-3">
+                                <label class="form-label" for="correo-cliente-administracion-modal">Correo</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="email" id="correo-cliente-administracion-modal" value="hola@gmail.com">
+                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('correo-cliente-administracion-modal');">Editar</button>
+                                </div>
+                            </div>
+                            <!--Contraseña-->
+                            <div class="mb-3">
+                                <label class="form-label" for="contrasena-cliente-administracion-modal">Contraseña</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" id="contrasena-cliente-administracion-modal" value="********">
+                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('contrasena-cliente-administracion-modal');">Editar</button>
+                                </div>
+                            </div>
+                            <!--Ordenes-->
+                            <div class="mb-3">
+                                <label class="form-label" for="productos-administracion-modal">Ordenes</label>
+                                <div class="input-group">
+                                    <!--Tabla-->
+                                    <div class="table-responsive table-vertical w-100">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID Orden</th>
+                                                    <th>Total</th>
+                                                    <th>Estado</th>
+                                                    <th>Conf</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>#dnsaj321bh321</td>
+                                                    <td>L. 4000</td>
+                                                    <td>En camino</td>
+                                                    <td>
+                                                        <button class="btn btn-warning">Mostrar</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button></div>
+                </div>
+            </div>
+        </div>
 
         <!--Modal editar perfil cliente-->
         <!--Modal editar Cliente Administrador-->
@@ -1068,8 +1518,8 @@
                         <form>
                             <!--Imagen-->
                             <div class="mb-3">
-                                <label class="form-label" for="imagen-cliente-administracion-modal">Imagen</label>
-                                <img class="avatar img-perfil" src="assets/img/pic-perfil/01.jpg" alt="">
+                                <label class="form-label" for="imagen-cliente-index-modal">Imagen</label>
+                                <img class="avatar img-perfil" src="assets/img/profile-pics/01.jpg" alt="">
                                 <button class="btn btn-primary" type="button">Editar</button>
                             </div>
                             <!--Nombre-->
@@ -1120,6 +1570,7 @@
                 </div>
             </div>
         </div>
+
     </section>
 
     <!-- Pie de Pagina Home-->
@@ -1195,7 +1646,7 @@
     <!--/Pie de Pagina-->
 
     <!--Pie de pagina formulario-->
-    <footer class="py-3 mt-4" style="display: block;">
+    <footer class="py-3 mt-4" style="display: none;">
         <!--Log in-->
         <section style="display: none;">
             <p class="text-center text-muted">¿No tienes ninguna cuenta aún? <a href="/create">Comenzar ahora</a></p>
