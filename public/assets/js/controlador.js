@@ -6,6 +6,7 @@ var modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAd
 var modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdministracion");
 var modalEditorProductoAdministracion = new bootstrap.Modal("#modalEditorProductoAdministracion");
 var modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProductosAdministracion");
+const modalEditorEmpresasAdministracion = new bootstrap.Modal("#modalEditorEmpresasAdministracion");
 
 //Divs para rellenar con los datos obtenidos
 const divClientesAdministracion = document.getElementById("contenido-clientes-administracion");
@@ -569,20 +570,25 @@ function llenarCategoriaAdministracion(categoria){
     }
     else if (categoria == 'ordenes'){
         let divOrdenesDisponibles = document.getElementById("div-cont-ordenes-disponibles");
-        divOrdenesDisponibles.innerHTML = "";
+        let divOrdenesTomadas = document.getElementById("div-cont-ordenes-tomadas");
+        let divOrdenesCamino= document.getElementById("div-cont-ordenes-camino");
+        let divOrdenesEntregadas = document.getElementById("div-cont-ordenes-entregadas");
+
+        //Obtener las ordenes disponibles
         obtenerOrdenesDisponibles().then((ordenes) => {
+        divOrdenesDisponibles.innerHTML = "";
             ordenes.forEach((orden) => {
                 orden = orden.ordenes;
-
                 divOrdenesDisponibles.innerHTML += 
+
                 `
                 <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                    <div class="orden-card">
+                <div class="orden-card">
                         <div>
-                            <h5 class="m-0">Orden: #${orden._id}</h5>
+                            <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
                                 <p class="orden-card-description">${(orden.productos).length} productos</p>
-                                <p class="orden-card-description">${orden.direccion.latitud}</p>
+                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
@@ -594,10 +600,174 @@ function llenarCategoriaAdministracion(categoria){
                 `;}
             );
         });
+
+        //Obtener las ordenes tomadas
+        obtenerOrdenesTomadas().then((ordenes) => {
+            divOrdenesTomadas.innerHTML = "";
+            ordenes.forEach((orden) => {
+                orden = orden.ordenes;
+
+                divOrdenesTomadas.innerHTML +=
+                `
+                <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">${(orden.productos).length} productos</p>
+                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                    </div>
+                </div>
+                `;
+            });
+        });
+
+        //Obtener las ordenes en camino
+        obtenerOrdenesEnCamino().then((ordenes) => {
+            divOrdenesCamino.innerHTML = "";
+            ordenes.forEach((orden) => {
+                orden = orden.ordenes;
+                divOrdenesCamino.innerHTML +=
+                `
+                <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">  
+                        <div>
+                            <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">${(orden.productos).length} productos</p>
+                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                    </div>
+                </div>
+                `;
+            });
+        });
+
+        //Obtener las ordenes entregadas
+        obtenerOrdenesEntregadas().then((ordenes) => {
+            divOrdenesEntregadas.innerHTML = "";
+            ordenes.forEach((orden) => {
+                orden = orden.ordenes;
+                divOrdenesEntregadas.innerHTML +=
+                `
+                <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">${(orden.productos).length} productos</p>
+                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                    </div>
+                </div>
+                `;
+            });
+        });
+
+
     } else 
     if (categoria == 'motoristas'){
+        let divMotoristasPendientes = document.getElementById("div-cont-motoristas-pendientes");
+        let divMotoristasAprobados = document.getElementById("div-cont-motoristas-aprobados");
+        let divMotoristasRechazados = document.getElementById("div-cont-motoristas-rechazados");
+
+        //Obtener los motoristas pendientes
+        obtenerMotoristasPendientes().then((motoristas) => {
+            divMotoristasPendientes.innerHTML = "";
+            motoristas.forEach((idMotorista) => {
+                obtenerMotoristaID(idMotorista).then((motorista) => {
+                    divMotoristasPendientes.innerHTML +=
+                    `
+                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">${motorista.nombre} ${motorista.apellido}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">ID: ${motorista._id}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                    </div>
+                </div>
+                    `;
+                });
+            });
+        });
+
+        //Obtener los motoristas aprobados
+        obtenerMotoristasAprobados().then((motoristas) => {
+            divMotoristasAprobados.innerHTML = "";
+            motoristas.forEach((idMotorista) => {
+                obtenerMotoristaID(idMotorista).then((motorista) => {
+                    divMotoristasAprobados.innerHTML +=
+                    `
+                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">${motorista.nombre} ${motorista.apellido}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">ID: ${motorista._id}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                    </div>
+                </div>
+                    `;
+                });
+            });
+        });
+
+        //Obtener los motoristas rechazados
+        obtenerMotoristasRechazados().then((motoristas) => {
+            divMotoristasRechazados.innerHTML = "";
+            motoristas.forEach((idMotorista) => {
+                obtenerMotoristaID(idMotorista).then((motorista) => {
+                    divMotoristasRechazados.innerHTML +=
+                    `
+                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">${motorista.nombre} ${motorista.apellido}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">ID: ${motorista._id}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                    </div>
+                </div>
+                    `;
+                });
+            });
+        });
+    }
 }
-}
+        
+
 
 
 function obtenerEmpresas(){
@@ -625,9 +795,41 @@ function obtenerEmpresaId(idEmpresa){
 }
 
 function mostrarEmpresa(idEmpresa){
-    console.log(idEmpresa);
+    modalEditorEmpresasAdministracion.show();
     obtenerEmpresaId(idEmpresa).then((empresa) => {
-        console.log(empresa);
+        let nombreEmpresa = document.getElementById("nombre-empresas-administracion-modal");
+        let correoEmpresa = document.getElementById("correo-empresas-administracion-modal");
+        let telefonoEmpresa = document.getElementById("telefono-empresas-administracion-modal");
+        let contrasenaEmpresa = document.getElementById("contrasena-empresas-administracion-modal");
+        let descripcionEmpresa = document.getElementById("descripcion-empresas-administracion-modal");
+        let selectImagenBannerEmpresa = document.getElementById("select-imagen-banner-empresas-administracion-modal");
+        let selectImagenLogoEmpresa = document.getElementById("select-logo-empresa-administracion-modal");
+        let selectImagenLocalEmpresa = document.getElementById("select-imagen-local-empresas-administracion-modal");
+        let imagenLocalEmpresaAdm = document.getElementById("imagen-local-empresas-administracion-modal");
+        let imagenBannerEmpresaAdm = document.getElementById("imagen-banner-empresas-administracion-modal");
+        let imagenLogoEmpresaAdm = document.getElementById("logo-empresa-administracion-modal");
+
+        nombreEmpresa.value = empresa.nombre;
+        correoEmpresa.value = empresa.correo;
+        telefonoEmpresa.value = empresa.telefono;
+        contrasenaEmpresa.value = empresa.contrasena;
+        descripcionEmpresa.value = empresa.descripcion;
+        imagenLogoEmpresaAdm.src = `assets/img/empresas/logos/${empresa.logo}`;
+
+
+
+        let datos = {
+            nombre: nombreEmpresa.value,
+            correo: correoEmpresa.value,
+            telefono: telefonoEmpresa.value,
+            contrasena: contrasenaEmpresa.value,
+            descripcion: descripcionEmpresa.value,
+            imagenBanner: selectImagenBannerEmpresa.value,
+            imagenLogo: selectImagenLogoEmpresa.value,
+            imagenLocal: selectImagenLocalEmpresa.value
+        }
+        console.log(datos);
+
     });
 }
 
@@ -635,10 +837,94 @@ function obtenerOrdenesDisponibles(){
     //Utilizar el fetch para obtener las empresas
     //async await
     async function obtenerOrdenesDisponiblesAdm(){
-        const res = await fetch(`http://localhost:3333/administracion/tomadas`);
+        const res = await fetch(`http://localhost:3333/administracion/origen`);
         const ordenes = await res.json();
         return ordenes;
     }
     const ordenes = obtenerOrdenesDisponiblesAdm();
     return ordenes;
+}
+
+function obtenerOrdenesTomadas(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerOrdenesTomadasAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/tomadas`);
+        const ordenes = await res.json();
+        return ordenes;
+    }
+    const ordenes = obtenerOrdenesTomadasAdm();
+    return ordenes;
+}
+
+function obtenerOrdenesEnCamino(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerOrdenesEnCaminoAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/camino`);
+        const ordenes = await res.json();
+        return ordenes;
+    }
+    const ordenes = obtenerOrdenesEnCaminoAdm();
+    return ordenes;
+}
+
+function obtenerOrdenesEntregadas(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerOrdenesEntregadasAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/destino`);
+        const ordenes = await res.json();
+        return ordenes;
+    }
+    const ordenes = obtenerOrdenesEntregadasAdm();
+    return ordenes;
+}
+
+function obtenerMotoristasPendientes(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerMotoristasPendientesAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/motorista/pendientes`);
+        const motoristas = await res.json();
+        return motoristas;
+    }
+    const motoristas = obtenerMotoristasPendientesAdm();
+    return motoristas;
+}
+
+function obtenerMotoristasAprobados(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerMotoristasAprobadosAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/motorista/aprobados`);
+        const motoristas = await res.json();
+        return motoristas;
+    }
+    const motoristas = obtenerMotoristasAprobadosAdm();
+    return motoristas;
+}
+
+function obtenerMotoristasRechazados(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerMotoristasRechazadosAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/motorista/rechazados`);
+        const motoristas = await res.json();
+        return motoristas;
+    }
+    const motoristas = obtenerMotoristasRechazadosAdm();
+    return motoristas;
+}
+
+function obtenerMotoristaID(idMotorista){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerMotoristaIDAdm(){
+        const res = await fetch(`http://localhost:3333/motorista/${idMotorista}`);
+        const motorista = await res.json();
+        return motorista;
+    }
+    const motorista = obtenerMotoristaIDAdm();
+    return motorista;
 }

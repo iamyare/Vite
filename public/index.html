@@ -986,17 +986,17 @@
                                 <div>
                                     <ul class="nav nav-pills nav-justified" role="tablist">
                                         <li class="nav-item" role="presentation"><a
-                                                onclick="llenarOrdenesAdministracion('Ordenes disponibles')" class="nav-link2 active"
+                                                 class="nav-link2 active"
                                                 role="tab" data-bs-toggle="pill" href="#content-ordenes-sin-tomar">Ordenes disponibles</a>
                                         </li>
                                         <li class="nav-item" role="presentation"><a
-                                                onclick="llenarOrdenesAdministracion('Ordenes asignadas')" class="nav-link2" role="tab"
+                                                 class="nav-link2" role="tab"
                                                 data-bs-toggle="pill" href="#content-ordenes-tomadas">Ordenes asignadas</a></li>
                                         <li class="nav-item" role="presentation"><a
-                                                onclick="llenarOrdenesAdministracion('Ordenes en camino')" class="nav-link2" role="tab"
+                                                ')" class="nav-link2" role="tab"
                                                 data-bs-toggle="pill" href="#content-en-camino">Ordenes en camino</a></li>
                                         <li class="nav-item" role="presentation"><a
-                                                onclick="llenarOrdenesAdministracion('Ordenes entregadas')" class="nav-link2" role="tab"
+                                                 class="nav-link2" role="tab"
                                                 data-bs-toggle="pill" href="#content-ordenes-entregadas">Ordenes entregadas</a></li>
                                     </ul>
                                     <div class="tab-content">
@@ -1030,9 +1030,9 @@
                                         <!-- Ordenes asignadas -->
                                         <div id="content-ordenes-tomadas" class="tab-pane fade" role="tabpanel">
                                             <div class="container my-4">
-                                                <div class="row">
+                                                <div class="row gy-2" id="div-cont-ordenes-tomadas">
                                                     <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card">
+                                                        <div class="orden-card" >
                                                             <div>
                                                                 <h5 class="m-0">Orden: #123412432</h5>
                                                                 <div class="ms-2">
@@ -1052,7 +1052,7 @@
                                         <!-- Ordenes en camino -->
                                         <div id="content-en-camino" class="tab-pane fade" role="tabpanel">
                                             <div class="container my-4">
-                                                <div class="row gy-2">
+                                                <div class="row gy-2" id="div-cont-ordenes-camino">
                                                     <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
                                                         <div class="orden-card">
                                                             <div>
@@ -1086,7 +1086,40 @@
                                         </div>
                     
                                         <!-- Ordenes entregadas -->
-                                        <div id="content-ordenes-entregadas" class="tab-pane fade" role="tabpanel"></div>
+                                        <div id="content-ordenes-entregadas" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-entregadas">
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1099,13 +1132,13 @@
                                 <h1 class="m-3 degradado-naranja">Motoristas</h1>
                                 <div>
                                     <ul class="nav nav-pills nav-justified" role="tablist">
-                                        <li class="nav-item" role="presentation"><a onclick="llenarMotoristasAdm('Motoristas pendientes')"
+                                        <li class="nav-item" role="presentation"><a 
                                                 class="nav-link2 active" role="tab" data-bs-toggle="pill"
                                                 href="#content-motoristas-pendientes">Motoristas pendientes</a></li>
-                                        <li class="nav-item" role="presentation"><a onclick="llenarMotoristasAdm('Motoristas aprobados')"
+                                        <li class="nav-item" role="presentation"><a 
                                                 class="nav-link2" role="tab" data-bs-toggle="pill"
                                                 href="#content-motoristas-aprobados">Motoristas aprobados</a></li>
-                                        <li class="nav-item" role="presentation"><a onclick="llenarMotoristasAdm('Motoristas rechazados')"
+                                        <li class="nav-item" role="presentation"><a 
                                                 class="nav-link2" role="tab" data-bs-toggle="pill"
                                                 href="#content-motoristas-rechazados">Motoristas rechazados</a></li>
                                     </ul>
@@ -1114,7 +1147,7 @@
                                         <!-- Motoristas pendientes-->
                                         <div id="content-motoristas-pendientes" class="tab-pane fade show active" role="tabpanel">
                                             <div class="container my-4">
-                                                <div class="row gy-2">
+                                                <div class="row gy-2" id="div-cont-motoristas-pendientes">
                                                     <!--Item: Motoristas-->
                                                     <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
                                                         <div class="orden-card">
@@ -1140,7 +1173,7 @@
                                         <!-- Motoristas aprobados -->
                                         <div id="content-motoristas-aprobados" class="tab-pane fade" role="tabpanel">
                                             <div class="container my-4">
-                                                <div class="row">
+                                                <div class="row" id="div-cont-motoristas-aprobados">
                                                     <!--Item: motoristas-->
                                                     <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
                                                         <div class="orden-card">
@@ -1164,7 +1197,26 @@
         
                                         <!-- Motoristas rechazados -->
                                         <div id="content-motoristas-rechazados" class="tab-pane fade" role="tabpanel">
-                                            Motorista rechazados
+                                            <div class="container my-4">
+                                                <div class="row" id="div-cont-motoristas-rechazados">
+                                                    <!--Item: motoristas-->
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Nombre motorista</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">Id 372817832178</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                                                        </div>
+                                                    </div>
+                                                    <!--Fin Item-->
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--/Motoristas rechazados -->
                                     </div>
@@ -1746,6 +1798,143 @@
             </div>
         </div>
         <!--/Modal-->
+
+        <!--Modal editor empresas-->
+        <div class="modal fade" id="modalEditorEmpresasAdministracion" tabindex="-1" aria-labelledby="modalEditorEmpresasAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditorEmpresasAdministracionLabel">Empresa</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="div-empresas-administracion-modal">
+                            <!--Logo Empresa-->
+                            <div class="mb-3">
+                                <label class="form-label" for="logo-empresa-administracion-modal">Logo</label>
+                                <div class="input-group">
+                                    <img id="logo-empresa-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Logo de la empresa" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select" id="select-logo-empresa-administracion-modal">
+                                        <option value="1" >Imagen 1</option>
+                                        <option value="1">Imagen 1</option>
+                                        <option value="2">Imagen 2</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Nombre-->
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre-empresas-administracion-modal">Nombre</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="nombre-empresas-administracion-modal" value="Burger">
+                                </div>
+                            </div>
+                            <!--/Nombre-->
+
+                            <!--Correo-->
+                            <div class="mb-3">
+                                <label class="form-label" for="correo-empresas-administracion-modal">Correo</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="email" id="correo-empresas-administracion-modal" value="correo@gmail.com">
+                                </div>
+                            </div>
+                            <!--/Correo-->
+
+                            <!--Telefono-->
+                            <div class="mb-3">
+                                <label class="form-label" for="telefono-empresas-administracion-modal">Telefono</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="tel" id="telefono-empresas-administracion-modal" value="12345678">
+                                </div>
+                            </div>
+                            <!--/Telefono-->
+
+                            <!--Contraseña-->
+                            <div class="mb-3">
+                                <label class="form-label" for="contrasena-empresas-administracion-modal">Contraseña</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" id="contrasena-empresas-administracion-modal" value="12345678">
+                                </div>
+                            </div>
+                            <!--/Contraseña-->
+
+                            <!--Descripcion-->
+                            <div class="mb-3">
+                                <label class="form-label" for="descripcion-empresas-administracion-modal">Descripcion</label>
+                                <div class="input-group">
+                                    <textarea class="form-control" id="descripcion-empresas-administracion-modal" rows="3">Descripcion de la empresa</textarea>
+                                </div>
+                            </div>
+                            <!--/Descripcion-->
+
+                            <!--Imagen del Banner y un select al lado-->
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-empresas-administracion-modal">Banner</label>
+                                <div class="input-group">
+                                    <img id="imagen-empresas-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del producto" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select" id="select-imagen-banner-empresas-administracion-modal">
+                                        <option value="1" >Imagen 1</option>
+                                        <option value="1">Imagen 1</option>
+                                        <option value="2">Imagen 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--/Imagen del Banner y un select al lado-->
+
+                            <!--Imagen Local-->
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-local-empresas-administracion-modal">Imagen Local</label>
+                                <div class="input-group">
+                                    <img id="imagen-local-empresas-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del producto" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select" id="select-imagen-local-empresas-administracion-modal">
+                                        <option value="1" >Imagen 1</option>
+                                        <option value="1">Imagen 1</option>
+                                        <option value="2">Imagen 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--/Imagen Local-->
+
+                            <!--Productos, en una tabla-->
+                            <!--Tabla-->
+                            <div class="table table-vertical w-100">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID del producto</th>
+                                            <th>Imagen</th>
+                                            <th>Producto</th>
+                                            <th>Precio</th>
+                                            <th>Conf</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaModalListarProductosAdministracion">
+                                        <tr>
+                                            <td>63721673217321</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <img src="https://i.imgur.com/3ZQ3ZQ1.png" alt="Imagen" style="width: 50px; height: 50px;" class="rounded-2">
+                                                </div>
+                                            </td>
+                                            <td>Nombre Prodcuto</td>
+                                            <td>L. 1000</td>
+                                            <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Mostrar</button></td>
+                                            <td><button class="btn btn-danger" type="button" onclick="mostrarProductoAdministracion('adios')">Eliminar</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--/Tabla-->
+                            <!--/Productos, en una tabla-->
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="div-footer-empresas-administracion-modal">
+                        <button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--Modal editar perfil cliente-->
         <!--Modal editar Cliente Administrador-->

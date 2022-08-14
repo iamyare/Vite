@@ -55,7 +55,8 @@ body {
 .img-perfil {
     border-radius: 100%;
 }
-.img-cover{
+
+.img-cover {
     -o-object-fit: cover;
     object-fit: cover;
 }
@@ -242,6 +243,25 @@ h1 {
     overflow-x: auto;
 
 }
+
+.orden-card {
+    background: var(--bs-gray-100);
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.19);
+    padding: 10px;
+    transition: 0.3s;
+}
+.orden-card:hover {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.29);
+    transform: scale(1.05);
+}
+
+
+.orden-card-description {
+    font-size: 12px;
+    color: var(--bs-gray-700);
+}
+
 
 .card-category {
     width: 440px;
