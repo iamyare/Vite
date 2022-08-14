@@ -5,12 +5,14 @@ var clienteSeleccionadoActualmente = null;
 var modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAdministrador");
 var modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdministracion");
 var modalEditorProductoAdministracion = new bootstrap.Modal("#modalEditorProductoAdministracion");
+var modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProductosAdministracion");
 
 //Divs para rellenar con los datos obtenidos
 const divClientesAdministracion = document.getElementById("contenido-clientes-administracion");
 const clienteAdministracionModal = document.getElementById("cliente-administracion-modal");
 const modalEditorOrdenAdministracionLabel = document.getElementById("modalEditorOrdenAdministracionLabel");
 const tablaModalEditorOrdenAdministracion = document.getElementById("tablaModalEditorOrdenAdministracion");
+const divContenidoProveedores  = document.getElementById("div-contenido-proveedores");
 
 var estados = [
     "en el origen",
@@ -29,6 +31,8 @@ var imagenesProductos = [
     "whooper.jpg"
     ]
 
+const categoriasAdm = ['tablero', 'ordenes', 'proveedores', 'motoristas'];
+
 if (administracion) {
   llenarClientesAdministracion();
 }
@@ -37,6 +41,7 @@ if (administracion) {
 
 function llenarClientesAdministracion() {
   divClientesAdministracion.innerHTML = "";
+  divListaOrdenesRecibidas.innerHTML = "";
   fetch(`http://localhost:3333/cliente`)
     .then((res) => res.json())
     .then((clientes) => {
@@ -57,6 +62,27 @@ function llenarClientesAdministracion() {
                     </div>
                     <!-- /Cliente item -->
                 `;
+            cliente.ordenes.forEach((orden) => {
+                mostrarOrdenAdministracion(orden).then((infoOrden) => {
+                    divListaOrdenesRecibidas.innerHTML +=
+                    `
+                    <tr>
+                        <td>${cliente.nombre}</td>
+                        <td>${cliente._id}</td>
+                        <td>${infoOrden._id}</td>
+                        <td>$${infoOrden.factura.total}</td>
+                        <td class="text-success">${infoOrden.estado}</td>
+                        <td>
+                            <button class="btn btn-warning" onclick="mostrarEditorOrdenAdministracion('${infoOrden._id}')">Mostrar</button>
+                        </td>
+                    </tr>
+                    `;
+                });
+                }
+
+                
+            );
+                
       });
     })
     .catch((err) => console.log(err));
@@ -77,7 +103,7 @@ function verInfoCliente(idCliente) {
                         ordenesDiv += `
                             <tr>
                                 <td>${orden._id}</td>
-                                <td>${orden.factura.total}</td>
+                                <td>$${orden.factura.total}</td>
                                 <td>${orden.estado}</td>
                                 <td>
                                     <button class="btn btn-warning" type="button" onclick="mostrarEditorOrdenAdministracion('${orden._id}')">Mostrar</button>
@@ -163,6 +189,8 @@ function mostrarEditorOrdenAdministracion(idOrden){
         //Modoficar h5 con id modalEditorOrdenAdministracionLabel
         modalEditorOrdenAdministracionLabel.innerHTML = `Orden #${res._id}`;
         tablaModalEditorOrdenAdministracion.innerHTML = "";
+        //Suma de los totales de los productos
+        let subtotal = 0;
         res.productos.forEach((idProducto) => {
             let ideProducto = idProducto.producto;
             let cantidadProducto = idProducto.cantidad;
@@ -175,10 +203,19 @@ function mostrarEditorOrdenAdministracion(idOrden){
                     <td>${cantidadProducto}</td>
                     <td>${producto.precio}</td>
                     <td>${(producto.precio)*(cantidadProducto)}</td>
-                    <td><button class="btn btn-danger" type="button" onclick="eliminarProductoOrden('${producto._id},${idOrden}')">Eliminar</button></td>
+                    <td><button class="btn btn-danger" type="button" onclick="eliminarProductoOrden('${producto._id}')">Eliminar</button></td>
                     <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button></td>
                 </tr>
                 `;
+                subtotal += (producto.precio)*(cantidadProducto);
+                isv = subtotal*0.15;
+                comision = subtotal*0.05;
+                total = subtotal + isv + comision;
+                document.getElementById("subTotalOrdenAdm").innerHTML = `$${subtotal}`;
+                document.getElementById("isvOrdenAdm").innerHTML = `$${isv}`;
+                document.getElementById("comisionOrdenAdm").innerHTML = `$${comision}`;
+                document.getElementById("totalOrdenAdm").innerHTML = `$${total}`;
+            
             });
             document.getElementById("estado-administracion-modal").innerHTML = `<option value="${res.estado}" selected>${res.estado}</option>`;
             estados.forEach((estado) => {
@@ -186,6 +223,7 @@ function mostrarEditorOrdenAdministracion(idOrden){
                     document.getElementById("estado-administracion-modal").innerHTML += `<option value="${estado}">${estado}</option>`;
                 }
             });
+            
         });
         modalEditorOrdenAdministracion.show();
     });
@@ -291,9 +329,44 @@ function editarProducto(idProducto){
     }).then((res) => {
         modalEditorProductoAdministracion.hide();
         mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+        agregarProductoOrdenAdministracion();
     });
 
 }
+
+function actualizarOrdenAdm(){
+
+    let subTotal = (document.getElementById("subTotalOrdenAdm").innerHTML).substring(1);
+    let comision = (document.getElementById("comisionOrdenAdm").innerHTML).substring(1);
+    let total = (document.getElementById("totalOrdenAdm").innerHTML).substring(1);
+
+    //El motorista tendra una comision del 30% de la comision, mientras La administracion tendra una comision del 70% de la comision
+    let comisionMotorista = (comision * 30) / 100;
+    let comisionAdministracion = (comision * 70) / 100;
+
+    let factura = {
+        subtotal: subTotal,
+        comision: {
+            motorista: comisionMotorista,
+            adm: comisionAdministracion
+        },
+        total: total
+    };
+    console.log(factura);
+    //http://localhost:3333/administracion/orden/:id/factura
+    fetch(`http://localhost:3333/administracion/orden/${ordenSeleccionadaActualmente}/factura`, {
+        method: 'PUT',
+        body: JSON.stringify(factura),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        modalEditorOrdenAdministracion.hide();
+        actualizarEstadoOrdenAdm(idOrden);
+        llenarClientesAdministracion();
+    });
+}
+
 
 function actualizarEstadoOrdenAdm(){
     //Obtenemos el estado de la orden seleccionado en el select
@@ -318,6 +391,7 @@ function eliminarOrdenAdministracion(idOrden){
         method: 'DELETE'
     }).then((res) => {
         verInfoCliente(clienteSeleccionadoActualmente);
+        llenarClientesAdministracion();
     });
 }
 
@@ -368,8 +442,203 @@ function agregarOrdenClienteAdm(){
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
+            alert("Orden agregada");
             verInfoCliente(clienteSeleccionadoActualmente);
+            llenarClientesAdministracion();
         });
     }
     );
+}
+
+function agregarProductoOrdenAdministracion(){
+    document.getElementById("tablaModalListarProductosAdministracion").innerHTML =""; 
+
+    //Listar las empresas y sus productos
+    fetch(`http://localhost:3333/empresa`)
+    .then((res) => res.json())
+    .then((empresas) => {
+        empresas.forEach((empresa) => {
+            //Obtener los productos de la empresa
+            fetch(`http://localhost:3333/empresa/${empresa._id}/productos`)
+            .then((res) => res.json())
+            .then((productos) => {
+                //Imprimir los productos de la empresa
+                productos.forEach((producto) => {
+                    document.getElementById("tablaModalListarProductosAdministracion").innerHTML += 
+                    `
+                        <tr>
+                            <td>${producto._id}</td>
+                            <td>${empresa.nombre}</td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <img src="assets/img/empresas/productos/${producto.imagen}" alt="Imagen" style="width: 50px; height: 50px;" class="rounded-2">
+                                </div>
+                            </td>
+                            <td>${producto.nombre}</td>
+                            <td>
+                                <div class="input-group">
+                                    <input class="form-control" type="number" value="1" min="1" max="100" id="cantidadProducto${producto._id}" onchange="multiplicarTotalProducto('cantidadProducto${producto._id}',${producto.precio},'precioTotalProducto${producto._id}')">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" value="${producto.precio}" id="precioProducto${producto._id}" disabled>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <label class="form-check-label" id="precioTotalProducto${producto._id}" disbled>${producto.precio}</label>
+                                    </div>
+                            </td>
+                            <td><button class="btn btn-primary" type="button" onclick="agregarItemOrden('${producto._id}', 'cantidadProducto${producto._id}')">Agregar</button></td>
+                            <td><button class="btn btn-secondary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Detalles</button></td>
+                        </tr>
+                    `;
+                });
+                modalListarProductosAdministracion.show();
+            });
+        });
+    });
+}
+
+function multiplicarTotalProducto(idCantidadProducto, precioProducto, divPrecioTotal){
+    let cantidadProducto = document.getElementById(idCantidadProducto).value;
+    let totalProducto = cantidadProducto * precioProducto;
+    document.getElementById(divPrecioTotal).innerHTML = totalProducto;
+}
+
+function eliminarProductoOrden(idProducto){
+    //Eliminar el producto de la orden
+    fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}/producto/${idProducto}`, {
+        method: 'DELETE'
+    }).then((res) => {
+        mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+    });
+}
+
+function agregarItemOrden(idProducto, cantidadProducto){
+    //http://localhost:3333/administracion/ordenes/:id/producto/:idProducto
+    let cantidadPro = document.getElementById(cantidadProducto).value;
+
+    let item = {
+        cantidad: cantidadPro,
+        idProducto: idProducto
+    };
+
+    fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}/producto/${idProducto}`, {
+        method: 'PUT',
+        body: JSON.stringify(item),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        alert("Producto agregado");
+        mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+    }
+    );
+}
+
+
+function llenarCategoriaAdministracion(categoria){
+    if (categoria == "tablero") {
+    } else 
+    if (categoria == "proveedores") {
+        divContenidoProveedores.innerHTML = "";
+        obtenerEmpresas().then((empresas) => {
+            empresas.forEach((empresa) => {
+                divContenidoProveedores.innerHTML +=
+                `
+                <div class="col-sm-12 col-md-6 col-xxl-4">
+                    <div class="card card-proveedores" onclick="mostrarEmpresa('${empresa._id}')">
+                        <img class="card-img-top w-100 d-block img-card-proveedores"
+                            src="assets/img/empresas/banners/${empresa.banner}" />
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4>${empresa.nombre}</h4>
+                                    <p>${empresa.descripcion}</p>
+                                    <p><i class="fas fa-star icon-reference"></i> 4.8</p>
+                                </div><img class="avatar-logo avatar-img" src="assets/img/empresas/logos/${empresa.logo}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        });
+    }
+    else if (categoria == 'ordenes'){
+        let divOrdenesDisponibles = document.getElementById("div-cont-ordenes-disponibles");
+        divOrdenesDisponibles.innerHTML = "";
+        obtenerOrdenesDisponibles().then((ordenes) => {
+            ordenes.forEach((orden) => {
+                orden = orden.ordenes;
+
+                divOrdenesDisponibles.innerHTML += 
+                `
+                <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                        <div>
+                            <h5 class="m-0">Orden: #${orden._id}</h5>
+                            <div class="ms-2">
+                                <p class="orden-card-description">${(orden.productos).length} productos</p>
+                                <p class="orden-card-description">${orden.direccion.latitud}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                    </div>
+                </div>
+                `;}
+            );
+        });
+    } else 
+    if (categoria == 'motoristas'){
+}
+}
+
+
+function obtenerEmpresas(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerEmpresasAdm(){
+        const res = await fetch(`http://localhost:3333/empresa`);
+        const empresas = await res.json();
+        return empresas;
+    }
+    const empresas = obtenerEmpresasAdm();
+    return empresas;
+}
+
+function obtenerEmpresaId(idEmpresa){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerEmpresaIdAdm(){
+        const res = await fetch(`http://localhost:3333/empresa/${idEmpresa}`);
+        const empresa = await res.json();
+        return empresa;
+    }
+    const empresa = obtenerEmpresaIdAdm();
+    return empresa;
+}
+
+function mostrarEmpresa(idEmpresa){
+    console.log(idEmpresa);
+    obtenerEmpresaId(idEmpresa).then((empresa) => {
+        console.log(empresa);
+    });
+}
+
+function obtenerOrdenesDisponibles(){
+    //Utilizar el fetch para obtener las empresas
+    //async await
+    async function obtenerOrdenesDisponiblesAdm(){
+        const res = await fetch(`http://localhost:3333/administracion/tomadas`);
+        const ordenes = await res.json();
+        return ordenes;
+    }
+    const ordenes = obtenerOrdenesDisponiblesAdm();
+    return ordenes;
 }

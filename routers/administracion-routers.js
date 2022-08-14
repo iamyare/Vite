@@ -308,6 +308,37 @@ router.put('/ordenes/:id', (req, res) => {
     });
 });
 
+//Actualizar la factura de una orden
+//URL: http://localhost:3333/administracion/orden/:id/factura
+router.put('/orden/:id/factura', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.id)
+        },
+        {
+            "$set": {
+                "ordenes.$.factura": {
+                    "subtotal": req.body.subtotal,
+                    "total": req.body.total,
+                    "comision": {
+                        "motorista": req.body.comision.motorista,
+                        "adm": req.body.comision.adm
+                    }
+                }
+            }
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
 //Agregar una orden
 //URL: http://localhost:3333/administracion/ordenes
 router.post('/ordenes/', (req, res) => {
@@ -345,6 +376,59 @@ router.post('/ordenes/', (req, res) => {
             id: id,
             ordenes: ordenes
         });
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Agregar un producto a una orden
+//URL: http://localhost:3333/administracion/ordenes/:id/producto/:idProducto
+router.put('/ordenes/:idOrden/producto/:idProducto', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$push": {
+                "ordenes.$.productos": {
+                    "producto": mongoose.Types.ObjectId(req.params.idProducto),
+                    "cantidad": Number(req.body.cantidad)
+                }
+            }
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar un producto de una orden
+//URL: http://localhost:3333/administracion/ordenes/:idOrden/producto/:idProducto
+router.delete('/ordenes/:idOrden/producto/:idProducto', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$pull": {
+                "ordenes.$.productos": {
+                    "producto": {
+                        "$eq": mongoose.Types.ObjectId(req.params.idProducto)
+                    }
+                }
+            }
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
         res.end();
     })
     .catch((err) => {

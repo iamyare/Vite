@@ -87,6 +87,19 @@ router.put('/producto/:id', (req, res) => {
 });
 
 
+//Obtener todos los productos de una empresa
+//URL: http://localhost:3333/empresa/:id/productos
+router.get('/:idEmpresa/productos', (req, res) => {
+    empresas.findById(req.params.idEmpresa)
+    .then((empresa) => {
+        res.send(empresa.productos);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
 
 
 
