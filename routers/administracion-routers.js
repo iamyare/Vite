@@ -102,6 +102,8 @@ router.get('/ordenes', (req, res) => {
     });
 });
 
+
+
 //Obtener todas orden por id
 //URL: http://localhost:3333/administracion/ordenes/:id
 router.get('/ordenes/:id', (req, res) => {
@@ -131,23 +133,37 @@ router.get('/ordenes/:id', (req, res) => {
 });
 
 
-
-//Obtener todas las ordenes tomadas
-//URL: http://localhost:3333/administracion/ordenes/tomadas
-router.get('/ordenes/tomadas', (req, res) => {
+//Obtener el producto por su id
+//URL: http://localhost:3333/administracion/producto/:id
+router.get('/producto/:id', (req, res) => {
     administracion.aggregate([
         {
-            "$project": { "ordenes._id": 1, "ordenes.estado": 1 }
-        }
-    ])
-    .then((ordenes) => {
-        var ordenesTomadas = [];
-        for (var i = 0; i < ordenes[0].ordenes.length; i++) {
-            if(ordenes[0].ordenes[i].estado == "tomada"){
-                ordenesTomadas.push(ordenes[0].ordenes[i]);
+            "$lookup": {
+                "from": "empresas",
+                "localField": "ordenes.productos",
+                "foreignField": "productos._id",
+                "as": "producto"
+            }
+        },
+        {
+            "$unwind": "$producto"
+        },
+        {
+            "$unwind": "$producto.productos"
+        },
+        {
+            "$match": {
+                "producto.productos._id": mongoose.Types.ObjectId(req.params.id)
+            }
+        },
+        {
+            "$project": {
+                "producto.productos": 1.0
             }
         }
-        res.send(ordenesTomadas);
+    ])
+    .then((producto) => {
+        res.send(producto[0].producto.productos);
         res.end();
     })
     .catch((err) => {
@@ -156,22 +172,27 @@ router.get('/ordenes/tomadas', (req, res) => {
     });
 });
 
-//Obtener todas las ordenes en el origen
-//URL: http://localhost:3333/administracion/ordenes/origen
-router.get('/ordenes/origen', (req, res) => {
+
+//Obtener las ordenes con estado: "tomada"
+//URL: http://localhost:3333/administracion/tomadas
+router.get('/tomadas', (req, res) => {
     administracion.aggregate([
         {
-            "$project": { "ordenes._id": 1, "ordenes.estado": 1 }
+            "$project": {
+                "ordenes": 1.0
+            }
+        },
+        {
+            "$unwind": "$ordenes"
+        },
+        {
+            "$match": {
+                "ordenes.estado": "tomada"
+            }
         }
     ])
     .then((ordenes) => {
-        var ordenesOrigen = [];
-        for (var i = 0; i < ordenes[0].ordenes.length; i++) {
-            if(ordenes[0].ordenes[i].estado == "en el origen"){
-                ordenesOrigen.push(ordenes[0].ordenes[i]);
-            }
-        }
-        res.send(ordenesOrigen);
+        res.send(ordenes);
         res.end();
     })
     .catch((err) => {
@@ -180,22 +201,26 @@ router.get('/ordenes/origen', (req, res) => {
     });
 });
 
-//Obtener todas las ordenes en el destino
-//URL: http://localhost:3333/administracion/ordenes/destino
-router.get('/ordenes/destino', (req, res) => {
+//Obtener las ordenes con estado: "en el origen"
+//URL: http://localhost:3333/administracion/origen
+router.get('/origen', (req, res) => {
     administracion.aggregate([
         {
-            "$project": { "ordenes._id": 1, "ordenes.estado": 1 }
+            "$project": {
+                "ordenes": 1.0
+            }
+        },
+        {
+            "$unwind": "$ordenes"
+        },
+        {
+            "$match": {
+                "ordenes.estado": "en el origen"
+            }
         }
     ])
     .then((ordenes) => {
-        var ordenesDestino = [];
-        for (var i = 0; i < ordenes[0].ordenes.length; i++) {
-            if(ordenes[0].ordenes[i].estado == "en el destino"){
-                ordenesDestino.push(ordenes[0].ordenes[i]);
-            }
-        }
-        res.send(ordenesDestino);
+        res.send(ordenes);
         res.end();
     })
     .catch((err) => {
@@ -204,22 +229,26 @@ router.get('/ordenes/destino', (req, res) => {
     });
 });
 
-//Obtener todas las ordenes en camino
-//URL: http://localhost:3333/administracion/ordenes/camino
-router.get('/ordenes/camino', (req, res) => {
+//Obtener las ordenes con estado: "en camino"
+//URL: http://localhost:3333/administracion/camino
+router.get('/camino', (req, res) => {
     administracion.aggregate([
         {
-            "$project": { "ordenes._id": 1, "ordenes.estado": 1 }
+            "$project": {
+                "ordenes": 1.0
+            }
+        },
+        {
+            "$unwind": "$ordenes"
+        },
+        {
+            "$match": {
+                "ordenes.estado": "en camino"
+            }
         }
     ])
     .then((ordenes) => {
-        var ordenesCamino = [];
-        for (var i = 0; i < ordenes[0].ordenes.length; i++) {
-            if(ordenes[0].ordenes[i].estado == "en camino"){
-                ordenesCamino.push(ordenes[0].ordenes[i]);
-            }
-        }
-        res.send(ordenesCamino);
+        res.send(ordenes);
         res.end();
     })
     .catch((err) => {
@@ -227,5 +256,61 @@ router.get('/ordenes/camino', (req, res) => {
         res.end();
     });
 });
+
+//Obtener las ordenes con estado: "en el destino"
+//URL: http://localhost:3333/administracion/destino
+router.get('/destino', (req, res) => {
+    administracion.aggregate([
+        {
+            "$project": {
+                "ordenes": 1.0
+            }
+        },
+        {
+            "$unwind": "$ordenes"
+        },
+        {
+            "$match": {
+                "ordenes.estado": "en el destino"
+            }
+        }
+    ])
+    .then((ordenes) => {
+        res.send(ordenes);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar producto de la orden por id
+//URL: http://localhost:3333/administacion/orden/:idOrden/product/:idProducto
+router.delete('/orden/:idOrden/product/:idProducto', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$pull": {
+                "ordenes.$.productos": {
+                    "_id": mongoose.Types.ObjectId(req.params.idProducto)
+                }
+            }
+        }
+    )
+    .then((orden) => {
+        res.send(orden);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
+
 
 module.exports = router;

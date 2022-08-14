@@ -37,4 +37,57 @@ router.get('/:id', (req, res) => {
     });
 });
 
+//Obtener un producto por su id
+//URL: http://localhost:3333/empresa/producto/:id
+router.get('/producto/:id', (req, res) => {
+    empresas.aggregate([
+        {
+            "$project": {
+                "productos": 1.0
+            }
+        },
+        {
+            "$unwind": "$productos"
+        },
+        {
+            "$match": {
+                "productos._id": mongoose.Types.ObjectId(req.params.id)
+            }
+        }
+    ])
+    .then((producto) => {
+        res.send(producto[0].productos);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//modificar un producto por su id
+//URL: http://localhost:3333/empresa/producto/:id
+router.put('/producto/:id', (req, res) => {
+    empresas.updateOne(
+        { "productos._id": mongoose.Types.ObjectId(req.params.id) },
+        { $set: {
+            "productos.$.nombre": req.body.nombre,
+            "productos.$.precio": req.body.precio,
+            "productos.$.imagen": req.body.imagen
+        }
+    })
+    .then((producto) => {
+        res.send(producto);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
+
+
+
 module.exports = router;

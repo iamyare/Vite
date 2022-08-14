@@ -1569,6 +1569,7 @@
                                 <label class="form-label" for="estado-administracion-modal">Estado</label>
                                 <div class="input-group">
                                     <select class="form-select" id="estado-administracion-modal">
+                                        <option value="1" selected>En camino</option>
                                         <option value="1">En camino</option>
                                         <option value="2">Entregado</option>
                                     </select>
@@ -1576,11 +1577,57 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button></div>
+                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" onclick="actualizarOrdenAdm()">Guardar</button></div>
                 </div>
             </div>
         </div>
+        <!--/Modal-->
 
+        <!--Modal editor Producto-->
+        <div class="modal fade" id="modalEditorProductoAdministracion" tabindex="-1" aria-labelledby="modalEditorProductoAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditorProductoAdministracionLabel">Producto</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="div-productos-administracion-modal">
+                            <!--Nombre-->
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre-administracion-modal">Nombre</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="nombre-administracion-modal" value="Producto 1">
+                                </div>
+                            </div>
+                            <!--Precio-->
+                            <div class="mb-3">
+                                <label class="form-label" for="precio-administracion-modal">Precio</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="number" id="precio-administracion-modal" value="1000">
+                                </div>
+                            </div>
+                            <!--Imagen del producto y un select al lado-->
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-administracion-modal">Imagen</label>
+                                <div class="input-group">
+                                    <img id="imagen-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del producto" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select" id="select-imagen-administracion-modal">
+                                        <option value="1" >Imagen 1</option>
+                                        <option value="1">Imagen 1</option>
+                                        <option value="2">Imagen 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="div-footer-productos-administracion-modal">
+                        <button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/Modal-->
 
         <!--Modal editar perfil cliente-->
         <!--Modal editar Cliente Administrador-->
