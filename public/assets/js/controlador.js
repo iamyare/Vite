@@ -1,5 +1,6 @@
 var administracion = true;
 var ordenSeleccionadaActualmente = null;
+var clienteSeleccionadoActualmente = null;
 //Modales
 var modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAdministrador");
 var modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdministracion");
@@ -48,7 +49,7 @@ function llenarClientesAdministracion() {
                                 <img class="avatar img-perfil" src="assets/img/profile-pics/${cliente.imagen}" />
                                 <div class="ms-2">
                                     <h5 class="m-0">${cliente.nombre} ${cliente.apellido}</h5>
-                                    <p class="text-break m-0 m-0">${cliente.ordenes.length}</p>
+                                    <p class="text-break m-0 m-0">${cliente.ordenes.length} Ordenes</p>
                                 </div>
                             </div>
                             <div><button class="btn btn-warning btn-sm" type="button" onclick="verInfoCliente('${cliente._id}')">Ver</button></div>
@@ -62,6 +63,7 @@ function llenarClientesAdministracion() {
 }
 
 function verInfoCliente(idCliente) {
+    clienteSeleccionadoActualmente = idCliente;
     let ordenesDiv = "";
     clienteAdministracionModal.innerHTML = "";
 
@@ -80,6 +82,9 @@ function verInfoCliente(idCliente) {
                                 <td>
                                     <button class="btn btn-warning" type="button" onclick="mostrarEditorOrdenAdministracion('${orden._id}')">Mostrar</button>
                                 </td>
+                                <td>
+                                <button class="btn btn-danger" type="button" onclick="eliminarOrdenAdministracion('${orden._id}')">Eliminar</button>
+                            </td>
                             </tr>
                         `;
                         clienteAdministracionModal.innerHTML = `
@@ -94,7 +99,6 @@ function verInfoCliente(idCliente) {
                                     <label class="form-label" for="nombre-cliente-administracion-modal">Nombre</label>
                                     <div class="input-group">
                                         <input class="form-control" type="text" id="nombre-cliente-administracion-modal" value="${cliente.nombre}">
-                                        <button class="btn btn-primary" type="button" onclick="abrirModalEditar('nombre-cliente-administracion-modal');">Editar</button>
                                     </div>
                                 </div>
                                 <!--Apellido-->
@@ -102,7 +106,6 @@ function verInfoCliente(idCliente) {
                                     <label class="form-label" for="apellido-cliente-administracion-modal">Apellido</label>
                                     <div class="input-group">
                                         <input class="form-control" type="text" id="apellido-cliente-administracion-modal" value="${cliente.apellido}">
-                                        <button class="btn btn-primary" type="button" onclick="abrirModalEditar('apellido-cliente-administracion-modal');">Editar</button>
                                     </div>
                                 </div>
                                 <!--Correo-->
@@ -110,7 +113,6 @@ function verInfoCliente(idCliente) {
                                     <label class="form-label" for="correo-cliente-administracion-modal">Correo</label>
                                     <div class="input-group">
                                         <input class="form-control" type="email" id="correo-cliente-administracion-modal" value="${cliente.correo}">
-                                        <button class="btn btn-primary" type="button" onclick="abrirModalEditar('correo-cliente-administracion-modal');">Editar</button>
                                     </div>
                                 </div>
                                 <!--Contraseña-->
@@ -118,7 +120,6 @@ function verInfoCliente(idCliente) {
                                     <label class="form-label" for="contrasena-cliente-administracion-modal">Contraseña</label>
                                     <div class="input-group">
                                         <input class="form-control" type="password" id="contrasena-cliente-administracion-modal" value="${cliente.contraseña}">
-                                        <button class="btn btn-primary" type="button" onclick="abrirModalEditar('contrasena-cliente-administracion-modal');">Editar</button>
                                     </div>
                                 </div>
                                 <!--Ordenes-->
@@ -134,6 +135,7 @@ function verInfoCliente(idCliente) {
                                                         <th>Total</th>
                                                         <th>Estado</th>
                                                         <th>Conf</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -162,15 +164,17 @@ function mostrarEditorOrdenAdministracion(idOrden){
         modalEditorOrdenAdministracionLabel.innerHTML = `Orden #${res._id}`;
         tablaModalEditorOrdenAdministracion.innerHTML = "";
         res.productos.forEach((idProducto) => {
-            obtenerProductosID(idProducto).then((producto) => {
+            let ideProducto = idProducto.producto;
+            let cantidadProducto = idProducto.cantidad;
+            obtenerProductosID(ideProducto).then((producto) => {
                 tablaModalEditorOrdenAdministracion.innerHTML += 
                 `
                 <tr>
                     <td>${producto._id}</td>
                     <td>${producto.nombre}</td>
-                    <td>1</td>
+                    <td>${cantidadProducto}</td>
                     <td>${producto.precio}</td>
-                    <td>${(producto.precio)*(2)}</td>
+                    <td>${(producto.precio)*(cantidadProducto)}</td>
                     <td><button class="btn btn-danger" type="button" onclick="eliminarProductoOrden('${producto._id},${idOrden}')">Eliminar</button></td>
                     <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button></td>
                 </tr>
@@ -291,6 +295,81 @@ function editarProducto(idProducto){
 
 }
 
-function actualizarOrdenAdm(){
-    console.log("Actualizar orden");
+function actualizarEstadoOrdenAdm(){
+    //Obtenemos el estado de la orden seleccionado en el select
+    let estado = document.getElementById("estado-administracion-modal").value;
+    //Actualizamos el estado de la orden
+    fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}`, {
+        method: 'PUT',
+        body: JSON.stringify({estado: estado}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        modalEditorOrdenAdministracion.hide();
+        verInfoCliente(clienteSeleccionadoActualmente);
+    });
+    
+}
+
+function eliminarOrdenAdministracion(idOrden){
+    //Eliminar la orden
+    fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}/orden/${idOrden}`, {
+        method: 'DELETE'
+    }).then((res) => {
+        verInfoCliente(clienteSeleccionadoActualmente);
+    });
+}
+
+function actualizarClienteAdm(){
+    //Obtenemos los valores de los inputs
+    let nombre = document.getElementById("nombre-cliente-administracion-modal").value;
+    let apellido = document.getElementById("apellido-cliente-administracion-modal").value;
+    let correo = document.getElementById("correo-cliente-administracion-modal").value;
+    let contrasena = document.getElementById("contrasena-cliente-administracion-modal").value;
+
+    //Creamos el objeto cliente
+    let cliente = {
+        nombre: nombre,
+        apellido: apellido,
+        correo: correo,
+        contrasena: contrasena
+    };
+    //Actualizamos el cliente
+    fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}`, {
+        method: 'PUT',
+        body: JSON.stringify(cliente),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        modalEditarClienteAdministrador.hide();
+        llenarClientesAdministracion();
+    });
+
+}
+
+function agregarOrdenClienteAdm(){
+    //Agregamos la orden a la administracion y obtenemos el id de la orden creada
+    fetch(`http://localhost:3333/administracion/ordenes`, {
+        method: 'POST',
+        body: JSON.stringify({}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        //Agregamos la orden al cliente
+        fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}/orden/${data.id}`, {
+            method: 'POST',
+            body: JSON.stringify({}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            verInfoCliente(clienteSeleccionadoActualmente);
+        });
+    }
+    );
 }

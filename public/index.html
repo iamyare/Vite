@@ -1499,7 +1499,19 @@
 
                         </form>
                     </div>
-                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button></div>
+                    <!--Tres botones uno al lado del otro-->
+                    <div class="row">
+                        <div class="col">
+                            <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" onclick="actualizarClienteAdm()">Guardar</button></div>
+                        </div>
+                        <div class="col">
+                            <div class="modal-footer"><button class="btn btn-primary w-100" type="button" onclick="agregarOrdenClienteAdm()">Agregar Orden</button></div>
+                        </div>
+                        <div class="col">
+                            <div class="modal-footer"><button class="btn btn-danger w-100" type="button" onclick="eliminarClienteAdm()">Eliminar cliente</button></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -1577,7 +1589,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" onclick="actualizarOrdenAdm()">Guardar</button></div>
+                    <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" onclick="actualizarEstadoOrdenAdm()">Guardar</button></div>
                 </div>
             </div>
         </div>

@@ -36,5 +36,67 @@ router.get('/:id', (req, res) => {
     });
 });
 
+//Actualizar un cliente por su id
+//URL: http://localhost:3333/cliente/:id
+router.put('/:id', (req, res) => {
+    clientes.findByIdAndUpdate(
+        {_id: req.params.id},
+        {
+            $set: {
+                "nombre": req.body.nombre,
+                "apellido": req.body.apellido,
+                "correo": req.body.correo,
+                "contraseña": req.body.contraseña
+        }
+    })
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar orden de un cliente por su id
+//URL: http://localhost:3333/cliente/:id/orden/:id
+router.delete('/:idCliente/orden/:idOrden', (req, res) => {
+    clientes.findByIdAndUpdate(
+        {_id: req.params.idCliente},
+        {
+            $pull: {
+                "ordenes": mongoose.Types.ObjectId(req.params.idOrden)
+        }
+    })
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Agregar un id de orden ya creado a un cliente por su id
+//URL: http://localhost:3333/cliente/:id/orden/:id
+router.post('/:idCliente/orden/:idOrden', (req, res) => {
+    clientes.findByIdAndUpdate(
+        {_id: req.params.idCliente},
+        {
+            $push: {
+                "ordenes": mongoose.Types.ObjectId(req.params.idOrden)
+        }
+    })
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
 
 module.exports = router;

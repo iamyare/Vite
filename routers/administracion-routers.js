@@ -140,7 +140,7 @@ router.get('/producto/:id', (req, res) => {
         {
             "$lookup": {
                 "from": "empresas",
-                "localField": "ordenes.productos",
+                "localField": "ordenes.productos.producto",
                 "foreignField": "productos._id",
                 "as": "producto"
             }
@@ -285,23 +285,21 @@ router.get('/destino', (req, res) => {
     });
 });
 
-//Eliminar producto de la orden por id
-//URL: http://localhost:3333/administacion/orden/:idOrden/product/:idProducto
-router.delete('/orden/:idOrden/product/:idProducto', (req, res) => {
+//Actualizar el estado de una orden
+//URL: http://localhost:3333/administracion/ordenes/:id
+router.put('/ordenes/:id', (req, res) => {
     administracion.updateOne(
         {
-            "ordenes._id": mongoose.Types.ObjectId(req.params.idOrden)
+            "ordenes._id": mongoose.Types.ObjectId(req.params.id)
         },
         {
-            "$pull": {
-                "ordenes.$.productos": {
-                    "_id": mongoose.Types.ObjectId(req.params.idProducto)
-                }
+            "$set": {
+                "ordenes.$.estado": req.body.estado
             }
         }
     )
-    .then((orden) => {
-        res.send(orden);
+    .then((ordenes) => {
+        res.send(ordenes);
         res.end();
     })
     .catch((err) => {
@@ -310,7 +308,49 @@ router.delete('/orden/:idOrden/product/:idProducto', (req, res) => {
     });
 });
 
-
-
+//Agregar una orden
+//URL: http://localhost:3333/administracion/ordenes
+router.post('/ordenes/', (req, res) => {
+    let id = mongoose.Types.ObjectId();
+    administracion.updateOne(
+        {
+            "$push": {
+                "ordenes": {
+                    "_id": id,
+                    "estado": "tomada",
+                    "direccion": {
+                        "altitud": 14.123456,
+                        "latitud": -87.123456,
+                    },
+                    "productos": [],
+                    "factura": {
+                        "tarjeta": 'random',
+                        "numeroTarjeta": '2345678',
+                        "fechaVencimiento": '12/12/2020',
+                        "codigoSeguridad": '123',
+                        "nombreTitular": 'Juan Perez',
+                        "subtotal": 0.0,
+                        "total": 0.0,
+                        "comision": {
+                            "motorista": 0.0,
+                            "adm": 0.0
+                        }
+                }
+            }
+        }
+    })
+    .then((ordenes) => {
+        //Enviar el id de la orden creada junto ordenes
+        res.send({
+            id: id,
+            ordenes: ordenes
+        });
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
 
 module.exports = router;
