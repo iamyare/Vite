@@ -32,6 +32,10 @@ var imagenesProductos = [
     "whooper.jpg"
     ]
 
+const logos = ["burger-king.png","geranium.png","pizza-hut.png","sub-way.png","wendys.png"]
+const banners = ["burger-king.jpg","geranium.jpg","pizza-hut.jpg","sub-way.jpg","wendys.jpg"]
+const local = ["burger-king.jpg","geranium.jpg","pizza-hut.jpg","sub-way.jpg","wendys.jpg"]
+
 const categoriasAdm = ['tablero', 'ordenes', 'proveedores', 'motoristas'];
 
 if (administracion) {
@@ -302,6 +306,7 @@ function mostrarProductoAdministracion(idProducto){
     });
 
 }
+
 
 function getValueSelectProductoImagen(select){
     document.getElementById("imagen-administracion-modal").src = `assets/img/empresas/productos/${select.value}`;
@@ -583,7 +588,7 @@ function llenarCategoriaAdministracion(categoria){
 
                 `
                 <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                <div class="orden-card">
+                <div class="orden-card" onclick="editarOrden('${orden._id}')">
                         <div>
                             <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
@@ -808,28 +813,72 @@ function mostrarEmpresa(idEmpresa){
         let imagenLocalEmpresaAdm = document.getElementById("imagen-local-empresas-administracion-modal");
         let imagenBannerEmpresaAdm = document.getElementById("imagen-banner-empresas-administracion-modal");
         let imagenLogoEmpresaAdm = document.getElementById("logo-empresa-administracion-modal");
-
         nombreEmpresa.value = empresa.nombre;
         correoEmpresa.value = empresa.correo;
         telefonoEmpresa.value = empresa.telefono;
         contrasenaEmpresa.value = empresa.contrasena;
         descripcionEmpresa.value = empresa.descripcion;
         imagenLogoEmpresaAdm.src = `assets/img/empresas/logos/${empresa.logo}`;
+        imagenBannerEmpresaAdm.src = `assets/img/empresas/banners/${empresa.banner}`;
+        imagenLocalEmpresaAdm.src = `assets/img/empresas/local/${empresa.local}`;
 
+        //Llenar los select con las imagenes
+        //Logo
+        //Llenar el select de los logos, y seleccionar el logo actual
+        selectImagenLogoEmpresa.innerHTML = ``;
+        selectImagenBannerEmpresa.innerHTML = ``;
+        selectImagenLocalEmpresa.innerHTML = ``;
 
-
-        let datos = {
-            nombre: nombreEmpresa.value,
-            correo: correoEmpresa.value,
-            telefono: telefonoEmpresa.value,
-            contrasena: contrasenaEmpresa.value,
-            descripcion: descripcionEmpresa.value,
-            imagenBanner: selectImagenBannerEmpresa.value,
-            imagenLogo: selectImagenLogoEmpresa.value,
-            imagenLocal: selectImagenLocalEmpresa.value
-        }
-        console.log(datos);
-
+        logos.forEach((logo) => {
+            if(logo == empresa.logo){
+                selectImagenLogoEmpresa.innerHTML += `<option value="${logo}" selected>${logo}</option>`;
+            }
+            else{
+                selectImagenLogoEmpresa.innerHTML += `<option value="${logo}">${logo}</option>`;
+            }
+        });
+        //Banner
+        //Llenar el select de los banners, y seleccionar el banner actual
+        banners.forEach((banner) => {
+            if(banner == empresa.banner){
+                selectImagenBannerEmpresa.innerHTML += `<option value="${banner}" selected>${banner}</option>`;
+            }
+            else{
+                selectImagenBannerEmpresa.innerHTML += `<option value="${banner}">${banner}</option>`;
+            }
+        });
+        //Local
+        //Llenar el select de los locales, y seleccionar el local actual
+        local.forEach((local) => {
+            if(local == empresa.local){
+                selectImagenLocalEmpresa.innerHTML += `<option value="${local}" selected>${local}</option>`;
+            }
+            else{
+                selectImagenLocalEmpresa.innerHTML += `<option value="${local}">${local}</option>`;
+            }
+        });
+        tablaModalListarProductosEmpresaAdministracion.innerHTML = ``;
+        empresa.productos.forEach((producto) => {
+            tablaModalListarProductosEmpresaAdministracion.innerHTML += `
+            <tr>
+                <td>${producto._id}</td>
+                <td>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img class="rounded-2" src="assets/img/empresas/productos/${producto.imagen}" width="50px" height="50px" alt="Imagen ${producto.nombre}">
+                    </div>
+                </td>
+                <td>${producto.nombre}</td>
+                <td>$${producto.precio}</td>
+                <td>
+                    <button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="eliminarProductoEmpresa('${producto._id}')">Eliminar</button>
+                </td>
+            </tr>
+            `;
+        });
+        
     });
 }
 
@@ -927,4 +976,25 @@ function obtenerMotoristaID(idMotorista){
     }
     const motorista = obtenerMotoristaIDAdm();
     return motorista;
+}
+
+
+function editarOrden(idOrden){
+    modalEditorOrdenAdministracionLabel.innerHTML = `Orden #${idOrden}`;
+    tablaModalEditorOrdenAdministracion.innerHTML = "";
+
+    mostrarOrdenAdministracion(idOrden).then((orden) => {
+        let productos = orden.productos;
+        productos.forEach((producto) => {
+            obtenerProductosID(producto.producto).then((producto) => {
+                console.log(producto)
+            });
+        });
+    });
+
+    
+
+    //Suma de los totales de los productos
+    let subtotal = 0;
+    modalEditorOrdenAdministracion.show();
 }
