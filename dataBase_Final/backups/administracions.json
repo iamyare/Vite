@@ -1,0 +1,235 @@
+{
+    "_id" : ObjectId("62f6825eba9dd13936b4762b"),
+    "nombre" : "adm",
+    "contraseña" : "adm",
+    "motoristas" : {
+        "aprobados" : [
+            ObjectId("62f67abbba9dd13936b47627"),
+            ObjectId("62f67af3ba9dd13936b47628")
+        ],
+        "pendientes" : [
+            ObjectId("62f67b29ba9dd13936b47629")
+        ],
+        "rechazados" : [
+            ObjectId("62f67b6eba9dd13936b4762a")
+        ]
+    },
+    "clientes" : [
+        ObjectId("62f676caba9dd13936b4761b"),
+        ObjectId("62f6773bba9dd13936b4761d"),
+        ObjectId("62f67793ba9dd13936b4761f"),
+        ObjectId("62f67836ba9dd13936b47621"),
+        ObjectId("62f678beba9dd13936b47623"),
+        ObjectId("62f67922ba9dd13936b47625")
+    ],
+    "proveedores" : [
+        ObjectId("62f66f3fba9dd13936b475ff"),
+        ObjectId("62f670acba9dd13936b47603"),
+        ObjectId("62f672acba9dd13936b4760c"),
+        ObjectId("62f67342ba9dd13936b47612"),
+        ObjectId("62f674c8ba9dd13936b47618")
+    ],
+    "ordenes" : [
+        {
+            "_id" : ObjectId("62f6825eba9dd13936b4762c"),
+            "estado" : "en el origen",
+            "direccion" : {
+                "latitud" : 14.123456,
+                "longitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "cantidad" : NumberInt(2),
+                    "producto" : ObjectId("62f66f3fba9dd13936b47600")
+                },
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f66f3fba9dd13936b47601")
+                }
+            ],
+            "factura" : {
+                "subtotal" : "142",
+                "total" : "170.4",
+                "comision" : {
+                    "motorista" : 2.1300000000000003,
+                    "adm" : 4.970000000000001
+                }
+            },
+            "total" : NumberInt(1000)
+        },
+        {
+            "_id" : ObjectId("62f6825eba9dd13936b4762d"),
+            "estado" : "en el origen",
+            "direccion" : {
+                "latitud" : 14.123456,
+                "longitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f672acba9dd13936b4760d")
+                },
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f67342ba9dd13936b47613")
+                }
+            ],
+            "factura" : {
+                "subtotal" : "100",
+                "total" : "120",
+                "comision" : {
+                    "motorista" : 1.5,
+                    "adm" : 3.5
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62f6825eba9dd13936b4762e"),
+            "estado" : "en el origen",
+            "direccion" : {
+                "latitud" : 14.123456,
+                "longitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f672acba9dd13936b4760d")
+                },
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f67342ba9dd13936b47614")
+                },
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f67342ba9dd13936b47615")
+                }
+            ],
+            "factura" : {
+                "tarjeta" : "visa",
+                "numeroTarjeta" : "123456789",
+                "fechaVencimiento" : "12/12/2020",
+                "codigoSeguridad" : "123",
+                "nombreTitular" : "Miguel Sanchez",
+                "subtotal" : "1000",
+                "total" : "1200",
+                "comision" : {
+                    "motorista" : "100",
+                    "adm" : "100"
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62f6825eba9dd13936b4762f"),
+            "estado" : "en el origen",
+            "direccion" : {
+                "latitud" : 14.123456,
+                "longitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f67342ba9dd13936b47616")
+                }
+            ],
+            "factura" : {
+                "tarjeta" : "visa",
+                "numeroTarjeta" : "123456789",
+                "fechaVencimiento" : "12/12/2020",
+                "codigoSeguridad" : "123",
+                "nombreTitular" : "Miguel Sanchez",
+                "subtotal" : "1000",
+                "total" : "1200",
+                "comision" : {
+                    "motorista" : "100",
+                    "adm" : "100"
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62f6825eba9dd13936b47630"),
+            "estado" : "tomada",
+            "direccion" : {
+                "latitud" : 14.123456,
+                "longitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f67342ba9dd13936b47616")
+                },
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f67342ba9dd13936b47615")
+                }
+            ],
+            "factura" : {
+                "subtotal" : "70",
+                "total" : "84",
+                "comision" : {
+                    "motorista" : 1.05,
+                    "adm" : 2.45
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62f6825eba9dd13936b47631"),
+            "estado" : "tomada",
+            "direccion" : {
+                "latitud" : 14.123456,
+                "longitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "cantidad" : NumberInt(1),
+                    "producto" : ObjectId("62f674c8ba9dd13936b47619")
+                }
+            ],
+            "factura" : {
+                "subtotal" : "50",
+                "total" : "60",
+                "comision" : {
+                    "motorista" : 0.75,
+                    "adm" : 1.75
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62fa729d1d3f5e2c2b87cbfb"),
+            "estado" : "tomada",
+            "direccion" : {
+                "altitud" : 14.123456,
+                "latitud" : -87.123456
+            },
+            "productos" : [
+                {
+                    "producto" : ObjectId("62f670acba9dd13936b47604"),
+                    "cantidad" : NumberInt(4)
+                }
+            ],
+            "factura" : {
+                "subtotal" : "200",
+                "total" : "240",
+                "comision" : {
+                    "motorista" : NumberInt(3),
+                    "adm" : NumberInt(7)
+                }
+            }
+        }
+    ],
+    "tarjetas" : [
+        "visa",
+        "mastercard",
+        "american express"
+    ],
+    "categorias" : [
+        "Buffet",
+        "Comida Rapida",
+        "Familiar"
+    ],
+    "estados" : [
+        "en el origen",
+        "en camino",
+        "tomada",
+        "en el destino"
+    ]
+}

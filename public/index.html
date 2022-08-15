@@ -878,7 +878,18 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-6 col-xxl-6">
-                                            <h4 class="m-0">Clientes</h4>
+                                            <!--Dos columnas: 1. con h4 y 2. Boton agregar cliente-->
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <h4 class="m-0">Clientes</h4>
+                                                </div>
+                                                <!--Boton alineado a la derecha-->
+                                                <div class="col-4 text-right">
+                                                    <button class="btn btn-warning btn-sm" type="button" onclick="verInfoCliente()">Agregar cliente</button>
+                                                </div>
+
+                                            </div>
+                                            
                                             <div class="row gy-3 my-1" id="contenido-clientes-administracion" style="overflow-y: scroll;max-height: 250px;">
                                             
                                                 <!-- Cliente item -->
@@ -1484,15 +1495,16 @@
                             <!--Imagen-->
                             <div class="mb-3">
                                 <label class="form-label" for="imagen-cliente-administracion-modal">Imagen</label>
-                                <img class="avatar img-perfil" src="assets/img/profile-pics/01.jpg" alt="">
-                                <button class="btn btn-primary" type="button">Editar</button>
+                                <img class="avatar img-perfil" id="imagen-cliente-modal-editor-adm" src="assets/img/profile-pics/01.jpg" alt="">
+                                <!--Select-->
+                                <select class="form-control" id="select-imagen-cliente-administracion-modal" onchange="actualizarImagenCliente()">
+                                </select>
                             </div>
                             <!--Nombre-->
                             <div class="mb-3">
                                 <label class="form-label" for="nombre-cliente-administracion-modal">Nombre</label>
                                 <div class="input-group">
                                     <input class="form-control" type="text" id="nombre-cliente-administracion-modal" value="Yamir Alejandro">
-                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('nombre-cliente-administracion-modal');">Editar</button>
                                 </div>
                             </div>
                             <!--Apellido-->
@@ -1500,7 +1512,6 @@
                                 <label class="form-label" for="apellido-cliente-administracion-modal">Apellido</label>
                                 <div class="input-group">
                                     <input class="form-control" type="text" id="apellido-cliente-administracion-modal" value="Rodas">
-                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('apellido-cliente-administracion-modal');">Editar</button>
                                 </div>
                             </div>
                             <!--Correo-->
@@ -1508,7 +1519,6 @@
                                 <label class="form-label" for="correo-cliente-administracion-modal">Correo</label>
                                 <div class="input-group">
                                     <input class="form-control" type="email" id="correo-cliente-administracion-modal" value="hola@gmail.com">
-                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('correo-cliente-administracion-modal');">Editar</button>
                                 </div>
                             </div>
                             <!--Contraseña-->
@@ -1516,7 +1526,6 @@
                                 <label class="form-label" for="contrasena-cliente-administracion-modal">Contraseña</label>
                                 <div class="input-group">
                                     <input class="form-control" type="password" id="contrasena-cliente-administracion-modal" value="********">
-                                    <button class="btn btn-primary" type="button" onclick="abrirModalEditar('contrasena-cliente-administracion-modal');">Editar</button>
                                 </div>
                             </div>
                             <!--Ordenes-->
@@ -1534,7 +1543,7 @@
                                                     <th>Conf</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="ordenesDeClienteAdm">
                                                 <tr>
                                                     <td>#dnsaj321bh321</td>
                                                     <td>L. 4000</td>
@@ -1551,19 +1560,12 @@
 
                         </form>
                     </div>
-                    <!--Tres botones uno al lado del otro-->
-                    <div class="row">
-                        <div class="col">
-                            <div class="modal-footer"><button class="btn btn-secundary w-100" type="button" onclick="actualizarClienteAdm()">Guardar</button></div>
-                        </div>
-                        <div class="col">
-                            <div class="modal-footer"><button class="btn btn-primary w-100" type="button" onclick="agregarOrdenClienteAdm()">Agregar Orden</button></div>
-                        </div>
-                        <div class="col">
-                            <div class="modal-footer"><button class="btn btn-danger w-100" type="button" onclick="eliminarClienteAdm()">Eliminar cliente</button></div>
+
+                    <div class="modal-footer d-flex">
+                        <div class="row w-100" id="footer-modal-editar-cliente">
+
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -1889,9 +1891,9 @@
                 </div>
             </div>
         </div>
+        <!--/Modal de Administracion de Empresas-->
 
         <!--Modal editar perfil cliente-->
-        <!--Modal editar Cliente Administrador-->
         <div class="modal fade" id="modalEditarClienteIndex" tabindex="-2"
             aria-labelledby="modalEditarClienteAdministradorLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -1956,6 +1958,7 @@
                 </div>
             </div>
         </div>
+        <!--/Modal editar perfil cliente-->
         
         <!--Modal editor Producto-->
         <div class="modal fade" id="modalEditorProductoAdministracion" tabindex="-1" aria-labelledby="modalEditorProductoAdministracionLabel" aria-hidden="true">
@@ -2002,6 +2005,226 @@
             </div>
         </div>
         <!--/Modal-->
+
+        <!--Modal editor Motorista-->
+        <div class="modal fade" id="modalEditorMotoristaAdministracion" tabindex="-1" aria-labelledby="modalEditorMotoristaAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditorMotoristaAdministracionLabel">Motorista</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="div-motoristas-administracion-modal">
+                            <!--Imagen de motorista junto un select-->
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-motorista-administracion-modal">Imagen</label>
+                                <div class="input-group">
+                                    <img id="imagen-motorista-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del motorista" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select" id="select-imagen-motorista-administracion-modal" onchange="getValueSelectMotoristaImagen(this);">
+                                        <option value="1" >Imagen 1</option>
+                                        <option value="1">Imagen 1</option>
+                                        <option value="2">Imagen 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--Nombre-->
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre-motorista-administracion-modal">Nombre</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="nombre-motorista-administracion-modal" value="Yamir Alejandro">
+                                </div>
+                            </div>
+                            <!--Apellido-->
+                            <div class="mb-3">
+                                <label class="form-label" for="apellido-motorista-administracion-modal">Apellido</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="apellido-motorista-administracion-modal" value="Rodas">
+                                </div>
+                            </div>
+                            <!--Correo-->
+                            <div class="mb-3">
+                                <label class="form-label" for="correo-motorista-administracion-modal">Correo</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="correo-motorista-administracion-modal" value="correo@gmail.com">
+                                </div>
+                            </div>
+                            <!--Contraseña-->
+                            <div class="mb-3">
+                                <label class="form-label" for="contrasena-motorista-administracion-modal">Contraseña</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" id="contrasena-motorista-administracion-modal" value="12345678">
+                                </div>
+                            </div>
+                            <!--Id-->
+                            <div class="mb-3">
+                                <label class="form-label" for="id-motorista-administracion-modal">ID</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="id-motorista-administracion-modal" value="0816-1000-8989">
+                                </div>
+                            </div>
+                            <!--Aprobado select que indique si esta aprobado o rechazado-->
+                            <div class="mb-3">
+                                <label class="form-label" for="aprobado-motorista-administracion-modal">Aprobado</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="aprobado-motorista-administracion-modal" onchange="getValueSelectMotoristaAprobado(this);">
+                                        <option value="1" >Aprobado</option>
+                                        <option value="0">Rechazado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--Ordenes-->
+                            <div class="container" id="divOrdenesMotorista">
+                                <h1 class="m-3 degradado-naranja">Ordenes</h1>
+                                <div>
+                                    <ul class="nav nav-pills nav-justified" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2 active" role="tab" data-bs-toggle="pill" href="#content-ordenes-sin-tomar-motorista">Ordenes disponibles</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-ordenes-tomadas-motorista">Ordenes asignadas</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-en-camino-motorista">Ordenes en camino</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-ordenes-entregadas-motorista">Ordenes entregadas</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <!-- Ordenes disponibles -->
+                                        <div id="content-ordenes-sin-tomar-motorista" class="tab-pane fade show active" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-disponibles">
+
+                                                    <!--Item: Ordenes-->
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                                                        </div>
+                                                    </div>
+                                                    <!--Fin Item-->
+                    
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes asignadas -->
+                                        <div id="content-ordenes-tomadas-motorista" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-tomadas">
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card" >
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes en camino -->
+                                        <div id="content-en-camino-motorista" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-camino">
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Ordenes entregadas -->
+                                        <div id="content-ordenes-entregadas-motorista" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-entregadas">
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #123412432</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                                                        <div class="orden-card">
+                                                            <div>
+                                                                <h5 class="m-0">Orden: #12341243321312</h5>
+                                                                <div class="ms-2">
+                                                                    <p class="orden-card-description">12 productos</p>
+                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="div-footer-motoristas-administracion-modal">
+                        <button class="btn btn-secundary w-100" type="button" onclick="verificarDatosMotorista()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/Modal-->
+
+
     </section>
 
     <!-- Pie de Pagina Home-->

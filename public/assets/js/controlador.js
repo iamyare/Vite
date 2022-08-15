@@ -10,6 +10,7 @@ var modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdmin
 var modalEditorProductoAdministracion = new bootstrap.Modal("#modalEditorProductoAdministracion");
 var modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProductosAdministracion");
 const modalEditorEmpresasAdministracion = new bootstrap.Modal("#modalEditorEmpresasAdministracion");
+const modalEditorMotoristaAdministracion = new bootstrap.Modal("#modalEditorMotoristaAdministracion");
 
 //Divs para rellenar con los datos obtenidos
 const divClientesAdministracion = document.getElementById("contenido-clientes-administracion");
@@ -18,22 +19,26 @@ const modalEditorOrdenAdministracionLabel = document.getElementById("modalEditor
 const tablaModalEditorOrdenAdministracion = document.getElementById("tablaModalEditorOrdenAdministracion");
 const divContenidoProveedores  = document.getElementById("div-contenido-proveedores");
 
-var estados = [
-    "en el origen",
-    "en camino",
-    "tomada",
-    "en el destino"
-]
-var imagenesProductos = [
-    "pizza-pepperoni.jpg",
-    "plato-pasta.jpg",
-    "subway-club.jpg",
-    "subway-melt.jpg",
-    "subway-tuna.jpg",
-    "subway-veggie-delite.jpg",
-    "whooper-jr.jpg",
-    "whooper.jpg"
-    ]
+//Inputs Clientes
+var imagenCliente = document.getElementById("imagen-cliente-modal-editor-adm");
+var nombreCliente = document.getElementById("nombre-cliente-administracion-modal");
+var apellidoCliente = document.getElementById("apellido-cliente-administracion-modal");
+var correoCliente = document.getElementById("correo-cliente-administracion-modal");
+var contrasenaCliente = document.getElementById("contrasena-cliente-administracion-modal");
+var selectImagenCliente = document.getElementById("select-imagen-cliente-administracion-modal");
+
+//Input Motorista
+var nombreMotorista = document.getElementById("nombre-motorista-administracion-modal");
+var apellidoMotorista = document.getElementById("apellido-motorista-administracion-modal");
+var correoMotorista = document.getElementById("correo-motorista-administracion-modal");
+var contrasenaMotorista = document.getElementById("contrasena-motorista-administracion-modal");
+var identificacionMotorista = document.getElementById("id-motorista-administracion-modal");
+
+const imagenesClientes = ["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg","11.jpg","12.jpg"]
+var estados = ["en el origen", "en camino", "tomada", "en el destino"]
+var imagenesProductos = ["pizza-pepperoni.jpg", "plato-pasta.jpg", "subway-club.jpg", "subway-melt.jpg", "subway-tuna.jpg", "subway-veggie-delite.jpg", "whooper-jr.jpg", "whooper.jpg"]
+
+
 
 const logos = ["burger-king.png","geranium.png","pizza-hut.png","sub-way.png","wendys.png"]
 const banners = ["burger-king.jpg","geranium.jpg","pizza-hut.jpg","sub-way.jpg","wendys.jpg"]
@@ -97,19 +102,38 @@ function llenarClientesAdministracion() {
 }
 
 function verInfoCliente(idCliente) {
+
+    if (idCliente != null ){
+
     clienteSeleccionadoActualmente = idCliente;
     llamadoDesde = "clientes";
-    let ordenesDiv = "";
-    clienteAdministracionModal.innerHTML = "";
+
 
     fetch(`http://localhost:3333/cliente/${idCliente}`)
         .then((res) => res.json())
         .then((cliente) => {
+            nombreCliente.value = cliente.nombre;
+            apellidoCliente.value = cliente.apellido;
+            correoCliente.value = cliente.correo;
+            contrasenaCliente.value = cliente.contraseña;
+            imagenCliente.src = `assets/img/profile-pics/${cliente.imagen}`;
+
+            //Llenar el select con las imagenes menos la actual
+            selectImagenCliente.innerHTML = "";
+            imagenesClientes.forEach((imagen) => {
+                if (imagen != cliente.imagen) {
+                    selectImagenCliente.innerHTML += `<option value="${imagen}">${imagen}</option>`;
+                }else{
+                    selectImagenCliente.innerHTML += `<option value="${imagen}" selected>${imagen}</option>`;
+                }
+            });
+            
+            ordenesDeClienteAdm.innerHTML = "";
             cliente.ordenes.forEach((orden) => {
                 fetch(`http://localhost:3333/administracion/ordenes/${orden}`)
                     .then((res) => res.json())
                     .then((orden) => {
-                        ordenesDiv += `
+                        ordenesDeClienteAdm.innerHTML += `
                             <tr>
                                 <td>${orden._id}</td>
                                 <td>$${orden.factura.total}</td>
@@ -122,73 +146,59 @@ function verInfoCliente(idCliente) {
                             </td>
                             </tr>
                         `;
-                        clienteAdministracionModal.innerHTML = `
-                                <!--Imagen-->
-                                <div class="mb-3">
-                                    <label class="form-label" for="imagen-cliente-administracion-modal">Imagen</label>
-                                    <img class="avatar img-perfil" src="assets/img/profile-pics/${cliente.imagen}" alt="">
-                                    <button class="btn btn-primary" type="button">Editar</button>
-                                </div>
-                                <!--Nombre-->
-                                <div class="mb-3">
-                                    <label class="form-label" for="nombre-cliente-administracion-modal">Nombre</label>
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" id="nombre-cliente-administracion-modal" value="${cliente.nombre}">
-                                    </div>
-                                </div>
-                                <!--Apellido-->
-                                <div class="mb-3">
-                                    <label class="form-label" for="apellido-cliente-administracion-modal">Apellido</label>
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" id="apellido-cliente-administracion-modal" value="${cliente.apellido}">
-                                    </div>
-                                </div>
-                                <!--Correo-->
-                                <div class="mb-3">
-                                    <label class="form-label" for="correo-cliente-administracion-modal">Correo</label>
-                                    <div class="input-group">
-                                        <input class="form-control" type="email" id="correo-cliente-administracion-modal" value="${cliente.correo}">
-                                    </div>
-                                </div>
-                                <!--Contraseña-->
-                                <div class="mb-3">
-                                    <label class="form-label" for="contrasena-cliente-administracion-modal">Contraseña</label>
-                                    <div class="input-group">
-                                        <input class="form-control" type="password" id="contrasena-cliente-administracion-modal" value="${cliente.contraseña}">
-                                    </div>
-                                </div>
-                                <!--Ordenes-->
-                                <div class="mb-3">
-                                    <label class="form-label" for="productos-administracion-modal">Ordenes</label>
-                                    <div class="input-group">
-                                        <!--Tabla-->
-                                        <div class="table-responsive table-vertical w-100">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID Orden</th>
-                                                        <th>Total</th>
-                                                        <th>Estado</th>
-                                                        <th>Conf</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    ${ordenesDiv}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                `;
                     });
-
             });
-            modalEditarClienteAdministrador.show();
+
+
+            document.getElementById("footer-modal-editar-cliente").innerHTML = 
+
+
+            `
+            <div class="col-4">
+            <button class="btn btn-secundary" type="button" onclick="actualizarClienteAdm()">Guardar Cliente</button>
+            </div>
+
+            <div class="col-4">
+            <button class="btn btn-primary" type="button" onclick="agregarOrdenClienteAdm()">Agregar Orden</button>
+            </div>
+                  
+            <div class="col-4">
+            <button class="btn btn-danger" type="button" onclick="eliminarClienteAdm('${cliente._id}')">Eliminar cliente</button>
+            </div>
+            `;
         })
 
         .catch((err) => console.log(err));
+    }else{
 
+        nombreCliente.value = "";
+        apellidoCliente.value = "";
+        correoCliente.value = "";
+        contrasenaCliente.value = "";
+        imagenCliente.src = "assets/img/profile-pics/default.png";
+
+        //Llenar el select
+        selectImagenCliente.innerHTML = "";
+        imagenesClientes.forEach((imagen) => {
+            selectImagenCliente.innerHTML += `<option value="${imagen}">${imagen}</option>`;
+        });
+
+        ordenesDeClienteAdm.innerHTML = "";
+
+        document.getElementById("footer-modal-editar-cliente").innerHTML = 
+        `
+            <div class="col-12">
+                <button class="btn btn-primary w-100" type="button" onclick="agregarClienteAdm()">Agregar Cliente</button>
+            </div>
+        `;
+    }
+
+    modalEditarClienteAdministrador.show();
+
+}
+
+function actualizarImagenCliente(){
+    imagenCliente.src = `assets/img/profile-pics/${selectImagenCliente.value}`;
 }
 
 
@@ -348,6 +358,8 @@ function editarProducto(idProducto){
             } else if (llamadoDesde == "proveedores") {
                 console.log("Llamado desde proveedores Editar producto");
                 mostrarEmpresa(empresaSeleccionadaActualmente);
+            } else if (llamadoDesde == "ordenes") {
+                llenarCategoriaAdministracion('ordenes');
             }
         });
 
@@ -387,6 +399,9 @@ function actualizarOrdenAdm(){
         if (llamadoDesde == "clientes"){
             console.log("Llamado desde clientes");
             llenarClientesAdministracion();
+        } else if (llamadoDesde == "ordenes"){
+            console.log("Llamado desde Ordenes");
+            llenarCategoriaAdministracion('ordenes');
         }
     });
 }
@@ -426,30 +441,37 @@ function eliminarOrdenAdministracion(idOrden){
 }
 
 function actualizarClienteAdm(){
-    //Obtenemos los valores de los inputs
-    let nombre = document.getElementById("nombre-cliente-administracion-modal").value;
-    let apellido = document.getElementById("apellido-cliente-administracion-modal").value;
-    let correo = document.getElementById("correo-cliente-administracion-modal").value;
-    let contrasena = document.getElementById("contrasena-cliente-administracion-modal").value;
+    //Verificar que los campos no esten vacios
+    if (nombreCliente.value == "" || apellidoCliente.value == "" || correoCliente.value == "" || contrasenaCliente.value == "") {
+        alert("Por favor llene todos los campos");
+    } //Verificar que el correo sea valido con expresion regular
+    else if (!correoCliente.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        alert("Correo invalido");
+    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if (!contrasenaCliente.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        alert("Contraseña invalida. Debe tener al menos 8 caracteres, una letra mayuscula, una minuscula y un numero");
+    } else {
 
-    //Creamos el objeto cliente
-    let cliente = {
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo,
-        contrasena: contrasena
-    };
-    //Actualizamos el cliente
-    fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}`, {
-        method: 'PUT',
-        body: JSON.stringify(cliente),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then((res) => {
-        modalEditarClienteAdministrador.hide();
-        llenarClientesAdministracion();
-    });
+        //Creamos el objeto cliente
+        let cliente = {
+            nombre: nombreCliente.value,
+            apellido: apellidoCliente.value,
+            correo: correoCliente.value,
+            contraseña: contrasenaCliente.value,
+            imagen: selectImagenCliente.value
+        };
+        //Actualizamos el cliente
+        fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}`, {
+            method: 'PUT',
+            body: JSON.stringify(cliente),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            modalEditarClienteAdministrador.hide();
+            llenarClientesAdministracion();
+        });
+    }
 
 }
 
@@ -612,7 +634,7 @@ function llenarCategoriaAdministracion(categoria){
 
                 `
                 <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                <div class="orden-card" onclick="editarOrden('${orden._id}')">
+                <div class="orden-card">
                         <div>
                             <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
@@ -621,9 +643,7 @@ function llenarCategoriaAdministracion(categoria){
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                                class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
                     </div>
                 </div>
                 `;}
@@ -649,8 +669,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                                onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
                     </div>
                 </div>
                 `;
@@ -675,8 +694,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                                onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
                     </div>
                 </div>
                 `;
@@ -701,8 +719,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
+                                onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
                     </div>
                 </div>
                 `;
@@ -733,8 +750,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                                onclick="modalEditorMotoristaAdministracion.show()">Abrir</button></div>
                     </div>
                 </div>
                     `;
@@ -1052,26 +1068,6 @@ function obtenerMotoristaID(idMotorista){
 }
 
 
-function editarOrden(idOrden){
-    modalEditorOrdenAdministracionLabel.innerHTML = `Orden #${idOrden}`;
-    tablaModalEditorOrdenAdministracion.innerHTML = "";
-
-    mostrarOrdenAdministracion(idOrden).then((orden) => {
-        let productos = orden.productos;
-        productos.forEach((producto) => {
-            obtenerProductosID(producto.producto).then((producto) => {
-                console.log(producto)
-            });
-        });
-    });
-
-    
-
-    //Suma de los totales de los productos
-    let subtotal = 0;
-    modalEditorOrdenAdministracion.show();
-}
-
 function mostrarEditorOrden(idOrden, llamado){
     llamadoDesde = llamado;
     mostrarEditorOrdenAdministracion(idOrden);
@@ -1272,5 +1268,89 @@ function agregarEmpresa(){
         }).catch((err) => {
             console.log(err);
         });
+    }
+}
+
+function agregarClienteAdm(){
+        
+    //Verificar que los campos no esten vacios
+    if (nombreCliente.value == "" || apellidoCliente.value == "" || correoCliente.value == "" || contrasenaCliente.value == "") {
+        alert("Por favor llene todos los campos");
+    } //Verificar que el correo sea valido con expresion regular
+    else if (!correoCliente.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        alert("Correo invalido");
+    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if (!contrasenaCliente.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        alert("Contraseña invalida. Debe tener al menos 8 caracteres, una letra mayuscula, una minuscula y un numero");
+    } else {
+
+        //Agregar el cliente a la base de datos
+        fetch(`http://localhost:3333/cliente`, {
+            method: 'POST',
+            body: JSON.stringify({
+                nombre: nombreCliente.value,
+                apellido: apellidoCliente.value,
+                correo: correoCliente.value,
+                contraseña: contrasenaCliente.value,
+                imagen: selectImagenCliente.value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if (res.status == 200) {
+                alert("Cliente agregado correctamente");
+                modalEditarClienteAdministrador.hide();
+                llenarClientesAdministracion();
+            } else {
+                alert("Error al agregar el cliente");
+            }
+        });
+    }
+}
+
+function eliminarClienteAdm(idCliente){
+    fetch(`http://localhost:3333/cliente/${idCliente}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        if (res.status == 200) {
+            alert("Cliente eliminado correctamente");
+            modalEditarClienteAdministrador.hide();
+            llenarClientesAdministracion();
+        } else {
+            alert("Error al eliminar el cliente");
+        }
+    });
+}
+
+function getValueSelectMotoristaAprobado(estado){
+    estado = estado.value;
+    if(estado == "1"){
+        console.log("aprobado");
+        divOrdenesMotorista.style.display = "block";
+    }else{
+        console.log("rechazado");
+        divOrdenesMotorista.style.display = "none";
+    }
+}
+
+function verificarDatosMotorista(){
+    if(nombreMotorista.value == "" || apellidoMotorista.value == "" || correoMotorista.value == "" || contrasenaMotorista.value == "" || identificacionMotorista.value == ""){
+        alert("Por favor llene todos los campos");
+        return false;
+    } //Verificar que el correo sea valido con expresion regular
+    else if (!correoMotorista.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        alert("Correo invalido");
+        return false;
+    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if (!contrasenaMotorista.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        alert("Contraseña invalida. Debe tener al menos 8 caracteres, una letra mayuscula, una minuscula y un numero");
+        return false;
+    } else {
+        console.log("verificar datos motorista");
+        return true;
     }
 }

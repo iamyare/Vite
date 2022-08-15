@@ -59,6 +59,41 @@ router.put('/:id', (req, res) => {
     });
 });
 
+//Crear un cliente
+//URL: http://localhost:3333/cliente
+router.post('/', (req, res) => {
+    var cliente = new clientes({
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        correo: req.body.correo,
+        contraseña: req.body.contraseña,
+        imagen: req.body.imagen
+    });
+    cliente.save()
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar un cliente por su id
+//URL: http://localhost:3333/cliente/:id
+router.delete('/:id', (req, res) => {
+    clientes.findByIdAndRemove(req.params.id)
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
+
 //Eliminar orden de un cliente por su id
 //URL: http://localhost:3333/cliente/:id/orden/:id
 router.delete('/:idCliente/orden/:idOrden', (req, res) => {
