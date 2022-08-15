@@ -37,6 +37,46 @@ router.get('/:id', (req, res) => {
     });
 });
 
+//Crear una empresa
+//URL: http://localhost:3333/empresa
+router.post('/', (req, res) => {
+    var empresa = new empresas({
+        nombre: req.body.nombre,
+        correo: req.body.correo,
+        telefono: req.body.telefono,
+        contraseña: req.body.contraseña,
+        descripcion: req.body.descripcion,
+        banner: req.body.banner,
+        logo: req.body.logo,
+        local: req.body.local,
+        productos: [],
+        reseñas: []
+    });
+    empresa.save()
+    .then((empresa) => {
+        res.send(empresa);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    }
+    );
+});
+
+//Eliminar una empresa por su id
+//URL: http://localhost:3333/empresa/:id
+router.delete('/:id', (req, res) => {
+    empresas.findByIdAndRemove(req.params.id)
+    .then((empresa) => {
+        res.send(empresa);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
 //Obtener un producto por su id
 //URL: http://localhost:3333/empresa/producto/:id
 router.get('/producto/:id', (req, res) => {
@@ -101,6 +141,76 @@ router.get('/:idEmpresa/productos', (req, res) => {
     });
 });
 
+//Agregar un producto a una empresa
+//URL: http://localhost:3333/empresa/:idEmpresa/producto
+router.post('/:idEmpresa/producto', (req, res) => {
+    empresas.updateOne(
+        { _id: req.params.idEmpresa },
+        { $push: {
+            productos: {
+                _id: mongoose.Types.ObjectId(),
+                nombre: req.body.nombre,
+                precio: req.body.precio,
+                imagen: req.body.imagen
+            }
+        }
+    })
+    .then((empresa) => {
+        res.send(empresa);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar un producto de una empresa
+//URL: http://localhost:3333/empresa/:idEmpresa/producto/:idProducto
+router.delete('/:idEmpresa/producto/:idProducto', (req, res) => {
+    empresas.updateOne(
+        { _id: req.params.idEmpresa },
+        { $pull: {
+            productos: {
+                _id: mongoose.Types.ObjectId(req.params.idProducto)
+            }
+        }
+    })
+    .then((empresa) => {
+        res.send(empresa);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Actualizar una empresa
+//URL: http://localhost:3333/empresa/:id
+router.put('/:id', (req, res) => {
+    empresas.updateOne(
+        { _id: req.params.id },
+        { $set: {
+            nombre: req.body.nombre,
+            correo: req.body.correo,
+            telefono: req.body.telefono,
+            descripcion: req.body.descripcion,
+            contraseña: req.body.contraseña,
+            banner: req.body.banner,
+            local: req.body.local,
+            logo: req.body.logo
+        }
+    })
+    .then((empresa) => {
+        res.send(empresa);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    }
+    );
+});
 
 
 module.exports = router;

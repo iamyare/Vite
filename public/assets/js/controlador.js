@@ -1,6 +1,9 @@
 var administracion = true;
 var ordenSeleccionadaActualmente = null;
 var clienteSeleccionadoActualmente = null;
+var llamadoDesde = null;
+var empresaSeleccionadaActualmente = null;
+
 //Modales
 var modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAdministrador");
 var modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdministracion");
@@ -78,7 +81,7 @@ function llenarClientesAdministracion() {
                         <td>$${infoOrden.factura.total}</td>
                         <td class="text-success">${infoOrden.estado}</td>
                         <td>
-                            <button class="btn btn-warning" onclick="mostrarEditorOrdenAdministracion('${infoOrden._id}')">Mostrar</button>
+                            <button class="btn btn-warning" onclick="mostrarEditorOrden('${infoOrden._id}','listaOrdenesRecibidas')">Mostrar</button>
                         </td>
                     </tr>
                     `;
@@ -95,6 +98,7 @@ function llenarClientesAdministracion() {
 
 function verInfoCliente(idCliente) {
     clienteSeleccionadoActualmente = idCliente;
+    llamadoDesde = "clientes";
     let ordenesDiv = "";
     clienteAdministracionModal.innerHTML = "";
 
@@ -315,6 +319,8 @@ function getValueSelectProductoImagen(select){
 
 
 function editarProducto(idProducto){
+    console.log(llamadoDesde);
+
     //Obtener los valores de los inputs
     let nombre = document.getElementById("nombre-administracion-modal").value;
     let precio = document.getElementById("precio-administracion-modal").value;
@@ -325,18 +331,27 @@ function editarProducto(idProducto){
         precio: precio,
         imagen: imagen
     };
-    //Enviar el objeto producto a la base de datos
-    fetch(`http://localhost:3333/empresa/producto/${idProducto}`, {
-        method: 'PUT',
-        body: JSON.stringify(producto),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then((res) => {
-        modalEditorProductoAdministracion.hide();
-        mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
-        agregarProductoOrdenAdministracion();
-    });
+
+
+        //Enviar el objeto producto a la base de datos
+        fetch(`http://localhost:3333/empresa/producto/${idProducto}`, {
+            method: 'PUT',
+            body: JSON.stringify(producto),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            modalEditorProductoAdministracion.hide();
+            if (llamadoDesde == "clientes" || llamadoDesde == "listaOrdenesRecibidas") {
+                console.log("Llamado desde clientes Editar producto");
+                mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+            } else if (llamadoDesde == "proveedores") {
+                console.log("Llamado desde proveedores Editar producto");
+                mostrarEmpresa(empresaSeleccionadaActualmente);
+            }
+        });
+
+    
 
 }
 
@@ -368,8 +383,11 @@ function actualizarOrdenAdm(){
         }
     }).then((res) => {
         modalEditorOrdenAdministracion.hide();
-        actualizarEstadoOrdenAdm(idOrden);
-        llenarClientesAdministracion();
+        actualizarEstadoOrdenAdm();
+        if (llamadoDesde == "clientes"){
+            console.log("Llamado desde clientes");
+            llenarClientesAdministracion();
+        }
     });
 }
 
@@ -386,7 +404,13 @@ function actualizarEstadoOrdenAdm(){
         }
     }).then((res) => {
         modalEditorOrdenAdministracion.hide();
-        verInfoCliente(clienteSeleccionadoActualmente);
+        if (llamadoDesde == "clientes"){
+            console.log("Llamado desde clientes");
+            verInfoCliente(clienteSeleccionadoActualmente);
+        } else if (llamadoDesde == "listaOrdenesRecibidas"){
+            console.log("Llamado desde lista ordenes recibidas");
+            llenarClientesAdministracion();
+        }
     });
     
 }
@@ -549,7 +573,7 @@ function llenarCategoriaAdministracion(categoria){
     if (categoria == "tablero") {
     } else 
     if (categoria == "proveedores") {
-        divContenidoProveedores.innerHTML = "";
+        divContenidoProveedores.innerHTML = `<button class="btn btn-primary" type="button" onclick="ModalAgregarProveedorAdministracion()">Agregar proveedor</button>`;
         obtenerEmpresas().then((empresas) => {
             empresas.forEach((empresa) => {
                 divContenidoProveedores.innerHTML +=
@@ -800,86 +824,135 @@ function obtenerEmpresaId(idEmpresa){
 }
 
 function mostrarEmpresa(idEmpresa){
-    modalEditorEmpresasAdministracion.show();
-    obtenerEmpresaId(idEmpresa).then((empresa) => {
-        let nombreEmpresa = document.getElementById("nombre-empresas-administracion-modal");
-        let correoEmpresa = document.getElementById("correo-empresas-administracion-modal");
-        let telefonoEmpresa = document.getElementById("telefono-empresas-administracion-modal");
-        let contrasenaEmpresa = document.getElementById("contrasena-empresas-administracion-modal");
-        let descripcionEmpresa = document.getElementById("descripcion-empresas-administracion-modal");
-        let selectImagenBannerEmpresa = document.getElementById("select-imagen-banner-empresas-administracion-modal");
-        let selectImagenLogoEmpresa = document.getElementById("select-logo-empresa-administracion-modal");
-        let selectImagenLocalEmpresa = document.getElementById("select-imagen-local-empresas-administracion-modal");
-        let imagenLocalEmpresaAdm = document.getElementById("imagen-local-empresas-administracion-modal");
-        let imagenBannerEmpresaAdm = document.getElementById("imagen-banner-empresas-administracion-modal");
-        let imagenLogoEmpresaAdm = document.getElementById("logo-empresa-administracion-modal");
-        nombreEmpresa.value = empresa.nombre;
-        correoEmpresa.value = empresa.correo;
-        telefonoEmpresa.value = empresa.telefono;
-        contrasenaEmpresa.value = empresa.contrasena;
-        descripcionEmpresa.value = empresa.descripcion;
-        imagenLogoEmpresaAdm.src = `assets/img/empresas/logos/${empresa.logo}`;
-        imagenBannerEmpresaAdm.src = `assets/img/empresas/banners/${empresa.banner}`;
-        imagenLocalEmpresaAdm.src = `assets/img/empresas/local/${empresa.local}`;
+    let nombreEmpresa = document.getElementById("nombre-empresas-administracion-modal");
+    let correoEmpresa = document.getElementById("correo-empresas-administracion-modal");
+    let telefonoEmpresa = document.getElementById("telefono-empresas-administracion-modal");
+    let contrasenaEmpresa = document.getElementById("contrasena-empresas-administracion-modal");
+    let descripcionEmpresa = document.getElementById("descripcion-empresas-administracion-modal");
+    let selectImagenBannerEmpresa = document.getElementById("select-imagen-banner-empresas-administracion-modal");
+    let selectImagenLogoEmpresa = document.getElementById("select-logo-empresa-administracion-modal");
+    let selectImagenLocalEmpresa = document.getElementById("select-imagen-local-empresas-administracion-modal");
+    let imagenLocalEmpresaAdm = document.getElementById("imagen-local-empresas-administracion-modal");
+    let imagenBannerEmpresaAdm = document.getElementById("imagen-banner-empresas-administracion-modal");
+    let imagenLogoEmpresaAdm = document.getElementById("logo-empresa-administracion-modal");
+    selectImagenLogoEmpresa.innerHTML = ``;
+    selectImagenBannerEmpresa.innerHTML = ``;
+    selectImagenLocalEmpresa.innerHTML = ``;
+    if (idEmpresa != null){
+        empresaSeleccionadaActualmente = idEmpresa;
+        llamadoDesde = 'proveedores';
+        modalEditorEmpresasAdministracion.show();
+        obtenerEmpresaId(idEmpresa).then((empresa) => {
+            
+            document.getElementById('modalEditorEmpresasAdministracionLabel').innerHTML = `Empresa`;
 
-        //Llenar los select con las imagenes
-        //Logo
-        //Llenar el select de los logos, y seleccionar el logo actual
-        selectImagenLogoEmpresa.innerHTML = ``;
-        selectImagenBannerEmpresa.innerHTML = ``;
-        selectImagenLocalEmpresa.innerHTML = ``;
+            nombreEmpresa.value = empresa.nombre;
+            correoEmpresa.value = empresa.correo;
+            telefonoEmpresa.value = empresa.telefono;
+            contrasenaEmpresa.value = empresa.contrasena;
+            descripcionEmpresa.value = empresa.descripcion;
+            imagenLogoEmpresaAdm.src = `assets/img/empresas/logos/${empresa.logo}`;
+            imagenBannerEmpresaAdm.src = `assets/img/empresas/banners/${empresa.banner}`;
+            imagenLocalEmpresaAdm.src = `assets/img/empresas/local/${empresa.local}`;
+    
+            //Llenar los select con las imagenes
+            //Logo
+            //Llenar el select de los logos, y seleccionar el logo actual
+
+    
+            logos.forEach((logo) => {
+                if(logo == empresa.logo){
+                    selectImagenLogoEmpresa.innerHTML += `<option value="${logo}" selected>${logo}</option>`;
+                }
+                else{
+                    selectImagenLogoEmpresa.innerHTML += `<option value="${logo}">${logo}</option>`;
+                }
+            });
+            //Banner
+            //Llenar el select de los banners, y seleccionar el banner actual
+            banners.forEach((banner) => {
+                if(banner == empresa.banner){
+                    selectImagenBannerEmpresa.innerHTML += `<option value="${banner}" selected>${banner}</option>`;
+                }
+                else{
+                    selectImagenBannerEmpresa.innerHTML += `<option value="${banner}">${banner}</option>`;
+                }
+            });
+            //Local
+            //Llenar el select de los locales, y seleccionar el local actual
+            local.forEach((local) => {
+                if(local == empresa.local){
+                    selectImagenLocalEmpresa.innerHTML += `<option value="${local}" selected>${local}</option>`;
+                }
+                else{
+                    selectImagenLocalEmpresa.innerHTML += `<option value="${local}">${local}</option>`;
+                }
+            });
+            tablaModalListarProductosEmpresaAdministracion.innerHTML = ``;
+            empresa.productos.forEach((producto) => {
+                tablaModalListarProductosEmpresaAdministracion.innerHTML += `
+                <tr>
+                    <td>${producto._id}</td>
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <img class="rounded-2" src="assets/img/empresas/productos/${producto.imagen}" width="50px" height="50px" alt="Imagen ${producto.nombre}">
+                        </div>
+                    </td>
+                    <td>${producto.nombre}</td>
+                    <td>$${producto.precio}</td>
+                    <td>
+                        <button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" type="button" onclick="eliminarProductoEmpresa('${producto._id}')">Eliminar</button>
+                    </td>
+                </tr>
+                `;
+            });
+            document.getElementById('divAgregarProductoEmpresa').innerHTML = 
+            `
+            <button class="btn btn-primary" type="button" onclick="modalAgregarProductoEmpresa('${idEmpresa}')">Agregar Producto</button>
+            `;
+        document.getElementById('div-footer-empresas-administracion-modal').innerHTML =
+        `
+        <div class="row w-100">
+            <div class="col-6">
+                <button class="btn btn-primary w-100" type="button" onclick="actualizarEmpresa()">Guardar</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-danger w-100" type="button" onclick="eliminarProveedor()">Eliminar</button>
+            </div>
+        </div>
+        `;
+        });
+    }else{
+        //Agregar texto a h5
+        document.getElementById('modalEditorEmpresasAdministracionLabel').innerHTML = `Crear Empresa`;
+        nombreEmpresa.value = "";
+        correoEmpresa.value = "";
+        telefonoEmpresa.value = "";
+        contrasenaEmpresa.value = "";
+        descripcionEmpresa.value = "";
 
         logos.forEach((logo) => {
-            if(logo == empresa.logo){
-                selectImagenLogoEmpresa.innerHTML += `<option value="${logo}" selected>${logo}</option>`;
-            }
-            else{
-                selectImagenLogoEmpresa.innerHTML += `<option value="${logo}">${logo}</option>`;
-            }
+            selectImagenLogoEmpresa.innerHTML += `<option value="${logo}">${logo}</option>`;
         });
-        //Banner
-        //Llenar el select de los banners, y seleccionar el banner actual
         banners.forEach((banner) => {
-            if(banner == empresa.banner){
-                selectImagenBannerEmpresa.innerHTML += `<option value="${banner}" selected>${banner}</option>`;
-            }
-            else{
-                selectImagenBannerEmpresa.innerHTML += `<option value="${banner}">${banner}</option>`;
-            }
+            selectImagenBannerEmpresa.innerHTML += `<option value="${banner}">${banner}</option>`;
         });
-        //Local
-        //Llenar el select de los locales, y seleccionar el local actual
         local.forEach((local) => {
-            if(local == empresa.local){
-                selectImagenLocalEmpresa.innerHTML += `<option value="${local}" selected>${local}</option>`;
-            }
-            else{
-                selectImagenLocalEmpresa.innerHTML += `<option value="${local}">${local}</option>`;
-            }
+            selectImagenLocalEmpresa.innerHTML += `<option value="${local}">${local}</option>`;
         });
-        tablaModalListarProductosEmpresaAdministracion.innerHTML = ``;
-        empresa.productos.forEach((producto) => {
-            tablaModalListarProductosEmpresaAdministracion.innerHTML += `
-            <tr>
-                <td>${producto._id}</td>
-                <td>
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img class="rounded-2" src="assets/img/empresas/productos/${producto.imagen}" width="50px" height="50px" alt="Imagen ${producto.nombre}">
-                    </div>
-                </td>
-                <td>${producto.nombre}</td>
-                <td>$${producto.precio}</td>
-                <td>
-                    <button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button>
-                </td>
-                <td>
-                    <button class="btn btn-danger" onclick="eliminarProductoEmpresa('${producto._id}')">Eliminar</button>
-                </td>
-            </tr>
-            `;
-        });
-        
-    });
+    
+        document.getElementById('tablaModalListarProductosEmpresaAdministracion').innerHTML = ``;
+
+        document.getElementById('div-footer-empresas-administracion-modal').innerHTML =
+        `
+        <button class="btn btn-success w-100" type="button" onclick="agregarEmpresa()">Agregar empresa</button>
+        `;
+        modalEditorEmpresasAdministracion.show();
+    }
+    
 }
 
 function obtenerOrdenesDisponibles(){
@@ -997,4 +1070,207 @@ function editarOrden(idOrden){
     //Suma de los totales de los productos
     let subtotal = 0;
     modalEditorOrdenAdministracion.show();
+}
+
+function mostrarEditorOrden(idOrden, llamado){
+    llamadoDesde = llamado;
+    mostrarEditorOrdenAdministracion(idOrden);
+}
+
+function mostrarEditorProducto(idProducto, llamado){
+    llamadoDesde = llamado;
+    mostrarProductoAdministracion(idProducto);
+}
+
+function cambioDeLogo(imagen){
+    document.getElementById("logo-empresa-administracion-modal").src = `assets/img/empresas/logos/${imagen.value}`;
+}
+
+function cambioDeBanner(imagen){
+    document.getElementById("imagen-banner-empresas-administracion-modal").src = `assets/img/empresas/banners/${imagen.value}`;
+}
+
+function cambioDeLocal(imagen){
+    document.getElementById("imagen-local-empresas-administracion-modal").src = `assets/img/empresas/local/${imagen.value}`;
+}
+
+function modalAgregarProductoEmpresa(idEmpresa){
+    document.getElementById("select-imagen-administracion-modal").innerHTML = '';
+    document.getElementById("nombre-administracion-modal").value = "Nombre del nuevo Producto";
+    document.getElementById("precio-administracion-modal").value = "1";
+
+    imagenesProductos.forEach((imagen) => {
+        document.getElementById("select-imagen-administracion-modal").innerHTML += `
+            <option value="${imagen}">${imagen}</option>
+        `;
+    });
+
+    document.getElementById("div-footer-productos-administracion-modal").innerHTML =
+    `<button class="btn btn-secundary w-100" type="button"  onclick="agregarProductoEmpresa()">Guardar</button>`;
+    modalEditorProductoAdministracion.show();
+
+}
+
+
+function agregarProductoEmpresa(){
+    let nombre = document.getElementById("nombre-administracion-modal").value;
+    let precio = document.getElementById("precio-administracion-modal").value;
+    let imagen = document.getElementById("select-imagen-administracion-modal").value;
+
+    let producto = {
+        nombre: nombre,
+        precio: precio,
+        imagen: imagen
+    }
+    //Verificar que los campos esten correctos
+    if(nombre == "" || precio == "" || imagen == ""){
+        alert("Debe llenar todos los campos");
+    }else{
+        //agregar el producto a la base de datos
+        fetch(`http://localhost:3333/empresa/${empresaSeleccionadaActualmente}/producto`, {
+            method: 'POST',
+            body: JSON.stringify(producto),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if(res.status == 200){
+                alert("Producto agregado correctamente");
+                mostrarEmpresa(empresaSeleccionadaActualmente);
+                modalEditorProductoAdministracion.hide();
+            }else{
+                alert("Error al agregar el producto");
+            }
+        });
+    }
+}
+
+function eliminarProductoEmpresa(idProducto){
+    fetch(`http://localhost:3333/empresa/${empresaSeleccionadaActualmente}/producto/${idProducto}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        if(res.status == 200){
+            alert("Producto eliminado correctamente");
+            mostrarEmpresa(empresaSeleccionadaActualmente);
+        }else{
+            alert("Error al eliminar el producto");
+        }
+    });
+}
+
+function actualizarEmpresa(){
+    let nombreEmpresa = document.getElementById("nombre-empresas-administracion-modal");
+    let correoEmpresa = document.getElementById("correo-empresas-administracion-modal");
+    let telefonoEmpresa = document.getElementById("telefono-empresas-administracion-modal");
+    let contrasenaEmpresa = document.getElementById("contrasena-empresas-administracion-modal");
+    let descripcionEmpresa = document.getElementById("descripcion-empresas-administracion-modal");
+    let selectImagenBannerEmpresa = document.getElementById("select-imagen-banner-empresas-administracion-modal");
+    let selectImagenLogoEmpresa = document.getElementById("select-logo-empresa-administracion-modal");
+    let selectImagenLocalEmpresa = document.getElementById("select-imagen-local-empresas-administracion-modal");
+
+    let empresa = {
+        nombre: nombreEmpresa.value,
+        correo: correoEmpresa.value,
+        telefono: telefonoEmpresa.value,
+        contraseña: contrasenaEmpresa.value,
+        descripcion: descripcionEmpresa.value,
+        banner: selectImagenBannerEmpresa.value,
+        logo: selectImagenLogoEmpresa.value,
+        local: selectImagenLocalEmpresa.value
+    }
+
+    fetch(`http://localhost:3333/empresa/${empresaSeleccionadaActualmente}`, {
+        method: 'PUT',
+        body: JSON.stringify(empresa),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        if(res.status == 200){
+            llenarCategoriaAdministracion('proveedores');
+            modalEditorEmpresasAdministracion.hide();
+        }else{
+            alert("Error al actualizar la empresa");
+        }
+    });
+}
+
+function ModalAgregarProveedorAdministracion(){
+
+    mostrarEmpresa();
+}
+
+function eliminarProveedor(){
+    fetch(`http://localhost:3333/empresa/${empresaSeleccionadaActualmente}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        if(res.status == 200){
+            llenarCategoriaAdministracion('proveedores');
+            modalEditorEmpresasAdministracion.hide();
+        }else{
+            alert("Error al eliminar la empresa");
+        }
+    });
+}
+
+function agregarEmpresa(){
+    let nombreEmpresa = document.getElementById("nombre-empresas-administracion-modal");
+    let correoEmpresa = document.getElementById("correo-empresas-administracion-modal");
+    let telefonoEmpresa = document.getElementById("telefono-empresas-administracion-modal");
+    let contrasenaEmpresa = document.getElementById("contrasena-empresas-administracion-modal");
+    let descripcionEmpresa = document.getElementById("descripcion-empresas-administracion-modal");
+    let selectImagenBannerEmpresa = document.getElementById("select-imagen-banner-empresas-administracion-modal");
+    let selectImagenLogoEmpresa = document.getElementById("select-logo-empresa-administracion-modal");
+    let selectImagenLocalEmpresa = document.getElementById("select-imagen-local-empresas-administracion-modal");
+
+    //Comprobar que los campos esten llenos
+    if(nombreEmpresa.value == "" || correoEmpresa.value == "" || telefonoEmpresa.value == "" || contrasenaEmpresa.value == "" || descripcionEmpresa.value == "" || selectImagenBannerEmpresa.value == "" || selectImagenLogoEmpresa.value == "" || selectImagenLocalEmpresa.value == ""){
+        alert("Debe llenar todos los campos");
+    }
+    //Verificar que el correo sea valido con una expresion regular
+    else if(!correoEmpresa.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+        alert("El correo no es valido");
+    }
+    //Verificar que el telefono sea valido con una expresion regular, debe comenzar con "+504" y tener 8 digitos
+    else if(!telefonoEmpresa.value.match(/^\+504[0-9]{8}$/)){
+        alert("El telefono no es valido. Debe comenzar con +504 y tener 8 digitos");
+    }
+    //Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if(!contrasenaEmpresa.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)){
+        alert("La contraseña no es valida\n Debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero");
+    }else{
+    //Agregar la empresa a la base de datos
+        fetch(`http://localhost:3333/empresa`, {
+            method: 'POST',
+            body: JSON.stringify({
+                nombre: nombreEmpresa.value,
+                correo: correoEmpresa.value,
+                telefono: telefonoEmpresa.value,
+                contraseña: contrasenaEmpresa.value,
+                descripcion: descripcionEmpresa.value,
+                banner: selectImagenBannerEmpresa.value,
+                logo: selectImagenLogoEmpresa.value,
+                local: selectImagenLocalEmpresa.value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            if(res.status == 200){
+                alert("Empresa agregada correctamente");
+                llenarCategoriaAdministracion('proveedores');
+                modalEditorEmpresasAdministracion.hide();
+            }else{
+                alert("Error al agregar la empresa");
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 }

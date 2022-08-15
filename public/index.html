@@ -1766,7 +1766,7 @@
                                 <label class="form-label" for="logo-empresa-administracion-modal">Logo</label>
                                 <div class="input-group">
                                     <img id="logo-empresa-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Logo de la empresa" class="img-fluid" style="max-width: 200px;">
-                                    <select class="form-select" id="select-logo-empresa-administracion-modal">
+                                    <select class="form-select" id="select-logo-empresa-administracion-modal" onchange="cambioDeLogo(this)">
                                         <option value="1" >Imagen 1</option>
                                         <option value="1">Imagen 1</option>
                                         <option value="2">Imagen 2</option>
@@ -1824,7 +1824,7 @@
                                 <label class="form-label" for="imagen-empresas-administracion-modal">Banner</label>
                                 <div class="input-group">
                                     <img id="imagen-banner-empresas-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del producto" class="img-fluid" style="max-width: 200px;">
-                                    <select class="form-select" id="select-imagen-banner-empresas-administracion-modal">
+                                    <select class="form-select" id="select-imagen-banner-empresas-administracion-modal" onchange="cambioDeBanner(this)">
                                         <option value="1" >Imagen 1</option>
                                         <option value="1">Imagen 1</option>
                                         <option value="2">Imagen 2</option>
@@ -1838,7 +1838,7 @@
                                 <label class="form-label" for="imagen-local-empresas-administracion-modal">Imagen Local</label>
                                 <div class="input-group">
                                     <img id="imagen-local-empresas-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del producto" class="img-fluid" style="max-width: 200px;">
-                                    <select class="form-select" id="select-imagen-local-empresas-administracion-modal">
+                                    <select class="form-select" id="select-imagen-local-empresas-administracion-modal" onchange="cambioDeLocal(this)">
                                         <option value="1" >Imagen 1</option>
                                         <option value="1">Imagen 1</option>
                                         <option value="2">Imagen 2</option>
@@ -1862,27 +1862,29 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tablaModalListarProductosEmpresaAdministracion">
-                                        <tr>
-                                            <td>63721673217321</td>
-                                            <td>
-                                                <div class="d-flex justify-content-center">
-                                                    <img src="https://i.imgur.com/3ZQ3ZQ1.png" alt="Imagen" style="width: 50px; height: 50px;" class="rounded-2">
-                                                </div>
-                                            </td>
-                                            <td>Nombre Prodcuto</td>
-                                            <td>L. 1000</td>
-                                            <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Mostrar</button></td>
-                                            <td><button class="btn btn-danger" type="button" onclick="mostrarProductoAdministracion('adios')">Eliminar</button></td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
                             <!--/Tabla-->
                             <!--/Productos, en una tabla-->
+
+                            <!--Boton de agregar producto-->
+                            <div class="mb-3" id="divAgregarProductoEmpresa" >
+                                <button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('adios')">Agregar Producto</button>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer" id="div-footer-empresas-administracion-modal">
-                        <button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button>
+                        <!---botones en dos columnas-->
+                        <div class="row w-100">
+                            <div class="col-6">
+                                <button class="btn btn-primary w-100" type="button" onclick="actualizarEmpresa()">Guardar</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-danger w-100" type="button" onclick="eliminarProveedor()">Eliminar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1984,7 +1986,7 @@
                                 <label class="form-label" for="imagen-administracion-modal">Imagen</label>
                                 <div class="input-group">
                                     <img id="imagen-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del producto" class="img-fluid" style="max-width: 200px;">
-                                    <select class="form-select" id="select-imagen-administracion-modal">
+                                    <select class="form-select" id="select-imagen-administracion-modal" onchange="getValueSelectProductoImagen(this);">
                                         <option value="1" >Imagen 1</option>
                                         <option value="1">Imagen 1</option>
                                         <option value="2">Imagen 2</option>
@@ -1994,7 +1996,7 @@
                         </form>
                     </div>
                     <div class="modal-footer" id="div-footer-productos-administracion-modal">
-                        <button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal">Guardar</button>
+                        <button class="btn btn-secundary w-100" type="button" >Guardar</button>
                     </div>
                 </div>
             </div>
