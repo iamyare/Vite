@@ -36,5 +36,71 @@ router.get('/:id', (req, res) => {
     });
 });
 
+//Agragar id orden entregada al motorista
+//URL: http://localhost:3333/motorista/:id/orden/entregada/:idOrden
+router.put('/:id/orden/entregada/:idOrden', (req, res) => {
+    motoristas.findByIdAndUpdate(
+        req.params.id,
+        {
+            $push: {
+                "ordenes.entregadas": req.params.idOrden
+            }
+        },
+        {
+            new: true
+        }
+    )
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Agregar id orden recibida al motorista como tomada
+//URL: http://localhost:3333/motorista/:id/orden/tomada/:idOrden
+router.put('/:id/orden/tomada/:idOrden', (req, res) => {
+    motoristas.findByIdAndUpdate(
+        req.params.id,
+        {
+            $push: {
+                "ordenes.tomadas": req.params.idOrden
+            }
+        },
+        {
+            new: true
+        }
+    )
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Buscar id de orden en todos los motoristas y eliminar la orden
+//URL: http://localhost:3333/motorista/orden/:idOrden
+router.delete('/orden/:idOrden', (req, res) => {
+    motoristas.updateMany(
+        {},
+        {
+            $pull: {
+                "ordenes.entregadas": req.params.idOrden,
+                "ordenes.tomadas": req.params.idOrden
+            }
+        }
+    )
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
 
 module.exports = router;

@@ -242,7 +242,47 @@ function mostrarEditorOrdenAdministracion(idOrden){
                     document.getElementById("estado-administracion-modal").innerHTML += `<option value="${estado}">${estado}</option>`;
                 }
             });
-            
+
+             if (res.estado == "en el destino") {
+                document.getElementById("motorista-asignado-administracion-modal").disabled = true;
+            }
+        });
+        obtenerMotoristasAprobados().then((motoristas) => {
+        document.getElementById("motorista-asignado-administracion-modal").innerHTML = '';
+
+            motoristas.forEach((motorista) => {
+                obtenerMotoristaID(motorista).then((motorista) => {
+                    console.log(motorista);
+                    let ordenAsignadas = motorista.ordenes[0].tomadas;
+                    let ordenesEntregadas = motorista.ordenes[0].entregadas;
+                    //verificar si el motorista ya esta asignado a la orden o si la entrego
+                    if(ordenAsignadas.length != 0 && ordenesEntregadas.length != 0){
+
+                        ordenAsignadas.forEach((orden) => {
+                            if(orden == idOrden){
+                                console.log("asignado a", motorista.nombre);
+                                document.getElementById("motorista-asignado-administracion-modal").innerHTML += `<option value="${motorista._id}" selected>${motorista.nombre}</option>`;
+                            }
+                        });
+                        ordenesEntregadas.forEach((orden) => {
+                            if(orden == idOrden){
+                                console.log("entregado por", motorista.nombre);
+                                document.getElementById("motorista-asignado-administracion-modal").innerHTML += `<option value="${motorista._id}" selected>${motorista.nombre} ${motorista.apellido}</option>`;
+                            }
+                        });
+                    }
+                    //verificar si el motorista ya esta asignado, entonces no se imprime en el select
+                    let motoristas = document.getElementById("motorista-asignado-administracion-modal").innerHTML;
+                    if(motoristas.includes(motorista._id)){
+                        console.log("ya esta asignado");
+                    }else{
+                        document.getElementById("motorista-asignado-administracion-modal").innerHTML += 
+                        `
+                        <option value="${motorista._id}">${motorista.nombre} ${motorista.apellido}</option>
+                        `;
+                    }
+                });
+            });
         });
         modalEditorOrdenAdministracion.show();
     });
@@ -359,6 +399,7 @@ function editarProducto(idProducto){
                 console.log("Llamado desde proveedores Editar producto");
                 mostrarEmpresa(empresaSeleccionadaActualmente);
             } else if (llamadoDesde == "ordenes") {
+                console.log("Llamado desde ordenes Editar producto");
                 llenarCategoriaAdministracion('ordenes');
             }
         });
@@ -372,6 +413,7 @@ function actualizarOrdenAdm(){
     let subTotal = (document.getElementById("subTotalOrdenAdm").innerHTML).substring(1);
     let comision = (document.getElementById("comisionOrdenAdm").innerHTML).substring(1);
     let total = (document.getElementById("totalOrdenAdm").innerHTML).substring(1);
+    let idMotorista = document.getElementById("motorista-asignado-administracion-modal").value;
 
     //El motorista tendra una comision del 30% de la comision, mientras La administracion tendra una comision del 70% de la comision
     let comisionMotorista = (comision * 30) / 100;
@@ -396,6 +438,44 @@ function actualizarOrdenAdm(){
     }).then((res) => {
         modalEditorOrdenAdministracion.hide();
         actualizarEstadoOrdenAdm();
+
+        //Eliminar orden en el motorista
+        fetch(`http://localhost:3333/motorista/orden/${ordenSeleccionadaActualmente}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            //Agregar id orden al motorista
+            //Verificamos si esta en el origen 
+            let estado = document.getElementById("estado-administracion-modal").value;
+            if(estado == "en el origen"){
+            }else if(estado == "en el destino"){
+                //Agregar id orden al motorista
+                fetch(`http://localhost:3333/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((res) => {
+                    console.log("Orden agregada al motorista como entregada");
+                });
+            } else {
+                //Se agrega la orden al motorista como tomada
+                fetch(`http://localhost:3333/motorista/${idMotorista}/orden/tomada/${ordenSeleccionadaActualmente}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((res) => {
+                    console.log("Orden agregada al motorista como tomada");
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+
+
         if (llamadoDesde == "clientes"){
             console.log("Llamado desde clientes");
             llenarClientesAdministracion();
@@ -592,6 +672,7 @@ function agregarItemOrden(idProducto, cantidadProducto){
 
 
 function llenarCategoriaAdministracion(categoria){
+
     if (categoria == "tablero") {
     } else 
     if (categoria == "proveedores") {
@@ -625,9 +706,9 @@ function llenarCategoriaAdministracion(categoria){
         let divOrdenesCamino= document.getElementById("div-cont-ordenes-camino");
         let divOrdenesEntregadas = document.getElementById("div-cont-ordenes-entregadas");
 
+        divOrdenesDisponibles.innerHTML = "";
         //Obtener las ordenes disponibles
         obtenerOrdenesDisponibles().then((ordenes) => {
-        divOrdenesDisponibles.innerHTML = "";
             ordenes.forEach((orden) => {
                 orden = orden.ordenes;
                 divOrdenesDisponibles.innerHTML += 
@@ -1352,5 +1433,22 @@ function verificarDatosMotorista(){
     } else {
         console.log("verificar datos motorista");
         return true;
+    }
+}
+
+function cambioDeEstado(estado){
+    if (estado.value == 'en el destino'){
+            document.getElementById("motorista-asignado-administracion-modal").disabled = true;
+    } else
+    {
+        document.getElementById("motorista-asignado-administracion-modal").disabled = false;
+    }
+}
+
+function cambioDeMotorista(motorista){
+    let estado = document.getElementById("estado-administracion-modal");
+    if (estado.value == 'en el origen'){
+        //cambia tomado
+        document.getElementById("estado-administracion-modal").value = "tomada";
     }
 }

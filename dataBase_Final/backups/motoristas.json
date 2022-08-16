@@ -5,68 +5,60 @@
     "correo" : "cris@gmail.com",
     "contraseña" : "Cris1234",
     "imagen" : "10.jpg",
-    "ordenes" : [
-        {
-            "tomadas" : [
-                ObjectId("62f6825eba9dd13936b47631")
-            ],
-            "entregadas" : [
-                ObjectId("62f6825eba9dd13936b47630")
-            ]
-        }
-    ]
+    "ordenes" : {
+        "tomadas" : [
+            ObjectId("62f6825eba9dd13936b47631")
+        ],
+        "entregadas" : [
+            ObjectId("62f6825eba9dd13936b47630")
+        ]
+    }
 }
 {
     "_id" : ObjectId("62f67af3ba9dd13936b47628"),
     "nombre" : "Mauricio",
     "apellido" : "Avila",
     "correo" : "mavila1234@gmail.com",
-    "contraseña" : "Mauricio1234",
+    "contraseña" : "Mauri12",
     "imagen" : "11.jpg",
-    "ordenes" : [
-        {
-            "tomadas" : [
+    "ordenes" : {
+        "tomadas" : [
 
-            ],
-            "entregadas" : [
+        ],
+        "entregadas" : [
 
-            ]
-        }
-    ]
+        ]
+    }
 }
 {
     "_id" : ObjectId("62f67b29ba9dd13936b47629"),
     "nombre" : "Ramiro",
     "apellido" : "Gonzalez",
     "correo" : "goramiro12@gmail.com",
-    "contraseña" : "Ramiro1234",
+    "contraseña" : "Ramiro34",
     "imagen" : "12.jpg",
-    "ordenes" : [
-        {
-            "tomadas" : [
+    "ordenes" : {
+        "tomadas" : [
 
-            ],
-            "entregadas" : [
+        ],
+        "entregadas" : [
 
-            ]
-        }
-    ]
+        ]
+    }
 }
 {
     "_id" : ObjectId("62f67b6eba9dd13936b4762a"),
     "nombre" : "Eduardo",
     "apellido" : "Garcia",
-    "correo" : "edgardr@gmail.com",
-    "contraseña" : "Eduardo1234",
+    "correo" : "edgard@gmail.com",
+    "contraseña" : "Eduardo1",
     "imagen" : "9.jpg",
-    "ordenes" : [
-        {
-            "tomadas" : [
+    "ordenes" : {
+        "tomadas" : [
 
-            ],
-            "entregadas" : [
+        ],
+        "entregadas" : [
 
-            ]
-        }
-    ]
+        ]
+    }
 }
