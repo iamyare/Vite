@@ -3,6 +3,13 @@ var ordenSeleccionadaActualmente = null;
 var clienteSeleccionadoActualmente = null;
 var llamadoDesde = null;
 var empresaSeleccionadaActualmente = null;
+var booleanProductos = false
+var subtotal = 0;
+var total = 0;
+var isv = 0;
+var comision = 0;
+var comisionMotorista = 0;
+var comisionAdministracion = 0;
 
 //Modales
 var modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAdministrador");
@@ -11,6 +18,7 @@ var modalEditorProductoAdministracion = new bootstrap.Modal("#modalEditorProduct
 var modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProductosAdministracion");
 const modalEditorEmpresasAdministracion = new bootstrap.Modal("#modalEditorEmpresasAdministracion");
 const modalEditorMotoristaAdministracion = new bootstrap.Modal("#modalEditorMotoristaAdministracion");
+const modalVisualizarDatosTarjeta = new bootstrap.Modal("#modal-visualizar-datos-tarjeta");
 
 //Divs para rellenar con los datos obtenidos
 const divClientesAdministracion = document.getElementById("contenido-clientes-administracion");
@@ -34,9 +42,18 @@ var correoMotorista = document.getElementById("correo-motorista-administracion-m
 var contrasenaMotorista = document.getElementById("contrasena-motorista-administracion-modal");
 var identificacionMotorista = document.getElementById("id-motorista-administracion-modal");
 
+//Inputs tarjeta
+var numeroTarjeta = document.getElementById("numero-tarjeta");
+var nombreTitular = document.getElementById("nombre-titular");
+var fechaVencimiento = document.getElementById("fecha-vencimiento");
+var codigoSeguridad = document.getElementById("codigo-seguridad");
+var tipoTarjeta = document.getElementById("tipo-tarjeta");
+
 const imagenesClientes = ["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg","11.jpg","12.jpg"]
 var estados = ["en el origen", "en camino", "tomada", "en el destino"]
 var imagenesProductos = ["pizza-pepperoni.jpg", "plato-pasta.jpg", "subway-club.jpg", "subway-melt.jpg", "subway-tuna.jpg", "subway-veggie-delite.jpg", "whooper-jr.jpg", "whooper.jpg"]
+
+const tarjetasCredito = ["Visa", "MasterCard", "American Express"];
 
 
 
@@ -204,49 +221,98 @@ function actualizarImagenCliente(){
 
 function mostrarEditorOrdenAdministracion(idOrden){
     ordenSeleccionadaActualmente = idOrden;
+
     mostrarOrdenAdministracion(idOrden).then((res) => {
+        
         //Modoficar h5 con id modalEditorOrdenAdministracionLabel
         modalEditorOrdenAdministracionLabel.innerHTML = `Orden #${res._id}`;
         tablaModalEditorOrdenAdministracion.innerHTML = "";
+        document.getElementById("direccion-administracion-modal").value ='';
+        document.getElementById("latitud-administracion-modal").value ='';
+        document.getElementById("longitud-administracion-modal").value ='';
+        document.getElementById("subTotalOrdenAdm").innerHTML = `0`;
+        document.getElementById("isvOrdenAdm").innerHTML = `0`;
+        document.getElementById("comisionOrdenAdm").innerHTML = `0`;
+        document.getElementById("totalOrdenAdm").innerHTML = `0`;
         //Suma de los totales de los productos
-        let subtotal = 0;
-        res.productos.forEach((idProducto) => {
-            let ideProducto = idProducto.producto;
-            let cantidadProducto = idProducto.cantidad;
-            obtenerProductosID(ideProducto).then((producto) => {
-                tablaModalEditorOrdenAdministracion.innerHTML += 
-                `
-                <tr>
-                    <td>${producto._id}</td>
-                    <td>${producto.nombre}</td>
-                    <td>${cantidadProducto}</td>
-                    <td>${producto.precio}</td>
-                    <td>${(producto.precio)*(cantidadProducto)}</td>
-                    <td><button class="btn btn-danger" type="button" onclick="eliminarProductoOrden('${producto._id}')">Eliminar</button></td>
-                    <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button></td>
-                </tr>
-                `;
-                subtotal += (producto.precio)*(cantidadProducto);
-                isv = subtotal*0.15;
-                comision = subtotal*0.05;
-                total = subtotal + isv + comision;
-                document.getElementById("subTotalOrdenAdm").innerHTML = `$${subtotal}`;
-                document.getElementById("isvOrdenAdm").innerHTML = `$${isv}`;
-                document.getElementById("comisionOrdenAdm").innerHTML = `$${comision}`;
-                document.getElementById("totalOrdenAdm").innerHTML = `$${total}`;
-            
-            });
-            document.getElementById("estado-administracion-modal").innerHTML = `<option value="${res.estado}" selected>${res.estado}</option>`;
-            estados.forEach((estado) => {
-                if(estado != res.estado){
-                    document.getElementById("estado-administracion-modal").innerHTML += `<option value="${estado}">${estado}</option>`;
-                }
-            });
+        subtotal = 0;
+        total = 0;
+        isv = 0;
+        comision = 0;
+        booleanProductos = false;
 
-             if (res.estado == "en el destino") {
-                document.getElementById("motorista-asignado-administracion-modal").disabled = true;
+        if (res.productos.length > 0) {
+            booleanProductos = true;
+            res.productos.forEach((idProducto) => {
+                let ideProducto = idProducto.producto;
+                let cantidadProducto = idProducto.cantidad;
+                obtenerProductosID(ideProducto).then((producto) => {
+                    tablaModalEditorOrdenAdministracion.innerHTML += 
+                    `
+                    <tr>
+                        <td>${producto._id}</td>
+                        <td>${producto.nombre}</td>
+                        <td>${cantidadProducto}</td>
+                        <td>${producto.precio}</td>
+                        <td>${(producto.precio)*(cantidadProducto)}</td>
+                        <td><button class="btn btn-danger" type="button" onclick="eliminarProductoOrden('${producto._id}')">Eliminar</button></td>
+                        <td><button class="btn btn-primary" type="button" onclick="mostrarProductoAdministracion('${producto._id}')">Mostrar</button></td>
+                    </tr>
+                    `;
+                    subtotal += (producto.precio)*(cantidadProducto);
+                    isv = subtotal*0.15;
+                    comision = subtotal*0.05;
+                    total = subtotal + isv + comision;
+                    document.getElementById("subTotalOrdenAdm").innerHTML = `$${subtotal}`;
+                    document.getElementById("isvOrdenAdm").innerHTML = `$${isv}`;
+                    document.getElementById("comisionOrdenAdm").innerHTML = `$${comision}`;
+                    document.getElementById("totalOrdenAdm").innerHTML = `$${total}`;
+                });
+            });
+        }
+
+
+        numeroTarjeta.value = res.factura.numeroTarjeta;
+        codigoSeguridad.value = res.factura.codigoSeguridad;
+        nombreTitular.value = res.factura.nombreTitular;
+        fechaVencimiento.value = res.factura.fechaVencimiento;
+
+        //Llenar el select con las tarjetas de credito disponibles, si la orden ya contiene una tarjeta de credito, seleccionarla
+        tipoTarjeta.innerHTML = "";
+        tarjetasCredito.forEach((tarjeta) => {
+            if (res.factura.tarjeta == tarjeta) {
+                tipoTarjeta.innerHTML += `<option value="${tarjeta}" selected>${tarjeta}</option>`;
+            }else{
+                tipoTarjeta.innerHTML += `<option value="${tarjeta}">${tarjeta}</option>`;
             }
         });
+
+        document.getElementById("estado-administracion-modal").innerHTML = ``;
+        
+        estados.forEach((estado) => {
+            if(estado != res.estado){
+                document.getElementById("estado-administracion-modal").innerHTML += `<option value="${estado}">${estado}</option>`;
+            }else{
+                document.getElementById("estado-administracion-modal").innerHTML += `<option value="${res.estado}" selected>${res.estado}</option>`;
+            }
+        });
+
+         if (res.estado == "en el destino") {
+            document.getElementById("motorista-asignado-administracion-modal").disabled = true;
+            document.getElementById("boton-visualizar-tarjeta").disabled = true;
+        }else{
+            document.getElementById("motorista-asignado-administracion-modal").disabled = false;
+            document.getElementById("boton-visualizar-tarjeta").disabled = false;
+
+        }
+
+
+
+        document.getElementById("direccion-administracion-modal").value = res.direccion.direccion;
+        console.log(res.direccion.latitud);
+        document.getElementById("latitud-administracion-modal").value = res.direccion.latitud;
+        document.getElementById("longitud-administracion-modal").value = res.direccion.longitud;
+        
         obtenerMotoristasAprobados().then((motoristas) => {
         document.getElementById("motorista-asignado-administracion-modal").innerHTML = '';
 
@@ -415,9 +481,14 @@ function actualizarOrdenAdm(){
     let total = (document.getElementById("totalOrdenAdm").innerHTML).substring(1);
     let idMotorista = document.getElementById("motorista-asignado-administracion-modal").value;
 
+    let direccion = document.getElementById("direccion-administracion-modal").value;
+    let latitud = document.getElementById("latitud-administracion-modal").value;
+    let longitud = document.getElementById("longitud-administracion-modal").value;
+    
+
     //El motorista tendra una comision del 30% de la comision, mientras La administracion tendra una comision del 70% de la comision
-    let comisionMotorista = (comision * 30) / 100;
-    let comisionAdministracion = (comision * 70) / 100;
+    comisionMotorista = (comision * 30) / 100;
+    comisionAdministracion = (comision * 70) / 100;
 
     let factura = {
         subtotal: subTotal,
@@ -427,69 +498,85 @@ function actualizarOrdenAdm(){
         },
         total: total
     };
-    console.log(factura);
-    //http://localhost:3333/administracion/orden/:id/factura
-    fetch(`http://localhost:3333/administracion/orden/${ordenSeleccionadaActualmente}/factura`, {
-        method: 'PUT',
-        body: JSON.stringify(factura),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then((res) => {
-        modalEditorOrdenAdministracion.hide();
-        actualizarEstadoOrdenAdm();
 
-        //Eliminar orden en el motorista
-        fetch(`http://localhost:3333/motorista/orden/${ordenSeleccionadaActualmente}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            //Agregar id orden al motorista
-            //Verificamos si esta en el origen 
-            let estado = document.getElementById("estado-administracion-modal").value;
-            if(estado == "en el origen"){
-            }else if(estado == "en el destino"){
-                //Agregar id orden al motorista
-                fetch(`http://localhost:3333/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
-                    method: 'PUT',
+    if (booleanProductos) {
+        //verificar que los campos no esten vacios
+        if(direccion == "" || latitud == "" || longitud == ""){
+            alert("Debe ingresar todos los campos de la direccion, latitud y longitud");
+        } //verificar que latitud y longitud sean numeros
+        else if(isNaN(latitud) || isNaN(longitud)){
+            alert("La latitud y longitud deben ser numeros");
+        }
+        else{
+            //http://localhost:3333/administracion/orden/:id/factura
+            fetch(`http://localhost:3333/administracion/orden/${ordenSeleccionadaActualmente}/factura`, {
+                method: 'PUT',
+                body: JSON.stringify(factura),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => {
+                modalEditorOrdenAdministracion.hide();
+                actualizarEstadoOrdenAdm();
+                actualizarDireccionOrden();
+
+                //Eliminar orden en el motorista
+                fetch(`http://localhost:3333/motorista/orden/${ordenSeleccionadaActualmente}`, {
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }).then((res) => {
-                    console.log("Orden agregada al motorista como entregada");
-                });
-            } else {
-                //Se agrega la orden al motorista como tomada
-                fetch(`http://localhost:3333/motorista/${idMotorista}/orden/tomada/${ordenSeleccionadaActualmente}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
+                    //Agregar id orden al motorista
+                    //Verificamos si esta en el origen 
+                    let estado = document.getElementById("estado-administracion-modal").value;
+                    if(estado == "en el origen"){
+                    }else if(estado == "en el destino"){
+                        //Agregar id orden al motorista
+                        fetch(`http://localhost:3333/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then((res) => {
+                            console.log("Orden agregada al motorista como entregada");
+                        });
+                    } else {
+                        //Se agrega la orden al motorista como tomada
+                        fetch(`http://localhost:3333/motorista/${idMotorista}/orden/tomada/${ordenSeleccionadaActualmente}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then((res) => {
+                            console.log("Orden agregada al motorista como tomada");
+                        });
                     }
-                }).then((res) => {
-                    console.log("Orden agregada al motorista como tomada");
+                }).catch((err) => {
+                    console.log(err);
                 });
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
 
 
-        if (llamadoDesde == "clientes"){
-            console.log("Llamado desde clientes");
-            llenarClientesAdministracion();
-        } else if (llamadoDesde == "ordenes"){
-            console.log("Llamado desde Ordenes");
-            llenarCategoriaAdministracion('ordenes');
+                if (llamadoDesde == "clientes"){
+                    console.log("Llamado desde clientes");
+                    llenarClientesAdministracion();
+                } else if (llamadoDesde == "ordenes"){
+                    console.log("Llamado desde Ordenes");
+                    llenarCategoriaAdministracion('ordenes');
+                }
+            });
         }
-    });
+    } else {
+        alert("Debe agregar productos a la orden");
+    }
 }
 
 
 function actualizarEstadoOrdenAdm(){
     //Obtenemos el estado de la orden seleccionado en el select
     let estado = document.getElementById("estado-administracion-modal").value;
+
+    console.log('Actualizar Estado Orden: ',estado);
     //Actualizamos el estado de la orden
     fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}`, {
         method: 'PUT',
@@ -510,13 +597,48 @@ function actualizarEstadoOrdenAdm(){
     
 }
 
-function eliminarOrdenAdministracion(idOrden){
-    //Eliminar la orden
-    fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}/orden/${idOrden}`, {
-        method: 'DELETE'
+function actualizarDireccionOrden() {
+    let direccion = document.getElementById("direccion-administracion-modal").value;
+    let latitud = document.getElementById("latitud-administracion-modal").value;
+    let longitud = document.getElementById("latitud-administracion-modal").value;
+
+    let ordenDireccion = {
+        direccion: direccion,
+        latitud: latitud,
+        longitud: longitud
+    };
+
+    fetch(`http://localhost:3333/administracion/orden/${ordenSeleccionadaActualmente}/direccion`, {
+        method: 'PUT',
+        body: JSON.stringify(ordenDireccion),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     }).then((res) => {
-        verInfoCliente(clienteSeleccionadoActualmente);
-        llenarClientesAdministracion();
+        modalEditorOrdenAdministracion.hide();
+        console.log("Direccion actualizada");
+    });
+
+
+}
+
+function eliminarOrdenAdministracion(idOrden){
+    //Eliminar orden en la administracion
+    fetch(`http://localhost:3333/administracion/ordenes/${idOrden}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((res) => {
+        //Eliminar la orden del cliente
+        fetch(`http://localhost:3333/cliente/${clienteSeleccionadoActualmente}/orden/${idOrden}`, {
+            method: 'DELETE'
+        }).then((res) => {
+            verInfoCliente(clienteSeleccionadoActualmente);
+            llenarClientesAdministracion();
+        });
+    }).catch((err) => {
+        console.log(err);
     });
 }
 
@@ -720,7 +842,7 @@ function llenarCategoriaAdministracion(categoria){
                             <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
                                 <p class="orden-card-description">${(orden.productos).length} productos</p>
-                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                                <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
@@ -1438,10 +1560,18 @@ function verificarDatosMotorista(){
 
 function cambioDeEstado(estado){
     if (estado.value == 'en el destino'){
+        if (verificarDatosTarjeta()){
             document.getElementById("motorista-asignado-administracion-modal").disabled = true;
+            document.getElementById("boton-visualizar-tarjeta").disabled = true;
+        }else{
+            let estado = document.getElementById("estado-administracion-modal");
+            estado.value = "en camino";
+        }
     } else
     {
         document.getElementById("motorista-asignado-administracion-modal").disabled = false;
+        document.getElementById("boton-visualizar-tarjeta").disabled = false;
+
     }
 }
 
@@ -1450,5 +1580,62 @@ function cambioDeMotorista(motorista){
     if (estado.value == 'en el origen'){
         //cambia tomado
         document.getElementById("estado-administracion-modal").value = "tomada";
+    }
+}
+
+function verificarDatosTarjeta(){
+// verificar que numeroTarjeta, nombreTitular, fechaVencimiento, codigoSeguridad, tipoTarjeta. No esten vacios, ni contengan undefined
+    if(numeroTarjeta.value == "" || nombreTitular.value == "" || fechaVencimiento.value == "" || codigoSeguridad.value == "" || tipoTarjeta.value == ""){
+        alert("Por favor llene todos los campos de la tarjeta de credito");
+        return false;
+    }
+    //Verificar que el numero de tarjeta sea valido con expresion regular segun el tipo de tarjeta
+    else if(tipoTarjeta.value == "Visa" && !numeroTarjeta.value.match(/^4[0-9]{12}(?:[0-9]{3})?$/)){
+        alert("Numero de tarjeta invalido");
+        //Debe de verse de la forma 4123456789012345
+        return false;
+    } else if(tipoTarjeta.value == "MasterCard" && !numeroTarjeta.value.match(/^5[1-5][0-9]{14}$/)){
+        alert("Numero de tarjeta invalido");
+        //Debe de verse de la forma 5123456789012345
+        return false;
+    } else if(tipoTarjeta.value == "American Express" && !numeroTarjeta.value.match(/^3[47][0-9]{13}$/)){
+        alert("Numero de tarjeta invalido");
+        //Debe de verse de la forma 341234567890123
+        return false;
+    } //Verificar que la fecha de vencimiento sea valida con expresion regular
+    else if(!fechaVencimiento.value.match(/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/)){
+        alert("Fecha de vencimiento invalida. Debe de verse de la forma MM/YYYY");
+        return false;
+    } //Verificar que el codigo de seguridad sea valido con expresion regular
+    else if(!codigoSeguridad.value.match(/^[0-9]{3,4}$/)){
+        alert("Codigo de seguridad invalido. Debe de verse de la forma XXX o XXXX");
+        return false;
+    } else {
+        console.log("verificar tarjeta");
+        return true;
+    }
+
+}
+
+function actualizarTarjeta(){
+    if (verificarDatosTarjeta()){
+        //actualizar factura
+        fetch(`/administracion/orden/${ordenSeleccionadaActualmente}/tarjeta`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                numeroTarjeta: numeroTarjeta.value,
+                nombreTitular: nombreTitular.value,
+                fechaVencimiento: fechaVencimiento.value,
+                codigoSeguridad: codigoSeguridad.value,
+                tarjeta: tipoTarjeta.value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            modalVisualizarDatosTarjeta.hide();
+        });
     }
 }

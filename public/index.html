@@ -1549,6 +1549,26 @@
                                     <button class="btn btn-primary" type="button" onclick="agregarProductoOrdenAdministracion()">Agregar producto</button>
                                 </div>
                             </div>
+                            <!--Direccion con tres inputs uno al lado de otro: direccion, longitud, latitud-->
+                            <div class="mb-3">
+                                <label class="form-label" for="direccion-administracion-modal">Dirección</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="direccion-administracion-modal" value="Calle falsa 123">
+                                </div>
+                            </div>
+                            <!--Latitud y longitud-->
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Latitud</span>
+                                    </div>
+                                    <input class="form-control" type="text" id="latitud-administracion-modal" value="-12.123123">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Longitud</span>
+                                    </div>
+                                    <input class="form-control" type="text" id="longitud-administracion-modal" value="-12.123123">
+                                </div>
+                            </div>
                             <!--Estado-->
                             <div class="mb-3">
                                 <label class="form-label" for="estado-administracion-modal">Estado</label>
@@ -1569,6 +1589,12 @@
                                         <option value="1">Motorista 1</option>
                                         <option value="2">Motorista 2</option>
                                     </select>
+                                </div>
+                            </div>
+                            <!--Boton para visualizar el modal modal-visualizar-datos-tarjeta-->
+                            <div class="mb-3">
+                                <div class="col-12 d-flex" id="div-boton-visualizar-modal">
+                                    <button class="btn btn-primary mx-auto" type="button" data-bs-toggle="modal" id="boton-visualizar-tarjeta" data-bs-target="#modal-visualizar-datos-tarjeta">Visualizar datos de la tarjeta</button>
                                 </div>
                             </div>
                         </form>
@@ -2148,6 +2174,64 @@
         </div>
         <!--/Modal-->
 
+        <!--Modal Visaulizar DAtos de Tarjeta-->\
+        <div class="modal fade" id="modal-visualizar-datos-tarjeta" tabindex="-1" aria-labelledby="modal-visualizar-datos-tarjeta" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Datos de la tarjeta</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <!--Select que indica el tipo de tarjeta-->
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="tipo-tarjeta">Tipo de tarjeta</label>
+                                        <select class="form-control" id="tipo-tarjeta">
+                                            <option>Visa</option>
+                                            <option>Mastercard</option>
+                                            <option>American Express</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--Input que indica el numero de la tarjeta-->
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="numero-tarjeta">Numero de tarjeta</label>
+                                        <input type="text" class="form-control" id="numero-tarjeta" placeholder="Numero de tarjeta">
+                                    </div>
+                                </div>
+                                <!--Input que indica el nombre del titular-->
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="nombre-titular">Nombre del titular</label>
+                                        <input type="text" class="form-control" id="nombre-titular" placeholder="Nombre del titular">
+                                    </div>
+                                </div>
+                                <!--Inputs que indican la fecha de vencimiento y codigo de seguridad uno al lado del otro-->
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="fecha-vencimiento">Fecha de vencimiento</label>
+                                        <input type="text" class="form-control" id="fecha-vencimiento" placeholder="Fecha de vencimiento">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="codigo-seguridad">Codigo de seguridad</label>
+                                        <input type="text" class="form-control" id="codigo-seguridad" placeholder="Codigo de seguridad">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="div-footer-motoristas-administracion-modal">
+                        <button class="btn btn-secundary w-100" type="button" onclick="actualizarTarjeta()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
 

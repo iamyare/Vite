@@ -35,8 +35,7 @@
             "estado" : "en el origen",
             "direccion" : {
                 "latitud" : 14.123456,
-                "longitud" : -87.123456,
-                "direccion" : "direccion cualquiera"
+                "longitud" : -87.123456
             },
             "productos" : [
                 {
@@ -49,22 +48,21 @@
                 }
             ],
             "factura" : {
-                "subtotal" : "142",
-                "total" : "170.4",
+                "subtotal" : "140",
+                "total" : "168",
                 "comision" : {
-                    "motorista" : 2.1300000000000003,
-                    "adm" : 4.970000000000001
+                    "motorista" : 2.1,
+                    "adm" : 4.9
                 }
             },
             "total" : NumberInt(1000)
         },
         {
             "_id" : ObjectId("62f6825eba9dd13936b4762d"),
-            "estado" : "en el origen",
+            "estado" : "tomada",
             "direccion" : {
                 "latitud" : 14.123456,
-                "longitud" : -87.123456,
-                "direccion" : "direccion cualquiera"
+                "longitud" : -87.123456
             },
             "productos" : [
                 {
@@ -87,11 +85,10 @@
         },
         {
             "_id" : ObjectId("62f6825eba9dd13936b4762e"),
-            "estado" : "en el origen",
+            "estado" : "tomada",
             "direccion" : {
                 "latitud" : 14.123456,
-                "longitud" : -87.123456,
-                "direccion" : "direccion cualquiera"
+                "longitud" : -87.123456
             },
             "productos" : [
                 {
@@ -108,26 +105,20 @@
                 }
             ],
             "factura" : {
-                "tarjeta" : "visa",
-                "numeroTarjeta" : "123456789",
-                "fechaVencimiento" : "12/12/2020",
-                "codigoSeguridad" : "123",
-                "nombreTitular" : "Miguel Sanchez",
-                "subtotal" : "1000",
-                "total" : "1200",
+                "subtotal" : "105",
+                "total" : "126",
                 "comision" : {
-                    "motorista" : "100",
-                    "adm" : "100"
+                    "motorista" : 1.575,
+                    "adm" : 3.675
                 }
             }
         },
         {
             "_id" : ObjectId("62f6825eba9dd13936b4762f"),
-            "estado" : "en el origen",
+            "estado" : "tomada",
             "direccion" : {
                 "latitud" : 14.123456,
-                "longitud" : -87.123456,
-                "direccion" : "direccion cualquiera"
+                "longitud" : -87.123456
             },
             "productos" : [
                 {
@@ -136,16 +127,11 @@
                 }
             ],
             "factura" : {
-                "tarjeta" : "visa",
-                "numeroTarjeta" : "123456789",
-                "fechaVencimiento" : "12/12/2020",
-                "codigoSeguridad" : "123",
-                "nombreTitular" : "Miguel Sanchez",
-                "subtotal" : "1000",
-                "total" : "1200",
+                "subtotal" : "40",
+                "total" : "48",
                 "comision" : {
-                    "motorista" : "100",
-                    "adm" : "100"
+                    "motorista" : 0.6,
+                    "adm" : 1.4
                 }
             }
         },
@@ -154,8 +140,7 @@
             "estado" : "tomada",
             "direccion" : {
                 "latitud" : 14.123456,
-                "longitud" : -87.123456,
-                "direccion" : "direccion cualquiera"
+                "longitud" : -87.123456
             },
             "productos" : [
                 {
@@ -181,8 +166,7 @@
             "estado" : "tomada",
             "direccion" : {
                 "latitud" : 14.123456,
-                "longitud" : -87.123456,
-                "direccion" : "direccion cualquiera"
+                "longitud" : -87.123456
             },
             "productos" : [
                 {
@@ -201,7 +185,7 @@
         },
         {
             "_id" : ObjectId("62fa729d1d3f5e2c2b87cbfb"),
-            "estado" : "tomada",
+            "estado" : "en camino",
             "direccion" : {
                 "altitud" : 14.123456,
                 "latitud" : -87.123456

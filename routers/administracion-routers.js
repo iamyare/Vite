@@ -321,8 +321,8 @@ router.put('/orden/:id/factura', (req, res) => {
                     "subtotal": req.body.subtotal,
                     "total": req.body.total,
                     "comision": {
-                        "motorista": req.body.comision.motorista,
-                        "adm": req.body.comision.adm
+                        "motorista": req.body.motorista,
+                        "adm": req.body.adm
                     }
                 }
             }
@@ -338,6 +338,61 @@ router.put('/orden/:id/factura', (req, res) => {
     });
 });
 
+//Actualizar direccion de la orden
+//URL: http://localhost:3333/administracion/orden/:id/direccion
+router.put('/orden/:id/direccion', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.id)
+        },
+        {
+            "$set": {
+                "ordenes.$.direccion": {
+                    "latitud": req.body.latitud,
+                    "longitud": req.body.longitud,
+                    "direccion": req.body.direccion
+                }
+            }
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Actualizar tarjeta de la orden
+//URL: http://localhost:3333/administracion/orden/:id/tarjeta
+router.put('/orden/:id/tarjeta', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.id)
+        },
+        {
+            "$set": {
+                "ordenes.$.factura": {
+                    "tarjeta": req.body.tarjeta,
+                    "numeroTarjeta": req.body.numeroTarjeta,
+                    "fechaVencimiento": req.body.fechaVencimiento,
+                    "codigoSeguridad": req.body.codigoSeguridad,
+                    "nombreTitular": req.body.nombreTitular
+                }
+            }
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
 
 //Agregar una orden
 //URL: http://localhost:3333/administracion/ordenes
@@ -348,18 +403,19 @@ router.post('/ordenes/', (req, res) => {
             "$push": {
                 "ordenes": {
                     "_id": id,
-                    "estado": "tomada",
+                    "estado": "en el origen",
                     "direccion": {
-                        "altitud": 14.123456,
-                        "latitud": -87.123456,
+                        "longitud": '',
+                        "latitud": '',
+                        "direccion": ''
                     },
                     "productos": [],
                     "factura": {
                         "tarjeta": 'random',
-                        "numeroTarjeta": '2345678',
-                        "fechaVencimiento": '12/12/2020',
-                        "codigoSeguridad": '123',
-                        "nombreTitular": 'Juan Perez',
+                        "numeroTarjeta": '',
+                        "fechaVencimiento": '',
+                        "codigoSeguridad": '',
+                        "nombreTitular": '',
                         "subtotal": 0.0,
                         "total": 0.0,
                         "comision": {
@@ -376,6 +432,31 @@ router.post('/ordenes/', (req, res) => {
             id: id,
             ordenes: ordenes
         });
+        res.end();
+    })
+    .catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar una orden por id
+//URL: http://localhost:3333/administracion/ordenes/:id
+router.delete('/ordenes/:id', (req, res) => {
+    administracion.updateOne(
+        {
+            "ordenes._id": mongoose.Types.ObjectId(req.params.id)
+        },
+        {
+            "$pull": {
+                "ordenes": {
+                    "_id": mongoose.Types.ObjectId(req.params.id)
+                }
+            }
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
         res.end();
     })
     .catch((err) => {
