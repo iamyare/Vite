@@ -171,34 +171,41 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-//Obtener las ordenes tomadas por un motorista por su id, y con el id de la orden obtener su informacio
+//Obtener las ordenes tomadas por el motorista
 //URL: http://localhost:3333/motorista/:id/ordenes/tomadas
 router.get('/:id/ordenes/tomadas', (req, res) => {
-    motoristas.aggregate([
-        {
-            $lookup: {
-                from: 'administracions',
-                localField: 'ordenes.tomadas',
-                foreignField: 'administracion.ordenes._id',
-                as: 'ordenesTomadas'
-            }
-        },
-        {
-            $unwind: '$ordenesTomadas'
-        },
-        {
-            $match: {
-                _id: mongoose.Types.ObjectId(req.params.id)
-            }
-        }
-    ])
+    motoristas.findOne({
+        _id: req.params.id
+    },{
+        "ordenes.tomadas": 1
+    }
+    )
     .then((motorista) => {
-        res.send(motorista);
+        res.send(motorista.ordenes.tomadas);
         res.end();
     }).catch((err) => {
         res.send(err);
         res.end();
     });
 });
+
+//Obtener las ordenes entregadas por el motorista
+//URL: http://localhost:3333/motorista/:id/ordenes/entregadas
+router.get('/:id/ordenes/entregadas', (req, res) => {
+    motoristas.findOne({
+        _id: req.params.id
+    },{
+        "ordenes.entregadas": 1
+    }
+    )
+    .then((motorista) => {
+        res.send(motorista.ordenes.entregadas);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
 
 module.exports = router;

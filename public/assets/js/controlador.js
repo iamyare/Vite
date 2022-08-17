@@ -113,7 +113,7 @@ function llenarClientesAdministracion() {
                         </td>
                     </tr>
                     `;
-                    console.log(infoOrden);
+
                 });
                 }
 
@@ -545,6 +545,8 @@ function actualizarOrdenAdm(){
                         //Verificamos si esta en el origen 
                         let estado = document.getElementById("estado-administracion-modal").value;
                         if(estado == "en el origen"){
+                            llenarOrdenesMotorista();
+
                         }else if(estado == "en el destino"){
                             //Agregar id orden al motorista
                             fetch(`http://localhost:3333/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
@@ -554,16 +556,31 @@ function actualizarOrdenAdm(){
                                 }
                             }).then((res) => {
                                 console.log("Orden agregada al motorista como entregada");
+                            llenarOrdenesMotorista();
+
                             });
-                        } else {
+                        } else if (estado == "tomada") {
                             //Se agrega la orden al motorista como tomada
                             fetch(`/motorista/${idMotorista}/orden/tomada/${ordenSeleccionadaActualmente}`, {
                                 method: 'PUT'
                             }).then((res) => {
                                 console.log(res);
                                 console.log("Orden agregada al motorista como tomada");
+                            llenarOrdenesMotorista();
+
+                            });
+                        } else if (estado == "en camino") {
+                            //Se agrega la orden al motorista como entregada
+                            fetch(`/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
+                                method: 'PUT'
+                            }).then((res) => {
+                                console.log(res);
+                                console.log("Orden agregada al motorista como entregada");
+                            llenarOrdenesMotorista();
+
                             });
                         }
+
                     }).catch((err) => {
                         console.log(err);
                     });
@@ -870,6 +887,8 @@ function llenarCategoriaAdministracion(categoria){
         obtenerOrdenesTomadas().then((ordenes) => {
             divOrdenesTomadas.innerHTML = "";
             ordenes.forEach((orden) => {
+            console.log(orden);
+
                 orden = orden.ordenes;
 
                 divOrdenesTomadas.innerHTML +=
@@ -1791,7 +1810,7 @@ function actualizarMotorista() {
             }
         }).then(res => res.json())
             .then(data => {
-                console.log(data);
+
                 modalEditorMotoristaAdministracion.hide();
             }).catch(err => {
                 console.log(err);
@@ -1806,7 +1825,7 @@ function actualizarMotorista() {
                 method: 'PUT'
             }).then(res => res.json())
                 .then(data => {
-                    console.log(data);
+
                     llenarCategoriaAdministracion('motoristas');
                 }).catch(err => {
                     console.log(err);
@@ -1817,7 +1836,7 @@ function actualizarMotorista() {
                 method: 'PUT'
             }).then(res => res.json())
                 .then(data => {
-                    console.log(data);
+
                     llenarCategoriaAdministracion('motoristas');
                 }).catch(err => {
                     console.log(err);
@@ -1828,13 +1847,14 @@ function actualizarMotorista() {
                 method: 'PUT'
             }).then(res => res.json())
                 .then(data => {
-                    console.log('respuesta rechazado ',data);
+
                     modalEditorMotoristaAdministracion.hide();
                     llenarCategoriaAdministracion('motoristas');
                 }).catch(err => {
                     console.log(err);
                 });
         }
+
     }else{
         //Crear motorista
         let motoristaNuevo = {
@@ -1923,29 +1943,91 @@ function llenarOrdenesMotorista() {
     }).catch(err => {
         console.log(err);
     });
-    //Obtener las ordenes tomadas
-    obtenerOrdenesTomadas().then(OrdenesTomadas => {
-        OrdenesTomadas.forEach((orden) => {
-            console.log('Llenando ordenes motorista');
 
-            orden = orden.ordenes;
-            divOrdenesTomadas.innerHTML += 
-            `
-            <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-            <div class="orden-card">
-                    <div>
-                        <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
-                        <div class="ms-2">
-                            <p class="orden-card-description">${(orden.productos).length} productos</p>
-                            <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
+    if (motoristaSeleccionadoActualmente != null) {
+        //Obtener las ordenes tomadas
+        obtenerOrdenesTomadasMotorista().then(OrdenesTomadas => {
+            console.log('Llenando ordenes tomadas motorista');
+            OrdenesTomadas.forEach((orden) => {
+
+                divOrdenesTomadas.innerHTML += 
+                `
+                <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">Orden: #${orden}</h5>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden}','ordenes')">Abrir</button></div>
+                    </div>
+                </div>
+                `;}
+            );
+        });
+        //Obtener las ordenes entregadas
+        obtenerOrdenesEntregadasMotorista().then(OrdenesEntregadas => {
+            OrdenesEntregadas.forEach((orden) => {
+
+                divOrdenesentregadas.innerHTML += 
+                `
+                <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                <div class="orden-card">
+                        <div>
+                            <h5 class="m-0 text-break">Orden: #${orden}</h5>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden}','ordenes')">Abrir</button></div>
+                    </div>
+                </div>
+                `;}
+            );
+        });
+
+        //Obtener las ordenes en camino
+        obtenerOrdenesEnCamino().then(OrdenesEnCamino => {
+            console.log('Llenando ordenes en camino motorista');
+            OrdenesEnCamino.forEach((orden) => {
+                    
+                    divOrdenesCamino.innerHTML += 
+                    `
+                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+                    <div class="orden-card">
+                            <div>
+                                <h5 class="m-0 text-break">Orden: #${orden.ordenes._id}</h5>
+                            </div>
+                            <div class="d-flex justify-content-center gap-2 mt-2"><button
+                                    class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden.ordenes._id}','ordenes')">Abrir</button></div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center gap-2 mt-2"><button
-                            class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
-                </div>
-            </div>
-            `;}
-        );
-    });
+                    `;}
+            );
+        });
+    }
 
+}
+
+function obtenerOrdenesTomadasMotorista(){
+    //Obtener las ordenes tomadas
+    //async fetch y await
+    async function obtenerOrdenesTomadas() {
+        const res = await fetch(`/motorista/${motoristaSeleccionadoActualmente}/ordenes/tomadas`);
+        const data = await res.json();
+        return data;
+    }
+    const OrdenesTomadas = obtenerOrdenesTomadas();
+    return OrdenesTomadas;
+        
+}
+
+function obtenerOrdenesEntregadasMotorista(){
+    //Obtener las ordenes entregadas
+    //async fetch y await
+    async function obtenerOrdenesEntregadas() {
+        const res = await fetch(`/motorista/${motoristaSeleccionadoActualmente}/ordenes/entregadas`);
+        const data = await res.json();
+        return data;
+    }
+    const OrdenesEntregadas = obtenerOrdenesEntregadas();
+    return OrdenesEntregadas;
+        
 }

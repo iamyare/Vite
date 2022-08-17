@@ -47,7 +47,7 @@ router.get('/motorista/aprobados', (req, res) => {
 router.put('/motorista/aprobado/:id', (req, res) => {
     administracion.update(
         {
-            "motoristas.aprobados": { $ne: req.params.id }
+            "motoristas.aprobados": { $ne: mongoose.Types.ObjectId(req.params.id) }
         },
         {
             $push: {
@@ -75,7 +75,7 @@ router.put('/motorista/aprobado/:id', (req, res) => {
 router.put('/motorista/rechazado/:id', (req, res) => {
     administracion.update(
         {
-            "motoristas.rechazados": { $ne: req.params.id }
+            "motoristas.rechazados": { $ne: mongoose.Types.ObjectId(req.params.id) }
         },
         {
             $push: {
@@ -87,7 +87,7 @@ router.put('/motorista/rechazado/:id', (req, res) => {
             }
         },
         {
-            //Si no existe el registro, lo crea y si existe, lo actualiza
+
             upsert: true
         }
     )
@@ -105,7 +105,7 @@ router.put('/motorista/rechazado/:id', (req, res) => {
 router.put('/motorista/pendiente/:id', (req, res) => {
     administracion.update(
         {
-            "motoristas.pendientes": { $ne: req.params.id }
+            "motoristas.pendientes": { $ne: mongoose.Types.ObjectId(req.params.id) }
         },
         {
             $push: {
