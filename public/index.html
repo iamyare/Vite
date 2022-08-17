@@ -998,17 +998,17 @@
                                     <ul class="nav nav-pills nav-justified" role="tablist">
                                         <li class="nav-item" role="presentation"><a
                                                  class="nav-link2 active"
-                                                role="tab" data-bs-toggle="pill" href="#content-ordenes-sin-tomar">Ordenes disponibles</a>
+                                                role="tab" data-bs-toggle="pill" href="#div-cont-ordenes-disponibles">Ordenes disponibles</a>
                                         </li>
                                         <li class="nav-item" role="presentation"><a
                                                  class="nav-link2" role="tab"
-                                                data-bs-toggle="pill" href="#content-ordenes-tomadas">Ordenes asignadas</a></li>
+                                                data-bs-toggle="pill" href="#div-cont-ordenes-tomadas">Ordenes asignadas</a></li>
                                         <li class="nav-item" role="presentation"><a
                                                 ')" class="nav-link2" role="tab"
-                                                data-bs-toggle="pill" href="#content-en-camino">Ordenes en camino</a></li>
+                                                data-bs-toggle="pill" href="#div-cont-ordenes-camino">Ordenes en camino</a></li>
                                         <li class="nav-item" role="presentation"><a
                                                  class="nav-link2" role="tab"
-                                                data-bs-toggle="pill" href="#content-ordenes-entregadas">Ordenes entregadas</a></li>
+                                                data-bs-toggle="pill" href="#div-cont-ordenes-entregadas">Ordenes entregadas</a></li>
                                     </ul>
                                     <div class="tab-content">
                                         <!-- Ordenes disponibles -->
@@ -1053,7 +1053,11 @@
                         <!-- Motorista-->
                         <section id="contenido-motoristas" class="tab-pane fade" role="tabpanel">
                             <div class="container">
-                                <h1 class="m-3 degradado-naranja">Motoristas</h1>
+                                <div class="d-flex gap-5 align-items-center">
+                                    <h1 class="m-3 degradado-naranja">Motoristas</h1>
+                                    <button class="btn btn-warning " type="button" onclick="agregarMotorista()" style="height: 40px;">Agregar motorista</button>
+                                </div>
+
                                 <div>
                                     <ul class="nav nav-pills nav-justified" role="tablist">
                                         <li class="nav-item" role="presentation"><a 
@@ -1158,7 +1162,140 @@
 
     <!--Modales-->
     <section>
+        <!--Modal editor Motorista-->
+        <div class="modal fade" id="modalEditorMotoristaAdministracion" tabindex="-1" aria-labelledby="modalEditorMotoristaAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditorMotoristaAdministracionLabel">Motorista</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="div-motoristas-administracion-modal">
+                            <!--Imagen de motorista junto un select-->
+                            <div class="mb-3">
+                                <label class="form-label" for="imagen-motorista-administracion-modal">Imagen</label>
+                                <div class="input-group">
+                                    <img id="imagen-motorista-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del motorista" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select" id="select-imagen-motorista-administracion-modal" onchange="getValueSelectMotoristaImagen(this);">
+                                        <option value="1" >Imagen 1</option>
+                                        <option value="1">Imagen 1</option>
+                                        <option value="2">Imagen 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--Nombre-->
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre-motorista-administracion-modal">Nombre</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="nombre-motorista-administracion-modal" value="Yamir Alejandro">
+                                </div>
+                            </div>
+                            <!--Apellido-->
+                            <div class="mb-3">
+                                <label class="form-label" for="apellido-motorista-administracion-modal">Apellido</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="apellido-motorista-administracion-modal" value="Rodas">
+                                </div>
+                            </div>
+                            <!--Correo-->
+                            <div class="mb-3">
+                                <label class="form-label" for="correo-motorista-administracion-modal">Correo</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="correo-motorista-administracion-modal" value="correo@gmail.com">
+                                </div>
+                            </div>
+                            <!--Contraseña-->
+                            <div class="mb-3">
+                                <label class="form-label" for="contrasena-motorista-administracion-modal">Contraseña</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" id="contrasena-motorista-administracion-modal" value="12345678">
+                                </div>
+                            </div>
+                            <!--Id-->
+                            <div class="mb-3">
+                                <label class="form-label" for="id-motorista-administracion-modal">ID</label>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="id-motorista-administracion-modal" value="0816-1000-8989">
+                                </div>
+                            </div>
+                            <!--Aprobado select que indique si esta aprobado o rechazado-->
+                            <div class="mb-3">
+                                <label class="form-label" for="aprobado-motorista-administracion-modal">Aprobado</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="aprobado-motorista-administracion-modal" onchange="getValueSelectMotoristaAprobado(this);">
+                                        <option value="Aprobado" >Aprobado</option>
+                                        <option value="Rechazado">Rechazado</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--Ordenes-->
+                            <div class="container" id="divOrdenesMotorista">
+                                <h1 class="m-3 degradado-naranja">Ordenes</h1>
+                                <div>
+                                    <ul class="nav nav-pills nav-justified" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2 active" role="tab" data-bs-toggle="pill" href="#content-ordenes-sin-tomar-motorista-modal">Ordenes disponibles</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-ordenes-tomadas-motorista-modal">Ordenes asignadas</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-en-camino-motorista-modal">Ordenes en camino</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-ordenes-entregadas-motorista-modal">Ordenes entregadas</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <!-- Ordenes disponibles -->
+                                        <div id="content-ordenes-sin-tomar-motorista-modal" class="tab-pane fade show active" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-disponibles-motorista-modal">
+                    
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes asignadas -->
+                                        <div id="content-ordenes-tomadas-motorista-modal" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-tomadas-motorista-modal">
 
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <!-- Ordenes en camino -->
+                                        <div id="content-en-camino-motorista-modal" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-camino-motorista-modal">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Ordenes entregadas -->
+                                        <div id="content-ordenes-entregadas-motorista-modal" class="tab-pane fade" role="tabpanel">
+                                            <div class="container my-4">
+                                                <div class="row gy-2" id="div-cont-ordenes-entregadas-motorista-modal">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="div-footer-motoristas-administracion-modal">
+                        <button class="btn btn-primary" type="button" onclick="verificarDatosMotorista()">Guardar motorista</button>
+                        <button class="btn btn-danger" type="button" onclick="eliminarMotorista()">Eliminar motorista</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/Modal-->
         <!--Carrito-->
         <div id="modal-carrito" class="modal fade" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-fullscreen" role="document">
@@ -1956,226 +2093,10 @@
         </div>
         <!--/Modal-->
 
-        <!--Modal editor Motorista-->
-        <div class="modal fade" id="modalEditorMotoristaAdministracion" tabindex="-1" aria-labelledby="modalEditorMotoristaAdministracionLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditorMotoristaAdministracionLabel">Motorista</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="div-motoristas-administracion-modal">
-                            <!--Imagen de motorista junto un select-->
-                            <div class="mb-3">
-                                <label class="form-label" for="imagen-motorista-administracion-modal">Imagen</label>
-                                <div class="input-group">
-                                    <img id="imagen-motorista-administracion-modal" src="https://i.imgur.com/8Q5ZQ0x.png" alt="Imagen del motorista" class="img-fluid" style="max-width: 200px;">
-                                    <select class="form-select" id="select-imagen-motorista-administracion-modal" onchange="getValueSelectMotoristaImagen(this);">
-                                        <option value="1" >Imagen 1</option>
-                                        <option value="1">Imagen 1</option>
-                                        <option value="2">Imagen 2</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--Nombre-->
-                            <div class="mb-3">
-                                <label class="form-label" for="nombre-motorista-administracion-modal">Nombre</label>
-                                <div class="input-group">
-                                    <input class="form-control" type="text" id="nombre-motorista-administracion-modal" value="Yamir Alejandro">
-                                </div>
-                            </div>
-                            <!--Apellido-->
-                            <div class="mb-3">
-                                <label class="form-label" for="apellido-motorista-administracion-modal">Apellido</label>
-                                <div class="input-group">
-                                    <input class="form-control" type="text" id="apellido-motorista-administracion-modal" value="Rodas">
-                                </div>
-                            </div>
-                            <!--Correo-->
-                            <div class="mb-3">
-                                <label class="form-label" for="correo-motorista-administracion-modal">Correo</label>
-                                <div class="input-group">
-                                    <input class="form-control" type="text" id="correo-motorista-administracion-modal" value="correo@gmail.com">
-                                </div>
-                            </div>
-                            <!--Contraseña-->
-                            <div class="mb-3">
-                                <label class="form-label" for="contrasena-motorista-administracion-modal">Contraseña</label>
-                                <div class="input-group">
-                                    <input class="form-control" type="password" id="contrasena-motorista-administracion-modal" value="12345678">
-                                </div>
-                            </div>
-                            <!--Id-->
-                            <div class="mb-3">
-                                <label class="form-label" for="id-motorista-administracion-modal">ID</label>
-                                <div class="input-group">
-                                    <input class="form-control" type="text" id="id-motorista-administracion-modal" value="0816-1000-8989">
-                                </div>
-                            </div>
-                            <!--Aprobado select que indique si esta aprobado o rechazado-->
-                            <div class="mb-3">
-                                <label class="form-label" for="aprobado-motorista-administracion-modal">Aprobado</label>
-                                <div class="input-group">
-                                    <select class="form-select" id="aprobado-motorista-administracion-modal" onchange="getValueSelectMotoristaAprobado(this);">
-                                        <option value="1" >Aprobado</option>
-                                        <option value="0">Rechazado</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--Ordenes-->
-                            <div class="container" id="divOrdenesMotorista">
-                                <h1 class="m-3 degradado-naranja">Ordenes</h1>
-                                <div>
-                                    <ul class="nav nav-pills nav-justified" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link2 active" role="tab" data-bs-toggle="pill" href="#content-ordenes-sin-tomar-motorista">Ordenes disponibles</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-ordenes-tomadas-motorista">Ordenes asignadas</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-en-camino-motorista">Ordenes en camino</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link2" role="tab" data-bs-toggle="pill" href="#content-ordenes-entregadas-motorista">Ordenes entregadas</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <!-- Ordenes disponibles -->
-                                        <div id="content-ordenes-sin-tomar-motorista" class="tab-pane fade show active" role="tabpanel">
-                                            <div class="container my-4">
-                                                <div class="row gy-2" id="div-cont-ordenes-disponibles">
 
-                                                    <!--Item: Ordenes-->
-                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card">
-                                                            <div>
-                                                                <h5 class="m-0">Orden: #123412432</h5>
-                                                                <div class="ms-2">
-                                                                    <p class="orden-card-description">12 productos</p>
-                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                                                    class="btn btn-primary btn-sm flex-fill" type="button"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-editar-orden-administrador">Abrir</button></div>
-                                                        </div>
-                                                    </div>
-                                                    <!--Fin Item-->
-                    
-                                                </div>
-                                            </div>
-                                        </div>
-                    
-                                        <!-- Ordenes asignadas -->
-                                        <div id="content-ordenes-tomadas-motorista" class="tab-pane fade" role="tabpanel">
-                                            <div class="container my-4">
-                                                <div class="row gy-2" id="div-cont-ordenes-tomadas">
-                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card" >
-                                                            <div>
-                                                                <h5 class="m-0">Orden: #123412432</h5>
-                                                                <div class="ms-2">
-                                                                    <p class="orden-card-description">12 productos</p>
-                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                    
-                                        <!-- Ordenes en camino -->
-                                        <div id="content-en-camino-motorista" class="tab-pane fade" role="tabpanel">
-                                            <div class="container my-4">
-                                                <div class="row gy-2" id="div-cont-ordenes-camino">
-                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card">
-                                                            <div>
-                                                                <h5 class="m-0">Orden: #123412432</h5>
-                                                                <div class="ms-2">
-                                                                    <p class="orden-card-description">12 productos</p>
-                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card">
-                                                            <div>
-                                                                <h5 class="m-0">Orden: #123412432</h5>
-                                                                <div class="ms-2">
-                                                                    <p class="orden-card-description">12 productos</p>
-                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Ordenes entregadas -->
-                                        <div id="content-ordenes-entregadas-motorista" class="tab-pane fade" role="tabpanel">
-                                            <div class="container my-4">
-                                                <div class="row gy-2" id="div-cont-ordenes-entregadas">
-                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card">
-                                                            <div>
-                                                                <h5 class="m-0">Orden: #123412432</h5>
-                                                                <div class="ms-2">
-                                                                    <p class="orden-card-description">12 productos</p>
-                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
-                                                        <div class="orden-card">
-                                                            <div>
-                                                                <h5 class="m-0">Orden: #12341243321312</h5>
-                                                                <div class="ms-2">
-                                                                    <p class="orden-card-description">12 productos</p>
-                                                                    <p class="orden-card-description">direccion de casa y todo eso</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex justify-content-center gap-2 mt-2"><button
-                                                                    class="btn btn-primary btn-sm flex-fill" type="button">Abrir</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer" id="div-footer-motoristas-administracion-modal">
-                        <button class="btn btn-secundary w-100" type="button" onclick="verificarDatosMotorista()">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/Modal-->
 
         <!--Modal Visaulizar DAtos de Tarjeta-->\
-        <div class="modal fade" id="modal-visualizar-datos-tarjeta" tabindex="-1" aria-labelledby="modal-visualizar-datos-tarjeta" aria-hidden="true">
+        <div class="modal fade" id="modal-visualizar-datos-tarjeta" tabindex="-3" aria-labelledby="modal-visualizar-datos-tarjeta" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">

@@ -59,11 +59,11 @@ router.put('/:id/orden/entregada/:idOrden', (req, res) => {
     });
 });
 
-//Agregar id orden recibida al motorista como tomada
+//Agregar orden a la lista de ordenes tomadas por el motorista
 //URL: http://localhost:3333/motorista/:id/orden/tomada/:idOrden
-router.put('/:id/orden/tomada/:idOrden', (req, res) => {
+router.put('/:idMotorista/orden/tomada/:idOrden', (req, res) => {
     motoristas.findByIdAndUpdate(
-        req.params.id,
+        req.params.idMotorista,
         {
             $push: {
                 "ordenes.tomadas": req.params.idOrden
@@ -82,6 +82,8 @@ router.put('/:id/orden/tomada/:idOrden', (req, res) => {
     });
 });
 
+
+
 //Buscar id de orden en todos los motoristas y eliminar la orden
 //URL: http://localhost:3333/motorista/orden/:idOrden
 router.delete('/orden/:idOrden', (req, res) => {
@@ -94,6 +96,102 @@ router.delete('/orden/:idOrden', (req, res) => {
             }
         }
     )
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
+//Actualizar un motorista
+//URL: http://localhost:3333/motorista/:id
+router.put('/:id', (req, res) => {
+    motoristas.findByIdAndUpdate(
+        req.params.id,
+        {
+            $set: {
+                nombre: req.body.nombre,
+                apellido: req.body.apellido,
+                correo: req.body.correo,
+                contraseña: req.body.contraseña,
+                imagen: req.body.imagen,
+                identificacion: req.body.identificacion
+            }
+        },
+
+    )
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
+//Crear un motorista
+//URL: http://localhost:3333/motorista
+router.post('/', (req, res) => {
+    var motorista = new motoristas({
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        correo: req.body.correo,
+        contraseña: req.body.contraseña,
+        imagen: req.body.imagen,
+        identificacion: req.body.identificacion,
+        ordenes: {
+            entregadas: [],
+            tomadas: []
+        }
+    });
+    motorista.save()
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar un motorista
+//URL: http://localhost:3333/motorista/:id
+router.delete('/:id', (req, res) => {
+    motoristas.findByIdAndRemove(req.params.id)
+    .then((motorista) => {
+        res.send(motorista);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Obtener las ordenes tomadas por un motorista por su id, y con el id de la orden obtener su informacio
+//URL: http://localhost:3333/motorista/:id/ordenes/tomadas
+router.get('/:id/ordenes/tomadas', (req, res) => {
+    motoristas.aggregate([
+        {
+            $lookup: {
+                from: 'administracions',
+                localField: 'ordenes.tomadas',
+                foreignField: 'administracion.ordenes._id',
+                as: 'ordenesTomadas'
+            }
+        },
+        {
+            $unwind: '$ordenesTomadas'
+        },
+        {
+            $match: {
+                _id: mongoose.Types.ObjectId(req.params.id)
+            }
+        }
+    ])
     .then((motorista) => {
         res.send(motorista);
         res.end();

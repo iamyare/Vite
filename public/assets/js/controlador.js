@@ -1,6 +1,7 @@
 var administracion = true;
 var ordenSeleccionadaActualmente = null;
 var clienteSeleccionadoActualmente = null;
+var motoristaSeleccionadoActualmente = null;
 var llamadoDesde = null;
 var empresaSeleccionadaActualmente = null;
 var booleanProductos = false
@@ -11,11 +12,12 @@ var comision = 0;
 var comisionMotorista = 0;
 var comisionAdministracion = 0;
 
+
 //Modales
-var modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAdministrador");
-var modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdministracion");
-var modalEditorProductoAdministracion = new bootstrap.Modal("#modalEditorProductoAdministracion");
-var modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProductosAdministracion");
+const modalEditarClienteAdministrador = new bootstrap.Modal("#modalEditarClienteAdministrador");
+const modalEditorOrdenAdministracion = new bootstrap.Modal("#modalEditorOrdenAdministracion");
+const modalEditorProductoAdministracion = new bootstrap.Modal("#modalEditorProductoAdministracion");
+const modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProductosAdministracion");
 const modalEditorEmpresasAdministracion = new bootstrap.Modal("#modalEditorEmpresasAdministracion");
 const modalEditorMotoristaAdministracion = new bootstrap.Modal("#modalEditorMotoristaAdministracion");
 const modalVisualizarDatosTarjeta = new bootstrap.Modal("#modal-visualizar-datos-tarjeta");
@@ -41,6 +43,10 @@ var apellidoMotorista = document.getElementById("apellido-motorista-administraci
 var correoMotorista = document.getElementById("correo-motorista-administracion-modal");
 var contrasenaMotorista = document.getElementById("contrasena-motorista-administracion-modal");
 var identificacionMotorista = document.getElementById("id-motorista-administracion-modal");
+var divImagenMotorista = document.getElementById("imagen-motorista-administracion-modal");
+var selectImagenesMotorista = document.getElementById("select-imagen-motorista-administracion-modal");
+var selectAprobadoMotorista = document.getElementById("aprobado-motorista-administracion-modal");
+var estadoMotorista = null
 
 //Inputs tarjeta
 var numeroTarjeta = document.getElementById("numero-tarjeta");
@@ -107,6 +113,7 @@ function llenarClientesAdministracion() {
                         </td>
                     </tr>
                     `;
+                    console.log(infoOrden);
                 });
                 }
 
@@ -316,11 +323,15 @@ function mostrarEditorOrdenAdministracion(idOrden){
         obtenerMotoristasAprobados().then((motoristas) => {
         document.getElementById("motorista-asignado-administracion-modal").innerHTML = '';
 
+
             motoristas.forEach((motorista) => {
                 obtenerMotoristaID(motorista).then((motorista) => {
                     console.log(motorista);
-                    let ordenAsignadas = motorista.ordenes[0].tomadas;
-                    let ordenesEntregadas = motorista.ordenes[0].entregadas;
+                    let ordenAsignadas = motorista.ordenes.tomadas;
+                    let ordenesEntregadas = motorista.ordenes.entregadas;
+
+                    console.log(ordenAsignadas);
+                    console.log(ordenesEntregadas);
                     //verificar si el motorista ya esta asignado a la orden o si la entrego
                     if(ordenAsignadas.length != 0 && ordenesEntregadas.length != 0){
 
@@ -507,65 +518,67 @@ function actualizarOrdenAdm(){
         else if(isNaN(latitud) || isNaN(longitud)){
             alert("La latitud y longitud deben ser numeros");
         }
-        else{
-            //http://localhost:3333/administracion/orden/:id/factura
-            fetch(`http://localhost:3333/administracion/orden/${ordenSeleccionadaActualmente}/factura`, {
-                method: 'PUT',
-                body: JSON.stringify(factura),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then((res) => {
-                modalEditorOrdenAdministracion.hide();
-                actualizarEstadoOrdenAdm();
-                actualizarDireccionOrden();
+        else if (verificarDatosTarjeta()) {
 
-                //Eliminar orden en el motorista
-                fetch(`http://localhost:3333/motorista/orden/${ordenSeleccionadaActualmente}`, {
-                    method: 'DELETE',
+
+                //http://localhost:3333/administracion/orden/:id/factura
+                fetch(`http://localhost:3333/administracion/orden/${ordenSeleccionadaActualmente}/factura`, {
+                    method: 'PUT',
+                    body: JSON.stringify(factura),
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }).then((res) => {
-                    //Agregar id orden al motorista
-                    //Verificamos si esta en el origen 
-                    let estado = document.getElementById("estado-administracion-modal").value;
-                    if(estado == "en el origen"){
-                    }else if(estado == "en el destino"){
+                    modalEditorOrdenAdministracion.hide();
+                    actualizarEstadoOrdenAdm();
+                    actualizarDireccionOrden();
+                    actualizarTarjeta();
+
+                    //Eliminar orden en el motorista
+                    fetch(`http://localhost:3333/motorista/orden/${ordenSeleccionadaActualmente}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((res) => {
                         //Agregar id orden al motorista
-                        fetch(`http://localhost:3333/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        }).then((res) => {
-                            console.log("Orden agregada al motorista como entregada");
-                        });
-                    } else {
-                        //Se agrega la orden al motorista como tomada
-                        fetch(`http://localhost:3333/motorista/${idMotorista}/orden/tomada/${ordenSeleccionadaActualmente}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        }).then((res) => {
-                            console.log("Orden agregada al motorista como tomada");
-                        });
+                        //Verificamos si esta en el origen 
+                        let estado = document.getElementById("estado-administracion-modal").value;
+                        if(estado == "en el origen"){
+                        }else if(estado == "en el destino"){
+                            //Agregar id orden al motorista
+                            fetch(`http://localhost:3333/motorista/${idMotorista}/orden/entregada/${ordenSeleccionadaActualmente}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then((res) => {
+                                console.log("Orden agregada al motorista como entregada");
+                            });
+                        } else {
+                            //Se agrega la orden al motorista como tomada
+                            fetch(`/motorista/${idMotorista}/orden/tomada/${ordenSeleccionadaActualmente}`, {
+                                method: 'PUT'
+                            }).then((res) => {
+                                console.log(res);
+                                console.log("Orden agregada al motorista como tomada");
+                            });
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+
+
+                    if (llamadoDesde == "clientes"){
+                        console.log("Llamado desde clientes");
+                        llenarClientesAdministracion();
+                    } else if (llamadoDesde == "ordenes"){
+                        console.log("Llamado desde Ordenes");
+                        llenarCategoriaAdministracion('ordenes');
                     }
-                }).catch((err) => {
-                    console.log(err);
                 });
-
-
-                if (llamadoDesde == "clientes"){
-                    console.log("Llamado desde clientes");
-                    llenarClientesAdministracion();
-                } else if (llamadoDesde == "ordenes"){
-                    console.log("Llamado desde Ordenes");
-                    llenarCategoriaAdministracion('ordenes');
-                }
-            });
-        }
+            }
+        
     } else {
         alert("Debe agregar productos a la orden");
     }
@@ -867,7 +880,7 @@ function llenarCategoriaAdministracion(categoria){
                             <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
                                 <p class="orden-card-description">${(orden.productos).length} productos</p>
-                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                                <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
@@ -892,7 +905,7 @@ function llenarCategoriaAdministracion(categoria){
                             <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
                                 <p class="orden-card-description">${(orden.productos).length} productos</p>
-                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                                <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
@@ -917,7 +930,7 @@ function llenarCategoriaAdministracion(categoria){
                             <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
                             <div class="ms-2">
                                 <p class="orden-card-description">${(orden.productos).length} productos</p>
-                                <p class="orden-card-description">Latitud: ${orden.direccion.latitud}</p>
+                                <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
@@ -936,9 +949,13 @@ function llenarCategoriaAdministracion(categoria){
         let divMotoristasAprobados = document.getElementById("div-cont-motoristas-aprobados");
         let divMotoristasRechazados = document.getElementById("div-cont-motoristas-rechazados");
 
+        divMotoristasPendientes.innerHTML = " ";
+        divMotoristasAprobados.innerHTML = " ";
+        divMotoristasRechazados.innerHTML = " ";
+
+
         //Obtener los motoristas pendientes
         obtenerMotoristasPendientes().then((motoristas) => {
-            divMotoristasPendientes.innerHTML = "";
             motoristas.forEach((idMotorista) => {
                 obtenerMotoristaID(idMotorista).then((motorista) => {
                     divMotoristasPendientes.innerHTML +=
@@ -953,7 +970,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                onclick="modalEditorMotoristaAdministracion.show()">Abrir</button></div>
+                                onclick="editorMotorista('${motorista._id}')">Abrir</button></div>
                     </div>
                 </div>
                     `;
@@ -963,7 +980,6 @@ function llenarCategoriaAdministracion(categoria){
 
         //Obtener los motoristas aprobados
         obtenerMotoristasAprobados().then((motoristas) => {
-            divMotoristasAprobados.innerHTML = "";
             motoristas.forEach((idMotorista) => {
                 obtenerMotoristaID(idMotorista).then((motorista) => {
                     divMotoristasAprobados.innerHTML +=
@@ -978,8 +994,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                                onclick="editorMotorista('${motorista._id}')">Abrir</button></div>
                     </div>
                 </div>
                     `;
@@ -989,7 +1004,6 @@ function llenarCategoriaAdministracion(categoria){
 
         //Obtener los motoristas rechazados
         obtenerMotoristasRechazados().then((motoristas) => {
-            divMotoristasRechazados.innerHTML = "";
             motoristas.forEach((idMotorista) => {
                 obtenerMotoristaID(idMotorista).then((motorista) => {
                     divMotoristasRechazados.innerHTML +=
@@ -1004,8 +1018,7 @@ function llenarCategoriaAdministracion(categoria){
                         </div>
                         <div class="d-flex justify-content-center gap-2 mt-2"><button
                                 class="btn btn-primary btn-sm flex-fill" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal-editar-motorista">Abrir</button></div>
+                                onclick="editorMotorista('${motorista._id}')">Abrir</button></div>
                     </div>
                 </div>
                     `;
@@ -1531,32 +1544,18 @@ function eliminarClienteAdm(idCliente){
 
 function getValueSelectMotoristaAprobado(estado){
     estado = estado.value;
-    if(estado == "1"){
-        console.log("aprobado");
+    if(estado == "Aprobado"){
+        estadoMotorista = "Aprobado";
         divOrdenesMotorista.style.display = "block";
-    }else{
-        console.log("rechazado");
+    }else if (estado == "Rechazado"){
+        estadoMotorista = "Rechazado";
+        divOrdenesMotorista.style.display = "none";
+    } else {
+        estadoMotorista = "Pendiente";
         divOrdenesMotorista.style.display = "none";
     }
 }
 
-function verificarDatosMotorista(){
-    if(nombreMotorista.value == "" || apellidoMotorista.value == "" || correoMotorista.value == "" || contrasenaMotorista.value == "" || identificacionMotorista.value == ""){
-        alert("Por favor llene todos los campos");
-        return false;
-    } //Verificar que el correo sea valido con expresion regular
-    else if (!correoMotorista.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-        alert("Correo invalido");
-        return false;
-    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
-    else if (!contrasenaMotorista.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
-        alert("Contraseña invalida. Debe tener al menos 8 caracteres, una letra mayuscula, una minuscula y un numero");
-        return false;
-    } else {
-        console.log("verificar datos motorista");
-        return true;
-    }
-}
 
 function cambioDeEstado(estado){
     if (estado.value == 'en el destino'){
@@ -1618,6 +1617,7 @@ function verificarDatosTarjeta(){
 }
 
 function actualizarTarjeta(){
+
     if (verificarDatosTarjeta()){
         //actualizar factura
         fetch(`/administracion/orden/${ordenSeleccionadaActualmente}/tarjeta`, {
@@ -1636,6 +1636,316 @@ function actualizarTarjeta(){
         .then(res => res.json())
         .then(data => {
             modalVisualizarDatosTarjeta.hide();
+            tarjetaCorrecta = true;
         });
     }
+}
+
+
+function getValueSelectMotoristaImagen(motorista){
+    //Cambiar imagen del motorista 
+    document.getElementById("imagen-motorista-administracion-modal").src = `assets/img/profile-pics/${motorista.value}`;
+}
+
+
+function editorMotorista(idMotorista) {
+
+    motoristaSeleccionadoActualmente = idMotorista;
+
+
+    //Obtener los datos del motorista
+    obtenerMotoristaID(idMotorista).then(motorista => {
+        //Porner imagen del motorista
+        divImagenMotorista.src = `assets/img/profile-pics/${motorista.imagen}`;
+
+        //Llenar los campos con los datos del motorista
+        nombreMotorista.value = motorista.nombre;
+        apellidoMotorista.value = motorista.apellido;
+        correoMotorista.value = motorista.correo;
+        contrasenaMotorista.value = motorista.contraseña;
+        identificacionMotorista.value = motorista.identificacion;
+        modalEditorMotoristaAdministracionLabel.innerHTML = `Motorista #${motorista._id}`;
+
+        //Comprobar si el motorista esta aprobado o no
+        obtenerMotoristasAprobados().then(motoristas => {
+            if (motoristas.includes(motorista._id)) {
+                //Motorista aprobado
+                //En el select selectAprobadoMotorista seleccionar la opcion "aprobado"
+                selectAprobadoMotorista.value = "Aprobado";
+                divOrdenesMotorista.style.display = "block";
+                estadoMotorista = "Aprobado";
+                llenarOrdenesMotorista();
+
+            } else {
+                obtenerMotoristasPendientes().then(motoristas => {
+                    if (motoristas.includes(motorista._id)) {
+                        //Motorista pendiente
+                        //En el select selectAprobadoMotorista seleccionar la opcion "pendiente"
+                        selectAprobadoMotorista.value = "Pendiente";
+                        divOrdenesMotorista.style.display = "none";
+                        estadoMotorista = "Pendiente";
+                    } else {
+                        //Motorista no aprobado
+                        //En el select selectAprobadoMotorista seleccionar la opcion "no aprobado"
+                        selectAprobadoMotorista.value = "Rechazado";
+                        divOrdenesMotorista.style.display = "none";
+                        estadoMotorista = "Rechazado";
+                    }
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+
+        //El selectImagenesMotorista seleccionar la opcion de la imagen del motorista actualmente
+        selectImagenesMotorista.innerHTML = ``;
+        imagenesClientes.forEach(imagen => {
+            if (imagen == motorista.imagen) {
+                selectImagenesMotorista.innerHTML += `<option value="${imagen}" selected>${imagen}</option>`;
+            } else {
+                selectImagenesMotorista.innerHTML += `<option value="${imagen}">${imagen}</option>`;
+            }
+        });
+
+
+        modalEditorMotoristaAdministracion.show();
+    });
+
+}
+
+function agregarMotorista() {
+
+
+    //Obtener los datos del motorista
+
+    //Porner imagen del motorista
+    divImagenMotorista.src = `assets/img/profile-pics/default.png`;
+
+    //Llenar los campos con los datos del motorista
+    nombreMotorista.value = "";
+    apellidoMotorista.value = "";
+    correoMotorista.value = "";
+    contrasenaMotorista.value = "";
+    identificacionMotorista.value = "";
+    modalEditorMotoristaAdministracionLabel.innerHTML = `Crear Motorista`;
+    selectAprobadoMotorista.value = "Pendiente";
+    divOrdenesMotorista.style.display = "none";
+    estadoMotorista = "Pendiente";
+
+
+
+    //El selectImagenesMotorista seleccionar la opcion de la imagen del motorista actualmente
+    selectImagenesMotorista.innerHTML = ``;
+    imagenesClientes.forEach(imagen => {
+        selectImagenesMotorista.innerHTML += `<option value="${imagen}">${imagen}</option>`;
+    });
+
+    motoristaSeleccionadoActualmente = null;
+    modalEditorMotoristaAdministracion.show();
+
+}
+
+
+
+function verificarDatosMotorista(){
+    if(nombreMotorista.value == "" || apellidoMotorista.value == "" || correoMotorista.value == "" || contrasenaMotorista.value == "" || identificacionMotorista.value == ""){
+        alert("Por favor llene todos los campos");
+        return false;
+    } //Verificar que el correo sea valido con expresion regular
+    else if (!correoMotorista.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        alert("Correo invalido");
+        return false;
+    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if (!contrasenaMotorista.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        alert("Contraseña invalida. Debe tener al menos 8 caracteres, una letra mayuscula, una minuscula y un numero");
+        return false;
+    } //Verificar que la identificacion sea valida con una expresion regular, debe tener estaz forma xxxx-xxxx-xxxxx
+    else if (!identificacionMotorista.value.match(/^[0-9]{4}-[0-9]{4}-[0-9]{5}$/)) {
+        alert("Identificacion invalida. Debe tener estaz forma xxxx-xxxx-xxxxx");
+        return false;
+    } else {
+        actualizarMotorista();
+        return true;
+    }
+}
+
+
+function actualizarMotorista() {
+    if (motoristaSeleccionadoActualmente != null) {
+        let motoristaActualizado = {
+            nombre: nombreMotorista.value,
+            apellido: apellidoMotorista.value,
+            correo: correoMotorista.value,
+            contraseña: contrasenaMotorista.value,
+            identificacion: identificacionMotorista.value,
+            imagen: selectImagenesMotorista.value
+        }
+        console.log(motoristaActualizado);
+        console.log(motoristaSeleccionadoActualmente);
+
+        fetch(`/motorista/${motoristaSeleccionadoActualmente}`, {
+            method: 'PUT',
+            body: JSON.stringify(motoristaActualizado),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data);
+                modalEditorMotoristaAdministracion.hide();
+            }).catch(err => {
+                console.log(err);
+            });
+
+        console.log('El estado es: ', estadoMotorista);
+
+        if (estadoMotorista == "Aprobado") {
+            //El motorista esta aprobado
+            console.log("El motorista esta aprobado");
+            fetch(`/administracion/motorista/aprobado/${motoristaSeleccionadoActualmente}`, {
+                method: 'PUT'
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    llenarCategoriaAdministracion('motoristas');
+                }).catch(err => {
+                    console.log(err);
+                });
+        } else if (estadoMotorista == "Pendiente") {
+            //El motorista esta pendiente
+            fetch(`/administracion/motorista/pendiente/${motoristaSeleccionadoActualmente}`, {
+                method: 'PUT'
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    llenarCategoriaAdministracion('motoristas');
+                }).catch(err => {
+                    console.log(err);
+                });
+        } else if (estadoMotorista == "Rechazado") {
+            //El motorista esta rechazado
+            fetch(`/administracion/motorista/rechazado/${motoristaSeleccionadoActualmente}`, {
+                method: 'PUT'
+            }).then(res => res.json())
+                .then(data => {
+                    console.log('respuesta rechazado ',data);
+                    modalEditorMotoristaAdministracion.hide();
+                    llenarCategoriaAdministracion('motoristas');
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+    }else{
+        //Crear motorista
+        let motoristaNuevo = {
+            nombre: nombreMotorista.value,
+            apellido: apellidoMotorista.value,
+            correo: correoMotorista.value,
+            contraseña: contrasenaMotorista.value,
+            identificacion: identificacionMotorista.value,
+            imagen: selectImagenesMotorista.value
+        }
+        fetch('/motorista', {
+            method: 'POST',
+            body: JSON.stringify(motoristaNuevo),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+            .then(data => {
+                motoristaSeleccionadoActualmente = data._id;
+                actualizarMotorista();
+            }).catch(err => {
+                console.log(err);
+            });
+
+    }
+}
+
+function eliminarMotorista(){
+    fetch(`/motorista/${motoristaSeleccionadoActualmente}`, {
+        method: 'DELETE'
+    }).then(res => res.json())
+        .then(data => {
+            fetch(`/administracion/motorista/eliminar/${motoristaSeleccionadoActualmente}`, {
+                method: 'PUT'
+            }).then(res => res.json())
+                .then(data => {
+                    alert("Motorista eliminado");
+                    modalEditorMotoristaAdministracion.hide();
+                    llenarCategoriaAdministracion('motoristas');
+                }).catch(err => {
+                    console.log(err);
+                });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+
+function llenarOrdenesMotorista() {
+    let divOrdenesDisponibles = document.getElementById('div-cont-ordenes-disponibles-motorista-modal');
+    let divOrdenesTomadas = document.getElementById('div-cont-ordenes-tomadas-motorista-modal');
+    let divOrdenesCamino = document.getElementById('div-cont-ordenes-camino-motorista-modal');
+    let divOrdenesentregadas = document.getElementById('div-cont-ordenes-entregadas-motorista-modal');
+
+    //Limpiar los divs
+    divOrdenesDisponibles.innerHTML = '';
+    divOrdenesTomadas.innerHTML = '';
+    divOrdenesCamino.innerHTML = '';
+    divOrdenesentregadas.innerHTML = '';
+
+    //Obtener las ordenes disponibles
+    obtenerOrdenesDisponibles().then(OrdenesDisponibles => {
+        OrdenesDisponibles.forEach((orden) => {
+        console.log('Llenando ordenes motorista');
+
+            orden = orden.ordenes;
+            divOrdenesDisponibles.innerHTML += 
+
+            `
+            <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+            <div class="orden-card">
+                    <div>
+                        <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
+                        <div class="ms-2">
+                            <p class="orden-card-description">${(orden.productos).length} productos</p>
+                            <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2 mt-2"><button
+                            class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
+                </div>
+            </div>
+            `;}
+        );
+    }).catch(err => {
+        console.log(err);
+    });
+    //Obtener las ordenes tomadas
+    obtenerOrdenesTomadas().then(OrdenesTomadas => {
+        OrdenesTomadas.forEach((orden) => {
+            console.log('Llenando ordenes motorista');
+
+            orden = orden.ordenes;
+            divOrdenesTomadas.innerHTML += 
+            `
+            <div class="col-sm-6 col-md-6 col-xl-4 col-xxl-3">
+            <div class="orden-card">
+                    <div>
+                        <h5 class="m-0 text-break">Orden: #${orden._id}</h5>
+                        <div class="ms-2">
+                            <p class="orden-card-description">${(orden.productos).length} productos</p>
+                            <p class="orden-card-description">Dirección: ${orden.direccion.direccion}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2 mt-2"><button
+                            class="btn btn-primary btn-sm flex-fill" type="button" onclick="mostrarEditorOrden('${orden._id}','ordenes')">Abrir</button></div>
+                </div>
+            </div>
+            `;}
+        );
+    });
+
 }

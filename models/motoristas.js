@@ -8,9 +8,9 @@ var Schema = mongoose.Schema(
         apellido: String,
         correo: String,
         contraseña: String,
-        aprobado: Boolean,
         imagen: String,
-        ordenes: Array
+        identificacion: String,
+        ordenes: {}
     }
 );
 

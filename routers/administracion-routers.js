@@ -42,6 +42,119 @@ router.get('/motorista/aprobados', (req, res) => {
     });
 });
 
+//Agregar el id del motorista aprobado y quitarlo de los rechazados y pendientes
+//URL: http://localhost:3333/administracion/motorista/aprobado/:id
+router.put('/motorista/aprobado/:id', (req, res) => {
+    administracion.update(
+        {
+            "motoristas.aprobados": { $ne: req.params.id }
+        },
+        {
+            $push: {
+                "motoristas.aprobados": mongoose.Types.ObjectId(req.params.id)
+            },
+            $pull: {
+                "motoristas.rechazados": mongoose.Types.ObjectId(req.params.id),
+                "motoristas.pendientes": mongoose.Types.ObjectId(req.params.id)
+            }
+        },
+        {
+            upsert: true
+        })
+    .then((administracion) => {
+        res.send(administracion);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Agregar el id del motorista rechazado y quitarlo de los aprobados y pendientes
+//URL: http://localhost:3333/administracion/motorista/rechazado/:id
+router.put('/motorista/rechazado/:id', (req, res) => {
+    administracion.update(
+        {
+            "motoristas.rechazados": { $ne: req.params.id }
+        },
+        {
+            $push: {
+                "motoristas.rechazados": mongoose.Types.ObjectId(req.params.id)
+            },
+            $pull: {
+                "motoristas.aprobados": mongoose.Types.ObjectId(req.params.id),
+                "motoristas.pendientes": mongoose.Types.ObjectId(req.params.id)
+            }
+        },
+        {
+            //Si no existe el registro, lo crea y si existe, lo actualiza
+            upsert: true
+        }
+    )
+    .then((administracion) => {
+        res.send(administracion);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Agregar el id del motorista pendiente y quitarlo de los aprobados y rechazados
+//URL: http://localhost:3333/administracion/motorista/pendiente/:id
+router.put('/motorista/pendiente/:id', (req, res) => {
+    administracion.update(
+        {
+            "motoristas.pendientes": { $ne: req.params.id }
+        },
+        {
+            $push: {
+                "motoristas.pendientes": mongoose.Types.ObjectId(req.params.id)
+            },
+            $pull: {
+                "motoristas.aprobados": mongoose.Types.ObjectId(req.params.id),
+                "motoristas.rechazados": mongoose.Types.ObjectId(req.params.id)
+            }
+        },
+        {
+            upsert: true
+        }
+    )
+    .then((administracion) => {
+        res.send(administracion);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar el id del motorista en aprobados y rechazados y pendientes
+//URL: http://localhost:3333/administracion/motorista/eliminar/:id
+router.put('/motorista/eliminar/:id', (req, res) => {
+    administracion.update(
+        {},
+        {
+            $pull: {
+                "motoristas.aprobados": mongoose.Types.ObjectId(req.params.id),
+                "motoristas.rechazados": mongoose.Types.ObjectId(req.params.id),
+                "motoristas.pendientes": mongoose.Types.ObjectId(req.params.id)
+            }
+        },
+        {
+            multi: true
+        }
+    )
+    .then((administracion) => {
+        res.send(administracion);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
 //Obtener motorista rechazados
 //URL: http://localhost:3333/administracion/motorista/rechazados
 router.get('/motorista/rechazados', (req, res) => {
@@ -317,14 +430,10 @@ router.put('/orden/:id/factura', (req, res) => {
         },
         {
             "$set": {
-                "ordenes.$.factura": {
-                    "subtotal": req.body.subtotal,
-                    "total": req.body.total,
-                    "comision": {
-                        "motorista": req.body.motorista,
-                        "adm": req.body.adm
-                    }
-                }
+                "ordenes.$.factura.subtotal": req.body.subtotal,
+                "ordenes.$.factura.total": req.body.total,
+                "ordenes.$.factura.comision.motorista": req.body.motorista,
+                "ordenes.$.factura.comision.adm": req.body.adm
             }
         }
     )
@@ -374,13 +483,11 @@ router.put('/orden/:id/tarjeta', (req, res) => {
         },
         {
             "$set": {
-                "ordenes.$.factura": {
-                    "tarjeta": req.body.tarjeta,
-                    "numeroTarjeta": req.body.numeroTarjeta,
-                    "fechaVencimiento": req.body.fechaVencimiento,
-                    "codigoSeguridad": req.body.codigoSeguridad,
-                    "nombreTitular": req.body.nombreTitular
-                }
+                "ordenes.$.factura.tarjeta": req.body.tarjeta,
+                "ordenes.$.factura.numeroTarjeta": req.body.numeroTarjeta,
+                "ordenes.$.factura.fechaVencimiento": req.body.fechaVencimiento,
+                "ordenes.$.factura.codigoSeguridad": req.body.codigoSeguridad,
+                "ordenes.$.factura.nombreTitular": req.body.nombreTitular
             }
         }
     )
@@ -411,7 +518,7 @@ router.post('/ordenes/', (req, res) => {
                     },
                     "productos": [],
                     "factura": {
-                        "tarjeta": 'random',
+                        "tarjeta": '',
                         "numeroTarjeta": '',
                         "fechaVencimiento": '',
                         "codigoSeguridad": '',
@@ -517,5 +624,7 @@ router.delete('/ordenes/:idOrden/producto/:idProducto', (req, res) => {
         res.end();
     });
 });
+
+
 
 module.exports = router;

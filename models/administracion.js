@@ -6,7 +6,7 @@ var Schema = mongoose.Schema(
     {
         nombre: String,
         contraseña: String,
-        motoristas: Array,
+        motoristas: {},
         clientes: Array,
         proveedores: Array, 
         ordenes: Array,
