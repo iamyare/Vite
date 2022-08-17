@@ -47,6 +47,7 @@ var divImagenMotorista = document.getElementById("imagen-motorista-administracio
 var selectImagenesMotorista = document.getElementById("select-imagen-motorista-administracion-modal");
 var selectAprobadoMotorista = document.getElementById("aprobado-motorista-administracion-modal");
 var estadoMotorista = null
+var divComisiones = document.getElementById("div-comisiones");
 
 //Inputs tarjeta
 var numeroTarjeta = document.getElementById("numero-tarjeta");
@@ -68,6 +69,20 @@ const banners = ["burger-king.jpg","geranium.jpg","pizza-hut.jpg","sub-way.jpg",
 const local = ["burger-king.jpg","geranium.jpg","pizza-hut.jpg","sub-way.jpg","wendys.jpg"]
 
 const categoriasAdm = ['tablero', 'ordenes', 'proveedores', 'motoristas'];
+
+
+
+function visualizarContenido(){
+    let url = window.location.href;
+    console.log(url);
+    if (url.includes("index.html")){
+        console.log("index");
+    } else if (url.includes("administracion.html")){
+        console.log("administracion");
+    }
+}
+
+visualizarContenido();
 
 if (administracion) {
   llenarClientesAdministracion();
@@ -283,6 +298,9 @@ function mostrarEditorOrdenAdministracion(idOrden){
         codigoSeguridad.value = res.factura.codigoSeguridad;
         nombreTitular.value = res.factura.nombreTitular;
         fechaVencimiento.value = res.factura.fechaVencimiento;
+        console.log('imprimiendo',res);
+        document.getElementById("comision-administracion-modal").value = `$${res.factura.comision.adm}`;
+        document.getElementById("comision-motorista-modal").value = `$${res.factura.comision.motorista}`;
 
         //Llenar el select con las tarjetas de credito disponibles, si la orden ya contiene una tarjeta de credito, seleccionarla
         tipoTarjeta.innerHTML = "";
@@ -307,9 +325,11 @@ function mostrarEditorOrdenAdministracion(idOrden){
          if (res.estado == "en el destino") {
             document.getElementById("motorista-asignado-administracion-modal").disabled = true;
             document.getElementById("boton-visualizar-tarjeta").disabled = true;
+            divComisiones.style.display = "block";
         }else{
             document.getElementById("motorista-asignado-administracion-modal").disabled = false;
             document.getElementById("boton-visualizar-tarjeta").disabled = false;
+            divComisiones.style.display = "none";
 
         }
 
@@ -500,6 +520,8 @@ function actualizarOrdenAdm(){
     //El motorista tendra una comision del 30% de la comision, mientras La administracion tendra una comision del 70% de la comision
     comisionMotorista = (comision * 30) / 100;
     comisionAdministracion = (comision * 70) / 100;
+    console.log(comisionMotorista);
+    console.log(comisionAdministracion);
 
     let factura = {
         subtotal: subTotal,
@@ -533,6 +555,7 @@ function actualizarOrdenAdm(){
                     actualizarEstadoOrdenAdm();
                     actualizarDireccionOrden();
                     actualizarTarjeta();
+
 
                     //Eliminar orden en el motorista
                     fetch(`http://localhost:3333/motorista/orden/${ordenSeleccionadaActualmente}`, {
@@ -1581,15 +1604,17 @@ function cambioDeEstado(estado){
         if (verificarDatosTarjeta()){
             document.getElementById("motorista-asignado-administracion-modal").disabled = true;
             document.getElementById("boton-visualizar-tarjeta").disabled = true;
+            divComisiones.style.display = "block";
         }else{
             let estado = document.getElementById("estado-administracion-modal");
             estado.value = "en camino";
+            divComisiones.style.display = "none";
         }
     } else
     {
         document.getElementById("motorista-asignado-administracion-modal").disabled = false;
         document.getElementById("boton-visualizar-tarjeta").disabled = false;
-
+        divComisiones.style.display = "none";
     }
 }
 

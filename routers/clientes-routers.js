@@ -1,5 +1,7 @@
 //Importamos las dependencias necesarias
 var express = require('express');
+const path = require('path');
+
 
 //Route nos permite crear rutas para nuestra aplicacion
 var router = express.Router();
@@ -7,6 +9,8 @@ var mongoose = require('mongoose');
 
 //Importamos el modelo de clientes, para poder trabajar con ellos en la base de datos
 var clientes = require('../models/clientes');
+
+
 
 //Obtener todos los clientes
 //URL: http://localhost:3333/cliente

@@ -22,6 +22,8 @@ router.get('/', (req, res) => {
     });
 });
 
+
+
 //Obtener motorista aprobados
 //URL: http://localhost:3333/administracion/motorista/aprobados
 router.get('/motorista/aprobados', (req, res) => {
@@ -432,20 +434,20 @@ router.put('/orden/:id/factura', (req, res) => {
             "$set": {
                 "ordenes.$.factura.subtotal": req.body.subtotal,
                 "ordenes.$.factura.total": req.body.total,
-                "ordenes.$.factura.comision.motorista": req.body.motorista,
-                "ordenes.$.factura.comision.adm": req.body.adm
+                "ordenes.$.factura.comision": req.body.comision
             }
         }
     )
     .then((ordenes) => {
         res.send(ordenes);
         res.end();
-    })
-    .catch((err) => {
+    }).catch((err) => {
         res.send(err);
         res.end();
-    });
+    }
+    );
 });
+
 
 //Actualizar direccion de la orden
 //URL: http://localhost:3333/administracion/orden/:id/direccion
@@ -477,18 +479,22 @@ router.put('/orden/:id/direccion', (req, res) => {
 //Actualizar tarjeta de la orden
 //URL: http://localhost:3333/administracion/orden/:id/tarjeta
 router.put('/orden/:id/tarjeta', (req, res) => {
-    administracion.updateOne(
+    administracion.update(
         {
             "ordenes._id": mongoose.Types.ObjectId(req.params.id)
         },
         {
             "$set": {
-                "ordenes.$.factura.tarjeta": req.body.tarjeta,
+
+                "ordenes.$.factura.nombreTitular": req.body.nombreTitular,
                 "ordenes.$.factura.numeroTarjeta": req.body.numeroTarjeta,
-                "ordenes.$.factura.fechaVencimiento": req.body.fechaVencimiento,
                 "ordenes.$.factura.codigoSeguridad": req.body.codigoSeguridad,
-                "ordenes.$.factura.nombreTitular": req.body.nombreTitular
+                "ordenes.$.factura.fechaVencimiento": req.body.fechaVencimiento,
+                "ordenes.$.factura.tarjeta": req.body.tarjeta
             }
+        },
+        {
+            "multi": true
         }
     )
     .then((ordenes) => {
@@ -497,9 +503,9 @@ router.put('/orden/:id/tarjeta', (req, res) => {
     }).catch((err) => {
         res.send(err);
         res.end();
-    });
+    }
+    );
 });
-
 
 //Agregar una orden
 //URL: http://localhost:3333/administracion/ordenes

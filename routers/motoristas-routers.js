@@ -1,12 +1,20 @@
 //Importamos las dependencias necesarias
 var express = require('express');
-
+const path = require('path');
 //Route nos permite crear rutas para nuestra aplicacion
 var router = express.Router();
 var mongoose = require('mongoose');
 
 //Importamos el modelo, para poder trabajar con ellos en la base de datos
 var motoristas = require('../models/motoristas');
+
+
+
+//Ver el index del motorista
+//URL: http://localhost:3333/motorista
+router.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../public/motoristas/index.html'));
+});
 
 //Obtener todos los motoristas
 //URL: http://localhost:3333/motorista
