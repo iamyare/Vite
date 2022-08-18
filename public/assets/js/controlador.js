@@ -2,6 +2,7 @@ var administracion = true;
 var ordenSeleccionadaActualmente = null;
 var clienteSeleccionadoActualmente = null;
 var motoristaSeleccionadoActualmente = null;
+var carritoSeleccionadoActualmente = null;
 var llamadoDesde = null;
 var empresaSeleccionadaActualmente = null;
 var booleanProductos = false
@@ -9,8 +10,49 @@ var subtotal = 0;
 var total = 0;
 var isv = 0;
 var comision = 0;
-var comisionMotorista = 0;
-var comisionAdministracion = 0;
+var subtotalCarrito = 0;
+var ISVCarrito = 0;
+var comisionCarrito = 0;
+var totalCarrito = 0;
+var comisionMotoristaCarrito = 0;
+var comisionAdministracionCarrito = 0;
+
+var sesionIniciada = false;
+//ingresar sesion inciada en el localstorage, si no existe lo creamos, si existe lo actualizamos
+function localStorageIniciarSesion(){
+    if (localStorage.getItem("sesionIniciada") == null){
+        localStorage.setItem("sesionIniciada",false);
+
+    } else {
+        sesionIniciada = localStorage.getItem("sesionIniciada");
+    }
+}
+
+//Creamos un localstorage para guardar la sesion iniciada, correo y contraseña, si no existe lo creamos, si existe lo actualizamos
+function localStorageIniciarSesionInfo(correo, contraseña){
+    if (localStorage.getItem("sesionIniciada") == null){
+        localStorage.setItem("sesionIniciada",false);
+        localStorage.setItem("correo",correo);
+        localStorage.setItem("contraseña",contraseña);
+    } else {
+        localStorage.setItem("correo",correo);
+        localStorage.setItem("contraseña",contraseña);
+    }
+}
+
+//Creamos un localstorage para guardar la sesion iniciada, que contendra el _id del cliente seleccionado, si no existe lo creamos, si existe lo actualizamos
+function localStorageClienteSeleccionado(idCliente){
+    if (localStorage.getItem("sesionIniciada") == null){
+        localStorage.setItem("sesionIniciada",false);
+        localStorage.setItem("idCliente",idCliente);
+    } else {
+        localStorage.setItem("idCliente",idCliente);
+    }
+}
+
+//div Login
+var inputContrasena = document.getElementById("inputContrasena");
+var inputCorreo = document.getElementById("inputCorreo");
 
 
 //Modales
@@ -21,6 +63,7 @@ const modalListarProductosAdministracion = new bootstrap.Modal("#modalListarProd
 const modalEditorEmpresasAdministracion = new bootstrap.Modal("#modalEditorEmpresasAdministracion");
 const modalEditorMotoristaAdministracion = new bootstrap.Modal("#modalEditorMotoristaAdministracion");
 const modalVisualizarDatosTarjeta = new bootstrap.Modal("#modal-visualizar-datos-tarjeta");
+const modalCarrito = new bootstrap.Modal("#modal-carrito");
 
 //Divs para rellenar con los datos obtenidos
 const divClientesAdministracion = document.getElementById("contenido-clientes-administracion");
@@ -115,19 +158,21 @@ function llenarClientesAdministracion() {
                 `;
             cliente.ordenes.forEach((orden) => {
                 mostrarOrdenAdministracion(orden).then((infoOrden) => {
-                    divListaOrdenesRecibidas.innerHTML +=
-                    `
-                    <tr>
-                        <td>${cliente.nombre}</td>
-                        <td>${cliente._id}</td>
-                        <td>${infoOrden._id}</td>
-                        <td>$${infoOrden.factura.total}</td>
-                        <td class="text-success">${infoOrden.estado}</td>
-                        <td>
-                            <button class="btn btn-warning" onclick="mostrarEditorOrden('${infoOrden._id}','listaOrdenesRecibidas')">Mostrar</button>
-                        </td>
-                    </tr>
-                    `;
+                    if (infoOrden.factura != undefined) {
+                        divListaOrdenesRecibidas.innerHTML +=
+                        `
+                        <tr>
+                            <td>${cliente.nombre}</td>
+                            <td>${cliente._id}</td>
+                            <td>${infoOrden._id}</td>
+                            <td>$${infoOrden.factura.total}</td>
+                            <td class="text-success">${infoOrden.estado}</td>
+                            <td>
+                                <button class="btn btn-warning" onclick="mostrarEditorOrden('${infoOrden._id}','listaOrdenesRecibidas')">Mostrar</button>
+                            </td>
+                        </tr>
+                        `;
+                    }
 
                 });
                 }
@@ -723,8 +768,16 @@ function actualizarClienteAdm(){
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
-            modalEditarClienteAdministrador.hide();
-            llenarClientesAdministracion();
+
+            if (llamadoDesde == "landing page"){
+                console.log("Llamado desde landing page");
+                //recargar la pagina
+                location.reload();
+            } else{
+                modalEditarClienteAdministrador.hide();
+                llenarClientesAdministracion();
+            }
+
         });
     }
 
@@ -815,34 +868,67 @@ function multiplicarTotalProducto(idCantidadProducto, precioProducto, divPrecioT
 }
 
 function eliminarProductoOrden(idProducto){
-    //Eliminar el producto de la orden
-    fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}/producto/${idProducto}`, {
-        method: 'DELETE'
-    }).then((res) => {
-        mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
-    });
+    if (llamadoDesde == "landing page"){
+        console.log("Llamado desde landing page");
+        fetch(`http://localhost:3333/cliente/carrito/${carritoSeleccionadoActualmente}/producto/${idProducto}`, {
+            method: 'DELETE'
+        }).then((res) => {
+            llenandoCliente();
+            modalCarrito.show();
+        });
+    } else{
+            //Eliminar el producto de la orden
+        fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}/producto/${idProducto}`, {
+            method: 'DELETE'
+        }).then((res) => {
+            mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+        });
+    }
 }
 
 function agregarItemOrden(idProducto, cantidadProducto){
-    //http://localhost:3333/administracion/ordenes/:id/producto/:idProducto
-    let cantidadPro = document.getElementById(cantidadProducto).value;
 
-    let item = {
-        cantidad: cantidadPro,
-        idProducto: idProducto
-    };
 
-    fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}/producto/${idProducto}`, {
-        method: 'PUT',
-        body: JSON.stringify(item),
-        headers: {
-            'Content-Type': 'application/json'
+
+    if (llamadoDesde == "landing page"){
+        console.log("Llamado desde landing page");
+        let cantidadPro = document.getElementById(cantidadProducto).value;
+        let item = {
+            producto: idProducto,
+            cantidad: cantidadPro
         }
-    }).then((res) => {
-        alert("Producto agregado");
-        mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+        //http://localhost:3333/cliente/carrito/:idCarrito/producto/:idProducto
+        fetch(`http://localhost:3333/cliente/carrito/${carritoSeleccionadoActualmente}/producto/${idProducto}`, {
+            method: 'PUT',
+            body: JSON.stringify(item),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            llenandoCliente();
+            modalCarrito.show();
+        }).catch((err) => {
+            console.log(err);
+        });
+    } else {
+        let cantidadPro = document.getElementById(cantidadProducto).value;
+
+        let item = {
+            cantidad: cantidadPro,
+            idProducto: idProducto
+        };
+        //http://localhost:3333/administracion/ordenes/:id/producto/:idProducto
+        fetch(`http://localhost:3333/administracion/ordenes/${ordenSeleccionadaActualmente}/producto/${idProducto}`, {
+            method: 'PUT',
+            body: JSON.stringify(item),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            mostrarEditorOrdenAdministracion(ordenSeleccionadaActualmente);
+        }
+        );
     }
-    );
 }
 
 
@@ -2055,4 +2141,688 @@ function obtenerOrdenesEntregadasMotorista(){
     const OrdenesEntregadas = obtenerOrdenesEntregadas();
     return OrdenesEntregadas;
         
+}
+
+
+function divIniciarSesion(){
+    //oculta el landing page
+    document.getElementById('contenido-home').style.display = 'none';
+    document.getElementById('navBar-Home').style.display = 'none';
+    document.getElementById('footer').style.display = 'none';
+    document.getElementById('footer-form-create').style.display = 'none';
+    document.getElementById('contenido-create').style.display = 'none';
+
+    //Muestra el formulario de inicio de sesion
+    document.getElementById('contenido-formularios').style.display = 'block';
+    document.getElementById('contenido-login').style.display = 'block';
+    document.getElementById('navBar-Form').style.display = 'block';
+    document.getElementById('footer-form').style.display = 'block';
+    document.getElementById('footer-form-log').style.display = 'block';
+}
+
+
+function iniciarSesion(){
+
+    if (verificarInputLogIn()){
+        //Obtenemos los clientes de la base de datos y comprobamos si el usuario y contraseña son correctos para iniciar sesion
+        fetch('/cliente').then(res => {
+            return res.json();
+        }).then(clientes => {
+            clientes.forEach(cliente => {
+                if (cliente.correo == inputCorreo.value && cliente.contraseña == inputContrasena.value){
+                    //Si el usuario y contraseña son correctos, iniciamos sesion
+                    console.log('Iniciando sesion');
+                    window.location.href = '/';
+                    sesionIniciada = true;
+                    //actualizar el local storage con la sesion iniciada como true
+                    localStorage.setItem('sesionIniciada', true);
+                    //actualizar el local storage con el correo y contraseña del usuario
+                    localStorage.setItem('correo', inputCorreo.value);
+                    localStorage.setItem('contrasena', inputContrasena.value);
+                    //actualizar el local storage con el id del usuario
+                    localStorage.setItem('id', cliente._id);
+
+                } else {
+                    //Si el usuario y contraseña no son correctos, mostramos un mensaje de error
+                    console.log('Usuario o contraseña incorrectos');
+
+                }
+            });
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+}
+
+
+function verificarInputLogIn(){
+    //Verifica que los campos no esten vacios, inputCorreo y inputContrasena
+    if (inputCorreo.value == '' || inputContrasena.value == '') {
+        alert('Por favor, llene todos los campos');
+        return false;
+    } //Verifica que el correo sea valido con expresion regular
+    else if (!inputCorreo.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
+        alert('Por favor, ingrese un correo valido');
+        return false;
+    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if (!inputContrasena.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        alert('Por favor, ingrese una contraseña valida');
+        //Debe de verse asi, ejemplo: *********
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+
+function divCrearCliente(){
+    //Ocultar el Login del cliente
+    document.getElementById('contenido-login').style.display = 'none';
+    document.getElementById('form-empresa').style.display = 'none';
+    document.getElementById('footer-form-log').style.display = 'none';
+    document.getElementById('form-motorista').style.display = 'none';
+    //Mostramos el formulario de crear cliente
+    document.getElementById('contenido-formularios').style.display = 'block';
+    document.getElementById('contenido-create').style.display = 'block';
+    document.getElementById('form-cliente').style.display = 'block';
+    document.getElementById('navBar-Form').style.display = 'block';
+    document.getElementById('footer-form').style.display = 'block';
+    document.getElementById('footer-form-create').style.display = 'block';
+    
+
+}
+
+function botonCrearCliente(){
+    if (verificarCreateCliente()){
+
+
+
+
+            console.log('Creando cliente');
+            fetch('/cliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre: inputNombre.value,
+                    apellido: inputApellido.value,
+                    correo: inputCorreo.value,
+                    contrasena: inputContrasena.value
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                //Ir a la pagina /
+                window.location.href = '/';
+                sesionIniciada = true;
+
+            }).catch(err => {
+                console.log(err);
+                alert('Error al crear cliente');
+            });
+    }
+}
+
+
+function verificarCreateCliente(){
+    let inputNombre = document.getElementById('inputNombreCliente').value;
+    let inputApellido = document.getElementById('inputApellidoCliente').value;
+    let inputCorreo = document.getElementById('inputCorreoCliente').value;
+    let inputContrasena = document.getElementById('inputContrasenaCliente').value;
+
+    if (inputNombre == '' || inputApellido == '' || inputCorreo == '' || inputContrasena == '') {
+        alert('Por favor, llene todos los campos');
+        return false;
+    } //Verifica que el correo sea valido con expresion regular
+    else if (!inputCorreo.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
+        alert('Por favor, ingrese un correo valido');
+        return false;
+    }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
+    else if (!inputContrasena.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        alert('Por favor, ingrese una contraseña valida');
+        //Debe de verse asi, ejemplo: *********
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function llenandoCliente(){
+if (localStorage.getItem('sesionIniciada') =='true'){
+    sesionIniciada = true;
+
+    //Mostrar el contenido del cliente
+    document.getElementById('divIniciarSesion').style.display = 'none';
+    document.getElementById('divCerrarSesion').style.display = 'block';
+    document.getElementById('divEditarPerfil').style.display = 'block';
+    document.getElementById('infoClienteLanding').style.display = 'block';
+
+    //imprimir el contenido de localStorage que contiene el _id del cliente
+    let idCliente = localStorage.getItem('id');
+    //Obtenemos la informacion del cliente
+    fetch(`/cliente/${idCliente}`)
+    .then(res => res.json())
+    .then(cliente => {
+        console.log(cliente);
+        clienteSeleccionadoActualmente = cliente._id;
+        //Lenamos los campos con la informacion del cliente
+        avatarClienteLanding.src = `assets/img/profile-pics/${cliente.imagen}`;
+        infoClienteLanding.innerHTML = 
+        `
+            <div class="d-flex align-items-center">
+                <!-- Avatar -->
+                <div class="avatar me-3">
+                    <img class="avatar-img rounded-circle shadow" src="/assets/img/profile-pics/${cliente.imagen}" alt="${cliente.nombre} ${cliente.apellido}">
+                </div>
+                <div>
+                    <a class="h6" href="#">${cliente.nombre}</a>
+                    <p class="small m-0">${cliente.correo}</p>
+                </div>
+            </div>
+            <hr>
+        `;
+        llamadoDesde = 'landing page';
+        console.log(carritoSeleccionadoActualmente);
+
+        if (cliente.carrito != null){
+
+            console.log(cliente.carrito);
+
+        carritoSeleccionadoActualmente = cliente.carrito._id;
+
+            //Comprobamos si tiene contenido en su carrito
+        if (cliente.carrito.productos.length > 0){
+            cantidadDeProductosCarrito = cliente.carrito.productos.length;
+            console.log('Tiene contenido en su carrito');
+            globoCarrito.style.display = 'block';
+            globoCarrito.innerHTML = `<span>${cliente.carrito.productos.length}</span>`;
+
+            document.getElementById('div-productos-carrito').innerHTML =``;
+
+            //Obtnemos los productos del carrito del cliente
+            cliente.carrito.productos.forEach(carrito => {
+                fetch(`administracion/producto/${carrito.producto}`)
+                .then(res => res.json())
+                .then(producto => {
+                    console.log(producto);
+
+
+
+                    document.getElementById('div-productos-carrito').innerHTML +=
+                    `
+                    <!--Item Producto-->
+                    <div class="container my-4">
+                        <div class="row gy-3">
+                            <div class="col-5 col-md-3 d-flex">
+                                <img class="img-fluid img-cover h-100 mx-auto rounded-4" src="assets/img/empresas/productos/${producto.imagen}"/>
+                            </div>
+                            <div
+                                class="col-7 col-md-6 col-lg-6 col-xxl-6 d-flex flex-column justify-content-between gap-4">
+                                <h3>${producto.nombre}</h3>
+                                <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                    ID: ${producto._id}</p>
+                                    <a class="btn-eliminarModal" onclick="eliminarProductoOrden('${producto._id}')"><i class="fas fa-times"></i> Eliminar</a>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xxl-3 d-flex flex-column my-auto gap-4">
+                                <!--Cantidad-->
+                                <div class="d-flex flex-row justify-content-between">
+                                    <div class="d-flex flex-column justify-content-between">
+                                        <h6>Cantidad</h6>
+                                        <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                                            <input type="number" id="cantidad-${producto._id}" onchange="cambiaCantidad('${producto._id}')" class="form-control form-control-sm" value="${carrito.cantidad}" min="1" max="100" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="m-0">Precio</h6>
+                                        <p class="idProductoModal" id="precio-${producto._id}">$${producto.precio}</p>
+                                    </div>
+                                    <div>
+                                        <h6 class="m-0">Total:</h6>
+                                        <p class="idProductoModal" id="total-${producto._id}">$${(producto.precio)*(carrito.cantidad)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Fin Item Producto-->
+                    `;
+
+
+                    let cantidadCarrito = document.getElementById(`cantidad-${producto._id}`).value;
+                    let precioCarrito = document.getElementById(`precio-${producto._id}`).innerHTML;
+                    precioCarrito = precioCarrito.replace('$', '');
+                    subtotalCarrito = cantidadCarrito * precioCarrito;
+                    ISVCarrito = subtotalCarrito * 0.15;
+                    comisionCarrito = subtotalCarrito * 0.05;
+                    totalCarrito = subtotalCarrito + ISVCarrito + comisionCarrito;
+                    comisionMotoristaCarrito = (comisionCarrito * 30) / 100;
+                    comisionAdministracionCarrito = (comisionCarrito * 70) / 100
+                    console.log(comisionMotoristaCarrito);
+                    console.log(comisionAdministracionCarrito);
+                    console.log(comisionCarrito);
+
+                    document.getElementById(`total-${producto._id}`).innerHTML = `$${subtotalCarrito}`;
+                
+                
+                    //Actualizamos la factura del cliente
+                    document.getElementById('div-factura-carrito').innerHTML =
+                        `
+                        <!--Factura-->
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Subtotal</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $${subtotalCarrito}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">ISV</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $${ISVCarrito}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Comision</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $${comisionCarrito}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Total a Pagar</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $${totalCarrito}
+                                    </p>
+                                </div>
+                            </div>
+                        <!--/Factura-->
+                        `;
+                });
+
+            });
+
+        } else {
+            console.log('No tiene contenido en su carrito');
+            cantidadDeProductosCarrito = 0;
+            total = 0;
+            subtotal = 0;
+            comision = 0;
+            comisionMotorista = 0;
+            comisionAdministracion = 0;
+            document.getElementById('globoCarrito').style.display = 'none';
+            globoCarrito.innerHTML = `<span>0</span>`;
+
+            document.getElementById('div-factura-carrito').innerHTML =
+                `
+                        <!--Factura-->
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Subtotal</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $0
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">ISV</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $0
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Comision</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $0
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Total a Pagar</h5>
+                                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                                        $0
+                                    </p>
+                                </div>
+                            </div>
+                        <!--/Factura-->
+                        `;
+        }
+
+        document.getElementById('div-productos-carrito').innerHTML =
+        //Agregar producto al carrito, boton
+        `
+        <!--Agregar producto al carrito, boton-->
+        <div class="container my-4">
+
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-block" onclick="agregarProductoOrdenAdministracion()">
+                        <i class="fas fa-cart-plus"></i> Agregar Producto
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!--/Agregar producto al carrito, boton-->
+        `
+        ;
+        } else {
+            console.log('No tiene carrito');
+            crearCarrito(idCliente);
+        }
+
+
+        
+    });
+}
+}
+
+llenandoCliente();
+
+function cambiaCantidad(idProducto){
+    let cantidad = document.getElementById(`cantidad-${idProducto}`).value;
+    let precio = document.getElementById(`precio-${idProducto}`).innerHTML;
+    precio = precio.replace('$', '');
+    let subtotal = cantidad * precio;
+    let ISV = subtotal * 0.15;
+    let comision = subtotal * 0.05;
+    let total = subtotal + ISV + comision;
+    document.getElementById(`total-${idProducto}`).innerHTML = `$${subtotal}`;
+
+
+    //Actualizamos la factura del cliente
+    document.getElementById('div-factura-carrito').innerHTML =
+        `
+        <!--Factura-->
+            <div class="row py-2">
+                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Subtotal</h5>
+                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                        $${subtotal}
+                    </p>
+                </div>
+            </div>
+            <div class="row py-2">
+                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">ISV</h5>
+                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                        $${ISV}
+                    </p>
+                </div>
+            </div>
+            <div class="row py-2">
+                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Comision</h5>
+                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                        $${comision}
+                    </p>
+                </div>
+            </div>
+            <div class="row py-2">
+                <div class="col-md-12 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Total a Pagar</h5>
+                    <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
+                        $${total}
+                    </p>
+                </div>
+            </div>
+        <!--/Factura-->
+        `;
+
+}
+
+function editarMiPerfil(){
+    verInfoCliente(clienteSeleccionadoActualmente);
+    llamadoDesde = 'landing page';
+}
+
+function selectCarrito(paso){
+    //obtenemos cuantos productos hay en el carrito
+    if (cantidadDeProductosCarrito == 0){
+        alert('Debe agregar productos al carrito para poder continuar');
+        //Sleeccionamos en el select el primer paso
+        document.getElementById('modal-carrito-select').value = 'productos';
+    }
+
+    if (paso.value == 'productos'){
+        document.getElementById('div-productos-carrito').style.display = 'block';
+        document.getElementById('div-factura-carrito').style.display = 'block';
+        document.getElementById('div-despacho-carrito').style.display = 'none';
+        document.getElementById('div-footer-despacho-carrito').style.display = 'none';
+        document.getElementById('div-pago-carrito').style.display = 'none';
+        document.getElementById('div-footer-pago-carrito').style.display = 'none';
+    } else if (paso.value == 'despacho'){
+        document.getElementById('div-productos-carrito').style.display = 'none';
+        document.getElementById('div-factura-carrito').style.display = 'none';
+        document.getElementById('div-despacho-carrito').style.display = 'block';
+        document.getElementById('div-footer-despacho-carrito').style.display = 'block';
+        document.getElementById('div-pago-carrito').style.display = 'none';
+        document.getElementById('div-footer-pago-carrito').style.display = 'none';
+    } else if (paso.value == 'pago'){
+        document.getElementById('div-productos-carrito').style.display = 'none';
+        document.getElementById('div-factura-carrito').style.display = 'none';
+        document.getElementById('div-despacho-carrito').style.display = 'none';
+        document.getElementById('div-footer-despacho-carrito').style.display = 'none';
+        document.getElementById('div-pago-carrito').style.display = 'block';
+        document.getElementById('div-footer-pago-carrito').style.display = 'block';
+    }
+
+
+}
+
+function crearCarrito(idCliente){
+    fetch(`/cliente/${idCliente}/carrito`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        if (data.success){
+            location.reload();
+        } else {
+            alert('No se pudo crear el carrito');
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+}
+
+
+function verificarDireccion(){
+    let direccionCarrito = document.getElementById("direccion-carrito").value;
+    let longitudCarrito = document.getElementById("longitud-carrito").value;
+    let latitudCarrito = document.getElementById("latitud-carrito").value;
+
+    //Verificamos que los campos no esten vacios
+    if (direccionCarrito == '' || longitudCarrito == '' || latitudCarrito == ''){
+        alert('Todos los campos son obligatorios');
+        return false;
+    } //Verificamos que longitud y latitud sean numericos
+    else if (isNaN(longitudCarrito) || isNaN(latitudCarrito)){
+        alert('Longitud y latitud deben ser numericos');
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function actualizarDireccion(){
+    if (verificarDireccion()){
+        let direccionCarrito = document.getElementById("direccion-carrito").value;
+        let longitudCarrito = document.getElementById("longitud-carrito").value;
+        let latitudCarrito = document.getElementById("latitud-carrito").value;
+
+        fetch(`/cliente/carrito/${carritoSeleccionadoActualmente}/direccion`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                direccion: direccionCarrito,
+                longitud: longitudCarrito,
+                latitud: latitudCarrito
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Se actualizo la direccion');
+        }).catch(err => {
+            console.log(err);
+        });
+
+    }else{
+        console.log('No se pudo actualizar la direccion');
+    }
+}
+
+function verificarTarjetaModal(){
+    let tipoTarjetaCarrito = document.getElementById("tipoTarjeta-carrito");
+    let numeroTarjetaCarrito = document.getElementById("numeroTarjeta-carrito");
+    let nombreTitularCarrito = document.getElementById("nombreTarjeta-carrito");
+    let fechaVencimientoCarrito = document.getElementById("fechaVencimiento-carrito");
+    let codigoSeguridadCarrito = document.getElementById("codigoSeguridad-carrito");
+
+    //Verificamos que los campos no esten vacios
+    if(numeroTarjetaCarrito.value == "" || nombreTitularCarrito.value == "" || fechaVencimientoCarrito.value == "" || codigoSeguridadCarrito.value == "" ){
+        alert("Por favor llene todos los campos de la tarjeta de credito");
+        return false;
+    }
+    //Verificar que el numero de tarjeta sea valido con expresion regular segun el tipo de tarjeta
+    else if(tipoTarjetaCarrito.value == "Visa" && !numeroTarjetaCarrito.value.match(/^4[0-9]{12}(?:[0-9]{3})?$/)){
+        alert("Numero de tarjeta invalido");
+        //Debe de verse de la forma 4123456789012345
+        return false;
+    } else if(tipoTarjetaCarrito.value == "MasterCard" && !numeroTarjetaCarrito.value.match(/^5[1-5][0-9]{14}$/)){
+        alert("Numero de tarjeta invalido");
+        //Debe de verse de la forma 5123456789012345
+        return false;
+    } else if(tipoTarjetaCarrito.value == "American Express" && !numeroTarjetaCarrito.value.match(/^3[47][0-9]{13}$/)){
+        alert("Numero de tarjeta invalido");
+        //Debe de verse de la forma 341234567890123
+        return false;
+    } //Verificar que la fecha de vencimiento sea valida con expresion regular
+    else if(!fechaVencimientoCarrito.value.match(/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/)){
+        alert("Fecha de vencimiento invalida. Debe de verse de la forma MM/YYYY");
+        return false;
+    } //Verificar que el codigo de seguridad sea valido con expresion regular
+    else if(!codigoSeguridadCarrito.value.match(/^[0-9]{3,4}$/)){
+        alert("Codigo de seguridad invalido. Debe de verse de la forma XXX o XXXX");
+        return false;
+    } else {
+        console.log("verificar tarjeta");
+        return true;
+    }
+
+
+}
+
+function pagarOrden(){
+    if (verificarTarjetaModal()){
+        if (verificarDireccion()){
+            comisionAdministracionCarrito = (comisionCarrito * 70) / 100
+            comisionMotoristaCarrito = (comisionCarrito * 30) / 100
+            console.log(comisionAdministracionCarrito);
+            console.log(comisionMotoristaCarrito);
+            let factura = {
+                "total": totalCarrito,
+                "subtotal": subtotalCarrito,
+                "adm": comisionAdministracionCarrito,
+                "motorista": comisionMotoristaCarrito,
+                "codigoSeguridad": document.getElementById("codigoSeguridad-carrito").value,
+                "fechaVencimiento": document.getElementById("fechaVencimiento-carrito").value,
+                "nombreTitular": document.getElementById("nombreTarjeta-carrito").value,
+                "numeroTarjeta": document.getElementById("numeroTarjeta-carrito").value,
+                "tarjeta": document.getElementById("tipoTarjeta-carrito").value
+            }
+            fetch(`/cliente/carrito/${carritoSeleccionadoActualmente}/factura`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(factura)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                mandarOrden();
+            }).catch(err => {
+                console.log(err);
+            });
+
+
+        }else{
+            console.log('No se pudo pagar la orden');
+        }
+    }else{
+        console.log('No se pudo pagar la orden');
+    }
+}
+
+//Mandar la orden de carrito a las iordenes de la base de dato de administracion
+function mandarOrden() {
+    //Obtener la orden de carrito
+    fetch(`/cliente/carrito/${carritoSeleccionadoActualmente}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+
+            //Mandar la orden de carrito a la base de datos de administracion
+            fetch(`/administracion/ordenes/copiar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    //Agregar el id de la orden de carrito a ordenes cliente
+                    fetch(`/cliente/${clienteSeleccionadoActualmente}/orden/${carritoSeleccionadoActualmente}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data);
+                            //Eliminar el carrito de la base de datos de cliente
+                            fetch(`/cliente/${clienteSeleccionadoActualmente}/carrito`, {
+                                method: 'DELETE'
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    console.log(data);
+                                    //recargar la pagina
+                                    location.reload();
+                                }).catch(err => {
+                                    console.log(err);
+                                });
+
+
+                        }).catch(err => {
+                            console.log(err);
+                        });
+
+                }).catch(err => {
+                    console.log(err);
+                });
+        });
 }

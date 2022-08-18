@@ -13,7 +13,7 @@ var motoristas = require('../models/motoristas');
 //Ver el index del motorista
 //URL: http://localhost:3333/motorista
 router.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../public/motoristas/index.html'));
+    res.sendFile(path.join(__dirname, '../public/motorista.html'));
 });
 
 //Obtener todos los motoristas

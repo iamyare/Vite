@@ -20,10 +20,10 @@
     <script src="https://kit.fontawesome.com/e0095c3355.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="bg-degradado">
+<body>
     <!--Navbars-->
     <!--Navbar Home-->
-    <header class="navbar-light navbar-sticky header-static" id="navBar-Home" style="display: block;">
+    <header class="navbar-light navbar-sticky header-static" style="display: none;">
         <!-- Navbar home-->
         <nav class="navbar navbar-expand-xl">
             <div class="container-fluid px-3 px-xl-5">
@@ -79,8 +79,8 @@
                                             <i class="fas fa-shopping-cart degradado-naranja"></i>
                                         </a>
                                     </div>
-                                    <div class="d-flex justify-content-center" id="globoCarrito" style="display: none;">
-                                        <span></span>
+                                    <div id="globoCarrito" style="display: none;">
+                                        <span>2</span>
                                     </div>
                                 </div>
                             </form>
@@ -95,12 +95,12 @@
                     <a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button"
                         data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <img id="avatarClienteLanding" class="avatar-img rounded-circle" src="./assets/img/profile-pics/default.png" alt="avatar">
+                        <img class="avatar-img rounded-circle" src="./assets/img/profile-pics/01.jpg" alt="avatar">
                     </a>
                     <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3" id="listaUsuario"
                         aria-labelledby="profileDropdown">
                         <!-- Profile info -->
-                        <li class="px-3" id="infoClienteLanding" style="display: none;">
+                        <li class="px-3">
                             <div class="d-flex align-items-center">
                                 <!-- Avatar -->
                                 <div class="avatar me-3">
@@ -114,23 +114,17 @@
                             </div>
                             <hr>
                         </li>
-                    
                         <!-- Links -->
-                        <li id="divEditarPerfil" style="display: none;">
-                            <a class="dropdown-item" onclick="editarMiPerfil()">
-                                <i class="bi bi-person fa-fw me-2"></i>Editar perfil
-                            </a>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditarClienteIndex"><i
+                                    class="bi bi-person fa-fw me-2"></i>Editar perfil</a>
                         </li>
-
-                        <li id="divCerrarSesion" style="display: none;">
+                        </li>
+                        <li>
                             <a class="dropdown-item bg-danger-soft-hover" href="/log-out"><i
                                     class="bi bi-power fa-fw me-2"></i>Cerrar sesión</a>
                         </li>
-
-
-                        <li id="divIniciarSesion" style="display: block;">
-                            <a class="dropdown-item bg-danger-soft-hover" onclick="divIniciarSesion()"><i
-                                    class="bi bi-power fa-fw me-2"></i>Iniciar Sesion</a>
+                        <li>
+                            <hr class="dropdown-divider">
                         </li>
                     </ul>
                 </div>
@@ -143,7 +137,7 @@
     <!--/Navbar Home-->
 
     <!--Navbar Formulario-->
-    <header id="navBar-Form" style="display: none;">
+    <header style="display: none;">
         <nav class="navbar navbar-light navbar-expand-md py-3" style="display: block;">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center gap-5" href="/">
@@ -157,7 +151,7 @@
 
     <main>
         <!-- Landing Page-->
-        <section  id="contenido-home" style="display: block;">
+        <section id="contenido-home" style="display: none;">
             <!-- Landing Page-->
             <section id="home" style="display: block;">
                 <!-- Presentacion-->
@@ -462,10 +456,10 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end mx-3">
-                                            <a class="text-end link-unset" href="#">Dificultades al iniciar sesión?</a>
+                                            <a class="text-end link-unset" href="">Dificultades al iniciar sesión?</a>
                                         </div>
                                     </div>
-                                    <button class="btn btn-orange and-icon mx-auto" type="button" onclick="iniciarSesion()">
+                                    <button class="btn btn-orange and-icon mx-auto" onclick="iniciarSesion('Cliente')">
                                         Iniciar Sesión
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </button>
@@ -481,7 +475,7 @@
             <section id="contenido-create" style="display: none;">
 
                 <!-- Formulario Cliente -->
-                <section id="form-cliente" style="display: none;">
+                <section id="cliente" style="display: none;">
                     <div class="container">
                         <div class="row justify-content-center align-items-center vh-90">
                             <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
@@ -501,7 +495,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-user"></i>
-                                                        <input id="inputNombreCliente" class="w-100 p-2" type="text" placeholder="Yamir" />
+                                                        <input id="inputNombre" class="w-100 p-2" type="text" placeholder="Yamir" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -512,7 +506,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-user"></i>
-                                                        <input id="inputApellidoCliente" class="w-100 p-2" type="text"
+                                                        <input id="inputApellido" class="w-100 p-2" type="text"
                                                             placeholder="Rodas" />
                                                     </div>
                                                 </div>
@@ -527,7 +521,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-envelope"></i>
-                                                        <input class="flex-fill p-2" id="inputCorreoCliente" type="email"
+                                                        <input class="flex-fill p-2" id="inputCorreo" type="email"
                                                             placeholder="hola@gmail.com" />
                                                     </div>
                                                 </div>
@@ -546,7 +540,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-lock"></i>
-                                                        <input id="inputContrasenaCliente" class="w-100 p-2" type="password"
+                                                        <input id="inputContrasena" class="w-100 p-2" type="password"
                                                             placeholder="Contraseña" />
                                                     </div>
                                                 </div>
@@ -554,7 +548,7 @@
                                         </div>
             
                                         <div class="col-12 mt-4">
-                                            <button class="btn btn-orange and-icon mx-auto" type="button" onclick="botonCrearCliente()">
+                                            <button class="btn btn-orange and-icon mx-auto" onclick="registrar('Cliente')">
                                                 Registrarse
                                                 <i class="fa-solid fa-chevron-right"></i>
                                             </button>
@@ -568,7 +562,7 @@
                 <!-- /Formulario Cliente -->
 
                 <!-- Formulario Empresa -->
-                <section id="form-empresa" style="display: none;">
+                <section id="empresa" style="display: none;">
                     <div class="container">
                         <div class="row justify-content-center align-items-center vh-90">
                             <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
@@ -683,7 +677,7 @@
                 <!-- /Formulario Empresa -->
 
                 <!-- Formulario Motorista -->
-                <section id="form-motorista" style="display: block;">
+                <section id="motorista" style="display: block;">
                     <div class="container">
                         <div class="row justify-content-center align-items-center vh-90">
                             <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
@@ -793,7 +787,7 @@
         <!-- /Formularios -->
 
         <!-- Administracion -->
-        <section id="contenido-administracion" style="display: none;">
+        <section id="contenido-administracion" style="display: block;">
                 <!--SideBar-->
                 <section class="d-flex">
                     <ul class="nav nav-pills nav-justified d-flex flex-column vh-100 bg-degradado-2 col-2 col-lg-3 col-xxl-2" role="tablist">
@@ -1312,18 +1306,19 @@
                             <h4 class="modal-title">Carrito de Compras</h4>
                             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <select id="modal-carrito-select" class="form-select form-select-lg mt-3" aria-label=".form-select-lg example" onchange="selectCarrito(this)">
-                            <option value="productos" selected>Productos</option>
+                        <select id="modal-carrito-select" class="form-select form-select-lg mt-3"
+                            aria-label=".form-select-lg example">
+                            <option value="producto">Productos</option>
                             <option value="despacho">Despacho</option>
                             <option value="pago">Pago</option>
                         </select>
                     </div>
-                    <button onclick="mandarOrden()">Aver</button>
+
                     <!--Modal Body-->
                     <div class="modal-body">
 
                         <!--Productos-->
-                        <section id="div-productos-carrito" style="display: block;">
+                        <section style="display: none;">
 
                             <!--Item Producto-->
                             <div class="container my-4">
@@ -1339,24 +1334,25 @@
                                             <a class="btn-eliminarModal" href="#"><i class="fas fa-times"></i> Eliminar</a>
                                     </div>
                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xxl-3 d-flex flex-column my-auto gap-4">
-                                        <!--Cantidad-->
-                                        <div class="d-flex flex-row justify-content-between">
-                                            <div class="d-flex flex-column justify-content-between">
-                                                <h6>Cantidad</h6>
-                                                <div class="d-flex flex-row justify-content-center align-items-center gap-2">
-                                                    <input type="number" class="form-control form-control-sm" value="1" min="1" max="100" />
-                                                </div>
+                                        <div>
+                                            <h6>Cant</h6>
+                                            <div class="d-flex flex-row gap-2"><button class="btn btn-dark btn-sm cant"
+                                                    type="button"><i class="fas fa-minus"></i></button>
+                                                <div
+                                                    class="text-center d-flex justify-content-center align-items-center cantCircle">
+                                                    <span>32</span>
+                                                </div><button class="btn btn-dark btn-sm cant" type="button"><i
+                                                        class="fas fa-plus"></i></button>
                                             </div>
-
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <h6 class="m-0">Precio</h6>
-                                                <p class="idProductoModal">$0</p>
+                                                <p class="idProductoModal">$52.90</p>
                                             </div>
                                             <div>
                                                 <h6 class="m-0">Total:</h6>
-                                                <p class="idProductoModal">$0</p>
+                                                <p class="idProductoModal">$105.80</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1368,7 +1364,7 @@
                         <!--/Productos-->
 
                         <!--Despacho-->
-                        <section id="div-despacho-carrito" style="display: none;">
+                        <section style="display: none;">
                             <div class="container">
                                 <div class="row gy-2">
                                     <!--Form del despacho, que contiene: un mapa que obtiene la localizacion actual, input direccion, longitud, altitud-->
@@ -1385,24 +1381,24 @@
 
                                             <!--Direccion-->
                                             <div class="col-12">
-                                                <label for="direccion-carrito" class="form-label">Dirección</label>
-                                                <input type="text" class="form-control" id="direccion-carrito"
+                                                <label for="direccion" class="form-label">Dirección</label>
+                                                <input type="text" class="form-control" id="direccion"
                                                     placeholder="Dirección">
                                             </div>
                                             <!--/Direccion-->
 
                                             <!--Longitud-->
                                             <div class="col-6">
-                                                <label for="longitud-carrito" class="form-label">Longitud</label>
-                                                <input type="text" class="form-control" id="longitud-carrito"
+                                                <label for="longitud" class="form-label">Longitud</label>
+                                                <input type="text" class="form-control" id="longitud"
                                                     placeholder="Longitud">
                                             </div>
                                             <!--/Longitud-->
 
                                             <!--Latitud-->
                                             <div class="col-6">
-                                                <label for="latitud-carrito" class="form-label">Latitud</label>
-                                                <input type="text" class="form-control" id="latitud-carrito"
+                                                <label for="latitud" class="form-label">Latitud</label>
+                                                <input type="text" class="form-control" id="latitud"
                                                     placeholder="Latitud">
                                             </div>
                                             <!--/Latitud-->
@@ -1417,47 +1413,49 @@
                         <!--/Despacho-->
 
                         <!--Pago-->
-                        <section id="div-pago-carrito" style="display: none;">
+                        <section style="display: block;">
                             <div class="container">
                                 <div class="row gy-2">
                                     <!--Select para saber que tipo de tarjeta de credito es-->
                                     <div class="col-12">
-                                        <label for="tipoTarjeta-carrito" class="form-label">Tipo de tarjeta</label>
-                                        <select class="form-select" id="tipoTarjeta-carrito">
-                                            <option value="Visa" selected>Visa</option>
-                                            <option value="Mastercard">Mastercard</option>
-                                            <option value="American Express">American Express</option>
+                                        <label for="tipoTarjeta" class="form-label">Tipo de tarjeta</label>
+                                        <select class="form-select" id="tipoTarjeta">
+                                            <option value="1">Visa</option>
+                                            <option value="2">Mastercard</option>
+                                            <option value="3">American Express</option>
                                         </select>
                                     </div>
                                     <!--/Select para saber que tipo de tarjeta de credito es-->
 
                                     <!--Input para el numero de la tarjeta-->
                                     <div class="col-12">
-                                        <label for="numeroTarjeta-carrito" class="form-label">Número de tarjeta</label>
-                                            <input type="text" class="form-control" id="numeroTarjeta-carrito"
-                                                placeholder="Número de tarjeta">
+                                        <label for="numeroTarjeta" class="form-label">Número de tarjeta</label>
+                                        <input type="text" class="form-control" id="numeroTarjeta"
+                                            placeholder="Número de tarjeta">
                                     </div>
                                     <!--/Input para el numero de la tarjeta-->
 
                                     <!--Input para el nombre del titular de la tarjeta-->
                                     <div class="col-12">
-                                        <label for="nombreTarjeta-carrito" class="form-label">Nombre del titular</label>
-                                        <input type="text" class="form-control" id="nombreTarjeta-carrito"
+                                        <label for="nombreTarjeta" class="form-label">Nombre del titular</label>
+                                        <input type="text" class="form-control" id="nombreTarjeta"
                                             placeholder="Nombre del titular">
                                     </div>
                                     <!--/Input para el nombre del titular de la tarjeta-->
 
                                     <!--Input de fecha que indica cuando vence, solo mes y año-->
                                     <div class="col-6">
-                                        <label for="fechaVencimiento-carrito" class="form-label">Fecha de vencimiento</label>
-                                        <input type="text" class="form-control" id="fechaVencimiento-carrito" placeholder="Fecha de vencimiento">
+                                        <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
+                                        <input type="date" class="form-control" id="fechaVencimiento"
+                                            placeholder="Fecha de vencimiento">
                                     </div>
                                     <!--/Input de fecha que indica cuando vence-->
 
                                     <!--Input para el codigo de seguridad-->
                                     <div class="col-6">
-                                        <label for="codigoSeguridad-carrito" class="form-label">Código de seguridad</label>
-                                        <input type="text" class="form-control" id="codigoSeguridad-carrito" placeholder="Código de seguridad">
+                                        <label for="codigoSeguridad" class="form-label">Código de seguridad</label>
+                                        <input type="text" class="form-control" id="codigoSeguridad"
+                                            placeholder="Código de seguridad">
                                     </div>
 
                                 </div>
@@ -1470,12 +1468,12 @@
 
                     <div class="modal-footer">
                         <!--Factura-->
-                        <div id="div-factura-carrito" class="container mx-auto" style="display: block;">
+                        <div class="container mx-auto" style="display: none;">
                             <div class="row py-2">
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Subtotal</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $0
+                                        $218.60
                                     </p>
                                 </div>
                             </div>
@@ -1483,7 +1481,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">ISV</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $0
+                                        $218.60
                                     </p>
                                 </div>
                             </div>
@@ -1491,7 +1489,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">ISV</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $0
+                                        $218.60
                                     </p>
                                 </div>
                             </div>
@@ -1499,7 +1497,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Total a Pagar</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $0
+                                        $2118.60
                                     </p>
                                 </div>
                             </div>
@@ -1507,20 +1505,20 @@
                         <!--/Factura-->
 
                         <!--Botones Despacho-->
-                        <div id="div-footer-despacho-carrito" class="container-fluid" style="display: none;">
+                        <div class="container-fluid" style="display: none;">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12 col-md-6 col-xl-4 text-center">
-                                    <button class="btn btn-secundary w-100" type="button" onclick="actualizarDireccion()">Guardar</button>
+                                    <button class="btn btn-secundary w-100" type="submit">Guardar</button>
                                 </div>
                             </div>
                         </div>
                         <!--/Botones-->
 
                         <!--Botones Pago-->
-                        <div id="div-footer-pago-carrito" class="container-fluid" style="display: none;">
+                        <div class="container-fluid" style="display: block;">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12 col-md-6 col-xl-4 text-center">
-                                    <button class="btn btn-success w-100" type="button" onclick="pagarOrden()">Pagar</button>
+                                    <button class="btn btn-success w-100" type="submit">Pagar</button>
                                 </div>
                             </div>
                         </div>
@@ -1763,7 +1761,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Subtotal</h5>
                                     <p class="idProductoModal" id="subTotalOrdenAdm" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $0
+                                        $218.60
                                     </p>
                                 </div>
                             </div>
@@ -2175,7 +2173,7 @@
     </section>
 
     <!-- Pie de Pagina Home-->
-    <footer id="footer" class="bd-footer mt-5" style="display: block;">
+    <footer id="footer" class="bd-footer mt-5" style="display: none;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 footer-center">
@@ -2247,18 +2245,18 @@
     <!--/Pie de Pagina-->
 
     <!--Pie de pagina formulario-->
-    <footer id="footer-form" class="py-3 mt-4" style="display: none;">
+    <footer class="py-3 mt-4" style="display: none;">
         <!--Log in-->
-        <section id="footer-form-log" style="display: none;">
-            <p class="text-center text-muted">¿No tienes ninguna cuenta aún? <a class="link-naranja" onclick="divCrearCliente()">Comenzar ahora</a></p>
+        <section style="display: none;">
+            <p class="text-center text-muted">¿No tienes ninguna cuenta aún? <a href="/create">Comenzar ahora</a></p>
             <hr>
             <p class="text-center text-muted">© 2022 Vite, Inc</p>
         </section>
         <!--/Log in-->
 
         <!--Crear-->
-        <section id="footer-form-create" style="display: none;">
-            <p class="text-center text-muted">¿Ya tienes una cuenta? <a class="link-naranja" onclick="divIniciarSesion()">Iniciar sesión</a></p>
+        <section style="display: block;">
+            <p class="text-center text-muted">¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a></p>
             <hr>
             <p class="text-center text-muted">© 2022 Vite, Inc</p>
         </section>

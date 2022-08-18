@@ -6,7 +6,6 @@
 
 body {
     margin: 0;
-    min-width: 305px;
 }
 
 .vh-90 {
@@ -676,4 +675,9 @@ p {
     transform: scale(1.05);
     background-color: #f0f0f0;
     box-shadow: 0px 5px 5px rgba(255, 77, 77, 0.26);
+}
+
+.link-naranja{
+    color: rgb(255, 157, 0);
+    cursor: pointer;
 }

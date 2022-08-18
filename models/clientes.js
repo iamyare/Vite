@@ -9,7 +9,7 @@ var Schema = mongoose.Schema(
         correo: String,
         contraseña: String,
         imagen: String,
-        carrito: Array,
+        carrito: {},
         ordenes: Array
     }
 );

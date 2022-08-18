@@ -1,5 +1,6 @@
 //Importamos las dependencias necesarias
 var express = require('express');
+var path = require('path');
 
 //Route nos permite crear rutas para nuestra aplicacion
 var router = express.Router();
@@ -7,6 +8,14 @@ var mongoose = require('mongoose');
 
 //Importamos el modelo, para poder trabajar con ellos en la base de datos
 var administracion = require('../models/administracion');
+
+
+
+//Ver el index del administracion
+//URL: http://localhost:3333/administracion
+router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/administracion.html'));
+});
 
 //Obtener todos los administradores
 //URL: http://localhost:3333/administracion
@@ -631,6 +640,35 @@ router.delete('/ordenes/:idOrden/producto/:idProducto', (req, res) => {
     });
 });
 
+//Copiar una orden de la coleccion 'clientes' a la coleccion 'administracion'
+//URL: http://localhost:3333/administracion/ordenes/copiar
+router.post('/ordenes/copiar', (req, res) => {
+    administracion.update(
+        {
+        },
+        {
+            "$push": {
+                "ordenes": {
+                    "_id": req.body._id,
+                    "estado": "en el origen",
+                    "direccion": req.body.direccion,
+                    "productos": req.body.productos,
+                    "factura": req.body.factura
+                }
+            }
+        },
+        {
+            "multi": true
+        }
+    )
+    .then((ordenes) => {
+        res.send(ordenes);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
 
 
 module.exports = router;

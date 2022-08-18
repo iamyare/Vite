@@ -138,4 +138,198 @@ router.post('/:idCliente/orden/:idOrden', (req, res) => {
     });
 });
 
+//Crear un carrito
+//URL: http://localhost:3333/cliente/:id/carrito
+router.post('/:idCliente/carrito', (req, res) => {
+    id = mongoose.Types.ObjectId();
+    clientes.findByIdAndUpdate(
+        {_id: req.params.idCliente},
+        {
+            $set: {
+                "carrito": {
+                    "_id": id,
+                    "productos": [],
+                    "direccion": {
+                        "direccion": '',
+                        "latitud": '',
+                        "longitud": ''
+                    },
+                    "factura": {
+                        "total": 0,
+                        "subtotal": 0,
+                        "comision": {},
+                        "codigoSeguridad": '',
+                        "numeroTarjeta": '',
+                        "nombreTitular": '',
+                        "fechaVencimiento": '',
+                        "tarjeta": ''
+                }
+            }
+
+        }
+    })
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//agregar un producto a un carrito
+//URL: http://localhost:3333/cliente/carrito/:idCarrito/producto/:idProducto
+router.put('/carrito/:idOrden/producto/:idProducto', (req, res) => {
+    clientes.updateOne(
+        {
+            "carrito._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$push": {
+                "carrito.productos": {
+                    "producto": mongoose.Types.ObjectId(req.params.idProducto),
+                    "cantidad": Number(req.body.cantidad)
+                }
+            }
+        }
+    )
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Actualizar la direccion de un carrito
+//URL: http://localhost:3333/cliente/carrito/:idCarrito/direccion
+router.put('/carrito/:idOrden/direccion', (req, res) => {
+    clientes.updateOne(
+        {
+            "carrito._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$set": {
+                "carrito.direccion": {
+                    "direccion": req.body.direccion,
+                    "latitud": req.body.latitud,
+                    "longitud": req.body.longitud
+                }
+            }
+        }
+    )
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Actualizar la factura de un carrito
+//URL: http://localhost:3333/cliente/carrito/:idCarrito/factura
+router.put('/carrito/:idOrden/factura', (req, res) => {
+    clientes.updateOne(
+        {
+            "carrito._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$set": {
+                "carrito.factura": {
+                    "total": req.body.total,
+                    "subtotal": req.body.subtotal,
+                        "comision": {
+                        "adm": req.body.adm,
+                        "motorista": req.body.motorista
+                    },
+                    "codigoSeguridad": req.body.codigoSeguridad,
+                    "numeroTarjeta": req.body.numeroTarjeta,
+                    "nombreTitular": req.body.nombreTitular,
+                    "fechaVencimiento": req.body.fechaVencimiento,
+                    "tarjeta": req.body.tarjeta
+                },
+                "carrito.estado": "en el origen"
+            }
+        }
+    )
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+
+//Eliminar un producto de un carrito
+//URL: http://localhost:3333/cliente/carrito/:idCarrito/producto/:idProducto
+router.delete('/carrito/:idOrden/producto/:idProducto', (req, res) => {
+    clientes.updateOne(
+        {
+            "carrito._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "$pull": {
+                "carrito.productos": {
+                    "producto": {
+                        "$eq": mongoose.Types.ObjectId(req.params.idProducto)
+                    }
+                }
+            }
+        }
+    )
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Obtener un carrito por su id
+//URL: http://localhost:3333/cliente/carrito/:idCarrito
+router.get('/carrito/:idOrden', (req, res) => {
+    clientes.findOne(
+        {
+            "carrito._id": mongoose.Types.ObjectId(req.params.idOrden)
+        },
+        {
+            "carrito.$": 1
+        }
+    )
+    .then((carrito) => {
+        res.send(carrito.carrito);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
+//Eliminar el carrito de un cliente
+//URL: http://localhost:3333/cliente/:idCliente/carrito
+router.delete('/:idCliente/carrito', (req, res) => {
+    clientes.updateOne(
+        {
+            "_id": mongoose.Types.ObjectId(req.params.idCliente)
+        },
+        {
+            "$set": {
+                "carrito": {}
+            }
+        }
+    )
+    .then((cliente) => {
+        res.send(cliente);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    });
+});
+
 module.exports = router;
