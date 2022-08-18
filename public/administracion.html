@@ -20,10 +20,10 @@
     <script src="https://kit.fontawesome.com/e0095c3355.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="bg-degradado">
     <!--Navbars-->
     <!--Navbar Home-->
-    <header class="navbar-light navbar-sticky header-static" style="display: none;">
+    <header class="navbar-light navbar-sticky header-static" id="navBar-Home" style="display: none;">
         <!-- Navbar home-->
         <nav class="navbar navbar-expand-xl">
             <div class="container-fluid px-3 px-xl-5">
@@ -50,17 +50,13 @@
                             <a class="nav-link active" href="/">Inicio</a>
                         </li>
 
-                        <!-- Nav item 3 Pages -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/productos">Productos</a>
-                        </li>
                         <!-- Nav item 4 Pages -->
                         <li class="nav-item">
-                            <a class="nav-link" href="/categorias">Categorias</a>
+                            <a class="nav-link" href="#categorias">Categorias</a>
                         </li>
                         <!-- Nav item 5 Pages -->
                         <li class="nav-item">
-                            <a class="nav-link" href="/sobre-nosotros">Sobre Nosotros</a>
+                            <a class="nav-link" href="#">Sobre Nosotros</a>
                         </li>
                     </ul>
                     <!-- Nav Main menu END -->
@@ -79,8 +75,8 @@
                                             <i class="fas fa-shopping-cart degradado-naranja"></i>
                                         </a>
                                     </div>
-                                    <div id="globoCarrito" style="display: none;">
-                                        <span>2</span>
+                                    <div class="d-flex justify-content-center" id="globoCarrito" style="display: none;">
+                                        <span></span>
                                     </div>
                                 </div>
                             </form>
@@ -95,12 +91,12 @@
                     <a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button"
                         data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <img class="avatar-img rounded-circle" src="./assets/img/profile-pics/01.jpg" alt="avatar">
+                        <img id="avatarClienteLanding" class="avatar-img rounded-circle" src="./assets/img/profile-pics/default.png" alt="avatar">
                     </a>
                     <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3" id="listaUsuario"
                         aria-labelledby="profileDropdown">
                         <!-- Profile info -->
-                        <li class="px-3">
+                        <li class="px-3" id="infoClienteLanding" style="display: none;">
                             <div class="d-flex align-items-center">
                                 <!-- Avatar -->
                                 <div class="avatar me-3">
@@ -114,17 +110,23 @@
                             </div>
                             <hr>
                         </li>
+                    
                         <!-- Links -->
-                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEditarClienteIndex"><i
-                                    class="bi bi-person fa-fw me-2"></i>Editar perfil</a>
+                        <li id="divEditarPerfil" style="display: none;">
+                            <a class="dropdown-item" onclick="editarMiPerfil()">
+                                <i class="bi bi-person fa-fw me-2"></i>Editar perfil
+                            </a>
                         </li>
-                        </li>
-                        <li>
-                            <a class="dropdown-item bg-danger-soft-hover" href="/log-out"><i
+
+                        <li id="divCerrarSesion" style="display: none;">
+                            <a class="dropdown-item bg-danger-soft-hover" onclick="cerrarSesion()"><i
                                     class="bi bi-power fa-fw me-2"></i>Cerrar sesión</a>
                         </li>
-                        <li>
-                            <hr class="dropdown-divider">
+
+
+                        <li id="divIniciarSesion" style="display: block;">
+                            <a class="dropdown-item bg-danger-soft-hover" onclick="divIniciarSesion()"><i
+                                    class="bi bi-power fa-fw me-2"></i>Iniciar Sesion</a>
                         </li>
                     </ul>
                 </div>
@@ -137,8 +139,8 @@
     <!--/Navbar Home-->
 
     <!--Navbar Formulario-->
-    <header style="display: none;">
-        <nav class="navbar navbar-light navbar-expand-md py-3" style="display: block;">
+    <header id="navBar-Form" style="display: none;">
+        <nav class="navbar navbar-light navbar-expand-md py-3" style="display: none;">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center gap-5" href="/">
                     <i class="fas fa-arrow-left degradado-naranja"></i>
@@ -151,7 +153,7 @@
 
     <main>
         <!-- Landing Page-->
-        <section id="contenido-home" style="display: none;">
+        <section  id="contenido-home" style="display: none;">
             <!-- Landing Page-->
             <section id="home" style="display: block;">
                 <!-- Presentacion-->
@@ -169,7 +171,7 @@
                                     impedit?</p>
 
                                 <a href="/login" style="all: unset;">
-                                    <button class="btn btn-orange btn-lg2 and-icon" id="btnComenzar">Comenzar<i
+                                    <button class="btn btn-orange btn-lg2 and-icon" id="btnComenzar"type="button" onclick="divIniciarSesion()">Comenzar<i
                                             class="fa-solid fa-angle-right"></i></button>
                                 </a>
                             </div>
@@ -183,7 +185,7 @@
                 </section>
 
                 <!-- Categorias destacadas -->
-                <section class="container-fluid">
+                <section class="container-fluid" id="categorias">
                     <div class="row">
                         <div class="col-lg-8 mx-auto text-center">
                             <h2 class="fs-1">Categorías Destacadas</h2>
@@ -198,11 +200,12 @@
                     <!-- Categorias -->
                     <div class="container-fluid d-flex justify-content-center">
                         <div class="scrolling-wrapper row flex-row flex-nowrap my-4">
+
                             <!-- Card 1 -->
-                            <div class="card-category position-relative">
+                            <div class="card-category position-relative" onclick="verCartegorias('Familiar')">
                                 <div class="w-100 d-flex justify-content-center">
                                     <div class="position-absolute btn-category bottom-0">
-                                        <a href="#">Familiar</a>
+                                        <a>Familiar</a>
                                         <span class="btn-arrow">
                                             <i class="fa-solid fa-arrow-right"></i>
                                         </span>
@@ -212,8 +215,9 @@
                                     src="assets/img/recursos/otros/categoria-familiar.jpg" alt="">
                             </div>
                             <!-- Card 1 Fin -->
+
                             <!-- Card 1 -->
-                            <div class="card-category position-relative">
+                            <div class="card-category position-relative" onclick="verCartegorias('Buffets')">
                                 <div class="w-100 d-flex justify-content-center">
                                     <div class="position-absolute btn-category bottom-0">
                                         <a href="#">Buffets</a>
@@ -226,8 +230,9 @@
                                     src="assets/img/recursos/otros/categoria-buffet.jpg" alt="">
                             </div>
                             <!-- Card 1 Fin -->
+
                             <!-- Card 1 -->
-                            <div class="card-category position-relative">
+                            <div class="card-category position-relative"onclick="verCartegorias('Comida Rápida')">
                                 <div class="w-100 d-flex justify-content-center">
                                     <div class="position-absolute btn-category bottom-0">
                                         <a href="#">Comida rápida</a>
@@ -247,7 +252,7 @@
                 </section>
 
                 <!-- Ofertas especiales de hoy -->
-                <section class="container-fluid">
+                <section class="container-fluid" style="display: none;">
                     <div class="row mt-4 mb-4">
                         <div class="col-lg-8 mx-auto text-center">
                             <h2 class="fs-1">Ofertas especiales de hoy</h2>
@@ -456,10 +461,10 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end mx-3">
-                                            <a class="text-end link-unset" href="">Dificultades al iniciar sesión?</a>
+                                            <a class="text-end link-unset" href="#">Dificultades al iniciar sesión?</a>
                                         </div>
                                     </div>
-                                    <button class="btn btn-orange and-icon mx-auto" onclick="iniciarSesion('Cliente')">
+                                    <button class="btn btn-orange and-icon mx-auto" type="button" onclick="iniciarSesion()">
                                         Iniciar Sesión
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </button>
@@ -475,7 +480,7 @@
             <section id="contenido-create" style="display: none;">
 
                 <!-- Formulario Cliente -->
-                <section id="cliente" style="display: none;">
+                <section id="form-cliente" style="display: none;">
                     <div class="container">
                         <div class="row justify-content-center align-items-center vh-90">
                             <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
@@ -495,7 +500,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-user"></i>
-                                                        <input id="inputNombre" class="w-100 p-2" type="text" placeholder="Yamir" />
+                                                        <input id="inputNombreCliente" class="w-100 p-2" type="text" placeholder="Yamir" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -506,7 +511,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-user"></i>
-                                                        <input id="inputApellido" class="w-100 p-2" type="text"
+                                                        <input id="inputApellidoCliente" class="w-100 p-2" type="text"
                                                             placeholder="Rodas" />
                                                     </div>
                                                 </div>
@@ -521,7 +526,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-envelope"></i>
-                                                        <input class="flex-fill p-2" id="inputCorreo" type="email"
+                                                        <input class="flex-fill p-2" id="inputCorreoCliente" type="email"
                                                             placeholder="hola@gmail.com" />
                                                     </div>
                                                 </div>
@@ -540,7 +545,7 @@
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center input-source">
                                                         <i class="fas fa-lock"></i>
-                                                        <input id="inputContrasena" class="w-100 p-2" type="password"
+                                                        <input id="inputContrasenaCliente" class="w-100 p-2" type="password"
                                                             placeholder="Contraseña" />
                                                     </div>
                                                 </div>
@@ -548,7 +553,7 @@
                                         </div>
             
                                         <div class="col-12 mt-4">
-                                            <button class="btn btn-orange and-icon mx-auto" onclick="registrar('Cliente')">
+                                            <button class="btn btn-orange and-icon mx-auto" type="button" onclick="botonCrearCliente()">
                                                 Registrarse
                                                 <i class="fa-solid fa-chevron-right"></i>
                                             </button>
@@ -562,7 +567,7 @@
                 <!-- /Formulario Cliente -->
 
                 <!-- Formulario Empresa -->
-                <section id="empresa" style="display: none;">
+                <section id="form-empresa" style="display: none;">
                     <div class="container">
                         <div class="row justify-content-center align-items-center vh-90">
                             <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
@@ -677,7 +682,7 @@
                 <!-- /Formulario Empresa -->
 
                 <!-- Formulario Motorista -->
-                <section id="motorista" style="display: block;">
+                <section id="form-motorista" style="display: block;">
                     <div class="container">
                         <div class="row justify-content-center align-items-center vh-90">
                             <div class="col-auto col-lg-6 col-xl-8 col-xxl-10 transicion-tamanio">
@@ -1161,6 +1166,50 @@
 
     <!--Modales-->
     <section>
+
+        <!--Modal Categorias comida-->
+        <div class="modal fade" id="modal-categorias-comida" tabindex="-1" role="dialog" aria-labelledby="modal-categorias-comida" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title" id="modal-categorias-comida">Categorias de comida</h5>
+                            <h5 class="modal-title" id="modal-categorias-comida-titulo">Familiar</h5>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row gy-4" id="div-categorias-empresas-landing">
+
+                                    <!--Item: Empresas-->
+                                    <div class="col-sm-12 col-md-6 col-xxl-4">
+                                        <div class="card card-proveedores">
+                                            <img class="card-img-top w-100 d-block img-card-proveedores"
+                                                src="assets/img/empresas/banners/burger-king.jpg" />
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h4>Burger Kinng</h4>
+                                                        <p>Descripcion: dsajndnsajdnjasdas</p>
+                                                        <p><i class="fas fa-star icon-reference"></i> 4.8</p>
+                                                    </div><img class="avatar-logo avatar-img" src="assets/img/empresas/logos/burger-king.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Fin Item-->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal Categorias comida-->
+
         <!--Modal editor Motorista-->
         <div class="modal fade" id="modalEditorMotoristaAdministracion" tabindex="-1" aria-labelledby="modalEditorMotoristaAdministracionLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1306,19 +1355,17 @@
                             <h4 class="modal-title">Carrito de Compras</h4>
                             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <select id="modal-carrito-select" class="form-select form-select-lg mt-3"
-                            aria-label=".form-select-lg example">
-                            <option value="producto">Productos</option>
+                        <select id="modal-carrito-select" class="form-select form-select-lg mt-3" aria-label=".form-select-lg example" onchange="selectCarrito(this)">
+                            <option value="productos" selected>Productos</option>
                             <option value="despacho">Despacho</option>
                             <option value="pago">Pago</option>
                         </select>
                     </div>
-
                     <!--Modal Body-->
                     <div class="modal-body">
 
                         <!--Productos-->
-                        <section style="display: none;">
+                        <section id="div-productos-carrito" style="display: block;">
 
                             <!--Item Producto-->
                             <div class="container my-4">
@@ -1334,25 +1381,24 @@
                                             <a class="btn-eliminarModal" href="#"><i class="fas fa-times"></i> Eliminar</a>
                                     </div>
                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xxl-3 d-flex flex-column my-auto gap-4">
-                                        <div>
-                                            <h6>Cant</h6>
-                                            <div class="d-flex flex-row gap-2"><button class="btn btn-dark btn-sm cant"
-                                                    type="button"><i class="fas fa-minus"></i></button>
-                                                <div
-                                                    class="text-center d-flex justify-content-center align-items-center cantCircle">
-                                                    <span>32</span>
-                                                </div><button class="btn btn-dark btn-sm cant" type="button"><i
-                                                        class="fas fa-plus"></i></button>
+                                        <!--Cantidad-->
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <div class="d-flex flex-column justify-content-between">
+                                                <h6>Cantidad</h6>
+                                                <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                                                    <input type="number" class="form-control form-control-sm" value="1" min="1" max="100" />
+                                                </div>
                                             </div>
+
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <h6 class="m-0">Precio</h6>
-                                                <p class="idProductoModal">$52.90</p>
+                                                <p class="idProductoModal">$0</p>
                                             </div>
                                             <div>
                                                 <h6 class="m-0">Total:</h6>
-                                                <p class="idProductoModal">$105.80</p>
+                                                <p class="idProductoModal">$0</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1364,7 +1410,7 @@
                         <!--/Productos-->
 
                         <!--Despacho-->
-                        <section style="display: none;">
+                        <section id="div-despacho-carrito" style="display: none;">
                             <div class="container">
                                 <div class="row gy-2">
                                     <!--Form del despacho, que contiene: un mapa que obtiene la localizacion actual, input direccion, longitud, altitud-->
@@ -1381,24 +1427,24 @@
 
                                             <!--Direccion-->
                                             <div class="col-12">
-                                                <label for="direccion" class="form-label">Dirección</label>
-                                                <input type="text" class="form-control" id="direccion"
+                                                <label for="direccion-carrito" class="form-label">Dirección</label>
+                                                <input type="text" class="form-control" id="direccion-carrito"
                                                     placeholder="Dirección">
                                             </div>
                                             <!--/Direccion-->
 
                                             <!--Longitud-->
                                             <div class="col-6">
-                                                <label for="longitud" class="form-label">Longitud</label>
-                                                <input type="text" class="form-control" id="longitud"
+                                                <label for="longitud-carrito" class="form-label">Longitud</label>
+                                                <input type="text" class="form-control" id="longitud-carrito"
                                                     placeholder="Longitud">
                                             </div>
                                             <!--/Longitud-->
 
                                             <!--Latitud-->
                                             <div class="col-6">
-                                                <label for="latitud" class="form-label">Latitud</label>
-                                                <input type="text" class="form-control" id="latitud"
+                                                <label for="latitud-carrito" class="form-label">Latitud</label>
+                                                <input type="text" class="form-control" id="latitud-carrito"
                                                     placeholder="Latitud">
                                             </div>
                                             <!--/Latitud-->
@@ -1413,49 +1459,47 @@
                         <!--/Despacho-->
 
                         <!--Pago-->
-                        <section style="display: block;">
+                        <section id="div-pago-carrito" style="display: none;">
                             <div class="container">
                                 <div class="row gy-2">
                                     <!--Select para saber que tipo de tarjeta de credito es-->
                                     <div class="col-12">
-                                        <label for="tipoTarjeta" class="form-label">Tipo de tarjeta</label>
-                                        <select class="form-select" id="tipoTarjeta">
-                                            <option value="1">Visa</option>
-                                            <option value="2">Mastercard</option>
-                                            <option value="3">American Express</option>
+                                        <label for="tipoTarjeta-carrito" class="form-label">Tipo de tarjeta</label>
+                                        <select class="form-select" id="tipoTarjeta-carrito">
+                                            <option value="Visa" selected>Visa</option>
+                                            <option value="Mastercard">Mastercard</option>
+                                            <option value="American Express">American Express</option>
                                         </select>
                                     </div>
                                     <!--/Select para saber que tipo de tarjeta de credito es-->
 
                                     <!--Input para el numero de la tarjeta-->
                                     <div class="col-12">
-                                        <label for="numeroTarjeta" class="form-label">Número de tarjeta</label>
-                                        <input type="text" class="form-control" id="numeroTarjeta"
-                                            placeholder="Número de tarjeta">
+                                        <label for="numeroTarjeta-carrito" class="form-label">Número de tarjeta</label>
+                                            <input type="text" class="form-control" id="numeroTarjeta-carrito"
+                                                placeholder="Número de tarjeta">
                                     </div>
                                     <!--/Input para el numero de la tarjeta-->
 
                                     <!--Input para el nombre del titular de la tarjeta-->
                                     <div class="col-12">
-                                        <label for="nombreTarjeta" class="form-label">Nombre del titular</label>
-                                        <input type="text" class="form-control" id="nombreTarjeta"
+                                        <label for="nombreTarjeta-carrito" class="form-label">Nombre del titular</label>
+                                        <input type="text" class="form-control" id="nombreTarjeta-carrito"
                                             placeholder="Nombre del titular">
                                     </div>
                                     <!--/Input para el nombre del titular de la tarjeta-->
 
                                     <!--Input de fecha que indica cuando vence, solo mes y año-->
                                     <div class="col-6">
-                                        <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
-                                        <input type="date" class="form-control" id="fechaVencimiento"
-                                            placeholder="Fecha de vencimiento">
+                                        <label for="fechaVencimiento-carrito" class="form-label">Fecha de vencimiento</label>
+                                        <input type="text" class="form-control" id="fechaVencimiento-carrito" placeholder="Fecha de vencimiento">
                                     </div>
                                     <!--/Input de fecha que indica cuando vence-->
 
                                     <!--Input para el codigo de seguridad-->
                                     <div class="col-6">
-                                        <label for="codigoSeguridad" class="form-label">Código de seguridad</label>
-                                        <input type="text" class="form-control" id="codigoSeguridad"
-                                            placeholder="Código de seguridad">
+                                        <label for="codigoSeguridad-carrito" class="form-label">Código de seguridad</label>
+                                        <input type="text" class="form-control" id="codigoSeguridad-carrito" placeholder="Código de seguridad">
                                     </div>
 
                                 </div>
@@ -1468,12 +1512,12 @@
 
                     <div class="modal-footer">
                         <!--Factura-->
-                        <div class="container mx-auto" style="display: none;">
+                        <div id="div-factura-carrito" class="container mx-auto" style="display: block;">
                             <div class="row py-2">
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Subtotal</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $218.60
+                                        $0
                                     </p>
                                 </div>
                             </div>
@@ -1481,7 +1525,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">ISV</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $218.60
+                                        $0
                                     </p>
                                 </div>
                             </div>
@@ -1489,7 +1533,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">ISV</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $218.60
+                                        $0
                                     </p>
                                 </div>
                             </div>
@@ -1497,7 +1541,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Total a Pagar</h5>
                                     <p class="idProductoModal" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $2118.60
+                                        $0
                                     </p>
                                 </div>
                             </div>
@@ -1505,20 +1549,20 @@
                         <!--/Factura-->
 
                         <!--Botones Despacho-->
-                        <div class="container-fluid" style="display: none;">
+                        <div id="div-footer-despacho-carrito" class="container-fluid" style="display: none;">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12 col-md-6 col-xl-4 text-center">
-                                    <button class="btn btn-secundary w-100" type="submit">Guardar</button>
+                                    <button class="btn btn-secundary w-100" type="button" onclick="actualizarDireccion()">Guardar</button>
                                 </div>
                             </div>
                         </div>
                         <!--/Botones-->
 
                         <!--Botones Pago-->
-                        <div class="container-fluid" style="display: block;">
+                        <div id="div-footer-pago-carrito" class="container-fluid" style="display: none;">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12 col-md-6 col-xl-4 text-center">
-                                    <button class="btn btn-success w-100" type="submit">Pagar</button>
+                                    <button class="btn btn-success w-100" type="button" onclick="pagarOrden()">Pagar</button>
                                 </div>
                             </div>
                         </div>
@@ -1530,6 +1574,81 @@
             </div>
         </div>
         <!--/Modal-->
+
+        <!--Modal empresa con Produtos-->
+        <div class="modal fade" id="modalProductosEmpresa" tabindex="-1" aria-labelledby="modalEditorOrdenAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalProductosEmpresanLabel">Productos</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="productos-administracion-modal">
+                            <!--Muestra el banner de la emprea-->
+                            <div class="row">
+                                <div class="col-12">
+                                    <img src="https://via.placeholder.com/1200x300" id="div-banner-empresa" class="img-fluid">
+                                </div>
+                            </div>
+                            <!--Logo, nombre de empresa y descripcion-->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <img src="https://via.placeholder.com/100x100" id="div-logo-empresa" class="avatar-logo avatar-img">
+                                        </div>
+                                        <div class="col-10" id="info-empresas-index">
+                                            <h5 class="m-0">Nombre de la empresa</h5>
+                                            <p class="m-0">Descripcion de la empresa</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <!--Card de productos,  contiene imagen, nombre y precio-->
+                    <div class="container">
+                        <!--Titulo: Productos-->
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="mx-auto">Productos</h3>
+                            </div>
+                        </div>
+                        <div class="row" id="productosEmpresa">
+                            <div class="col-sm-12 col-md-6 col-xxl-4">
+                                <div class="card card-proveedores" onclick="modalEmpresaConOrdenes('${empresas._id}')">
+                                    <img class="card-img-top w-100 d-block img-card-proveedores"
+                                        src="" />
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4>${empresas.nombre}</h4>
+                                                <p>Descripcion: ${empresas.descripcion}</p>
+                                                <p><i class="fas fa-star icon-reference"></i> ${promedio}</p>
+                                            </div>
+                                            <!--Boton añadir al carrito-->
+                                            <div>
+                                                <button class="btn btn-warning" type="button" onclick="modalEmpresaConOrdenes('${empresas._id}')">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </button>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal" >Cerrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--Modal editar Cliente Administrador-->
         <div class="modal fade" id="modalEditarClienteAdministrador" tabindex="-1" aria-labelledby="modalEditarClienteAdministradorLabel" aria-hidden="true">
@@ -1761,7 +1880,7 @@
                                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0">Subtotal</h5>
                                     <p class="idProductoModal" id="subTotalOrdenAdm" style="font-size: 14px;color: var(--bs-gray-500);">
-                                        $218.60
+                                        $0
                                     </p>
                                 </div>
                             </div>
@@ -2109,8 +2228,6 @@
         </div>
         <!--/Modal-->
 
-
-
         <!--Modal Visaulizar DAtos de Tarjeta-->\
         <div class="modal fade" id="modal-visualizar-datos-tarjeta" tabindex="-3" aria-labelledby="modal-visualizar-datos-tarjeta" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -2245,18 +2362,18 @@
     <!--/Pie de Pagina-->
 
     <!--Pie de pagina formulario-->
-    <footer class="py-3 mt-4" style="display: none;">
+    <footer id="footer-form" class="py-3 mt-4" style="display: none;">
         <!--Log in-->
-        <section style="display: none;">
-            <p class="text-center text-muted">¿No tienes ninguna cuenta aún? <a href="/create">Comenzar ahora</a></p>
+        <section id="footer-form-log" style="display: none;">
+            <p class="text-center text-muted">¿No tienes ninguna cuenta aún? <a class="link-naranja" onclick="divCrearCliente()">Comenzar ahora</a></p>
             <hr>
             <p class="text-center text-muted">© 2022 Vite, Inc</p>
         </section>
         <!--/Log in-->
 
         <!--Crear-->
-        <section style="display: block;">
-            <p class="text-center text-muted">¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a></p>
+        <section id="footer-form-create" style="display: none;">
+            <p class="text-center text-muted">¿Ya tienes una cuenta? <a class="link-naranja" onclick="divIniciarSesion()">Iniciar sesión</a></p>
             <hr>
             <p class="text-center text-muted">© 2022 Vite, Inc</p>
         </section>

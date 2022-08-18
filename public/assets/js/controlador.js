@@ -2220,6 +2220,7 @@ function verificarInputLogIn(){
     //Verifica que los campos no esten vacios, inputCorreo y inputContrasena
     if (inputCorreo.value == '' || inputContrasena.value == '') {
         alert('Por favor, llene todos los campos');
+
         return false;
     } //Verifica que el correo sea valido con expresion regular
     else if (!inputCorreo.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
@@ -2257,9 +2258,6 @@ function divCrearCliente(){
 function botonCrearCliente(){
     if (verificarCreateCliente()){
 
-
-
-
             console.log('Creando cliente');
             fetch('/cliente', {
                 method: 'POST',
@@ -2289,20 +2287,26 @@ function botonCrearCliente(){
 
 
 function verificarCreateCliente(){
-    let inputNombre = document.getElementById('inputNombreCliente').value;
-    let inputApellido = document.getElementById('inputApellidoCliente').value;
-    let inputCorreo = document.getElementById('inputCorreoCliente').value;
-    let inputContrasena = document.getElementById('inputContrasenaCliente').value;
+    let inputNombre = document.getElementById('inputNombreCliente');
+    let inputApellido = document.getElementById('inputApellidoCliente');
+    let inputCorreo = document.getElementById('inputCorreoCliente');
+    let inputContrasena = document.getElementById('inputContrasenaCliente');
 
-    if (inputNombre == '' || inputApellido == '' || inputCorreo == '' || inputContrasena == '') {
+
+    if (inputNombre.value == '' || inputApellido.value == '' || inputCorreo.value == '' || inputContrasena.value == '') {
         alert('Por favor, llene todos los campos');
+        //Añadir clase de error a los campos
+        inputNombre.classList.add('input-error');
+        inputApellido.classList.add('input-error');
+        inputCorreo.classList.add('input-error');
+        inputContrasena.classList.add('input-error');
         return false;
     } //Verifica que el correo sea valido con expresion regular
-    else if (!inputCorreo.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
+    else if (!inputCorreo.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
         alert('Por favor, ingrese un correo valido');
         return false;
     }//Verificar que la contraseña sea valida con una expresion regular, debe tener al menos 8 caracteres, y al menos una letra mayuscula, una minuscula y un numero
-    else if (!inputContrasena.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+    else if (!inputContrasena.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
         alert('Por favor, ingrese una contraseña valida');
         //Debe de verse asi, ejemplo: *********
         return false;
@@ -2963,4 +2967,132 @@ function cerrarSesion(){
     localStorage.clear();
     //Redireccionar a la pagina de inicio
     window.location.href = "/";
+}
+
+function actualizarMapa(){
+    //Actualizar el mapa
+    let latitud = 14.084206;
+    let longitud = -87.200585;
+    map.innerHTML = 
+    `
+    <iframe class="vh-100" allowfullscreen frameborder="0" loading="lazy" src="https://www.google.com/maps/embed/v1/view?key=AIzaSyCn3fCOq5lpRmSHoLp8k6FW6PbtBqQeGLo&amp;center=${latitud}%2C${longitud}&amp;zoom=10" width="100%" height="400"></iframe>
+    `;
+
+}
+
+
+//Verificcar si la url contiene /motorista
+
+if ((window.location.href).includes("/motorista")) {
+    ordenesDisponiblesMotorista()
+}
+
+
+function ordenesDisponiblesMotorista() {
+    //Obtener las ordenes disponibles
+    let divDisponibles = document.getElementById("motorista-orden-disponible");
+
+    divDisponibles.innerHTML = "";
+    fetch(`administracion/origen`)
+        .then(res => res.json())
+        .then(data => {
+
+            data.forEach(origen => {
+
+
+                console.log(origen);
+                divDisponibles.innerHTML +=
+                    `
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card-motorista-orden" onclick="modalOrdenesEstado()">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="d-flex flex-row align-items-center h-100">
+                                    <div>
+                                        <h6 class="degradado-naranja m-0">${origen.ordenes._id}</h6>
+
+                                        <p class="card-motorista-orden-descripcion">${origen.ordenes.direccion.direccion}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col"><img class="img-fluid card-motorista-orden-imagen"
+                                    src="assets/img/empresas/local/burger-king.jpg" /></div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+
+        }).catch(err => {
+            console.log(err);
+    });
+
+    //Obtener las ordenes tomadas
+    let divTomadas = document.getElementById("motorista-orden-tomada");
+    divTomadas.innerHTML = "";
+
+    motoristaSeleccionadoActualmente = '62fc68fa3068e922047a1c54';
+    fetch(`/motorista/${motoristaSeleccionadoActualmente}/ordenes/tomadas`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            data.forEach(orden => {
+                divTomadas.innerHTML +=
+                    `
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card-motorista-orden" onclick="modalOrdenesEstado()">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="d-flex flex-row align-items-center h-100">
+                                    <div>
+                                        <h6 class="degradado-naranja m-0">${orden.orden._id}</h6>
+                                        <p class="card-motorista-orden-descripcion">${orden.orden.direccion.direccion}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col"><img class="img-fluid card-motorista-orden-imagen"
+                                    src="assets/img/empresas/local/burger-king.jpg" /></div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        }).catch(err => {
+            console.log(err);
+    });
+
+    //Obtener las ordenes entregadas
+    let divEntregadas = document.getElementById("motorista-orden-entregada");
+    divEntregadas.innerHTML = "";
+    fetch(`/motorista/${motoristaSeleccionadoActualmente}/ordenes/entregadas`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            data.forEach(orden => {
+                divEntregadas.innerHTML +=
+                    `
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card-motorista-orden" onclick="modalOrdenesEstado()">
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="d-flex flex-row align-items-center h-100">
+                                    <div>
+                                        <h6 class="degradado-naranja m-0">${orden}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col"><img class="img-fluid card-motorista-orden-imagen"
+                                    src="assets/img/empresas/local/burger-king.jpg" /></div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        }
+        ).catch(err => {
+            console.log(err);
+    }
+    );
+
+
 }
