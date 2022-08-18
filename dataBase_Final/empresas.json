@@ -1,232 +1,182 @@
-[{
-  "_id": {
-    "$oid": "62f66f3fba9dd13936b475ff"
-  },
-  "nombre": "Burger King",
-  "correo": "burgerking@gmail.com",
-  "telefono": "+50432311234",
-  "contraseña": "BK123456",
-  "categoria": "Comida Rápida",
-  "descripcion": "Burger King es una cadena de restaurantes de comida rápida estadounidense, especializada en hamburguesas. Fue fundada en 1954 en Jacksonville.",
-  "logo": "burger-king.png",
-  "banner": "burger-king.jpg",
-  "local": "burger-king.jpg",
-  "productos": [
-    {
-      "_id": {
-        "$oid": "62f66f3fba9dd13936b47600"
-      },
-      "nombre": "Whopper",
-      "imagen": "whooper.jpg",
-      "precio": 50
-    },
-    {
-      "_id": {
-        "$oid": "62f66f3fba9dd13936b47601"
-      },
-      "nombre": "Whopper Jr.",
-      "imagen": "whooper-jr.jpg",
-      "precio": 40
-    }
-  ],
-  "reseñas": [
-    {
-      "_id": {
-        "$oid": "62f66f3fba9dd13936b47602"
-      },
-      "usuario": {
-        "$oid": "62f676caba9dd13936b4761b"
-      },
-      "comentario": "Muy buena comida",
-      "puntuacion": 5
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f670acba9dd13936b47603"
-  },
-  "nombre": "Pizza Hut",
-  "correo": "pizzahut@gmail.com",
-  "telefono": "+5041234567",
-  "contraseña": "PH123456",
-  "categoria": "Familiar",
-  "descripcion": "Pizza Hut es una cadena de restaurantes de comida rápida estadounidense, especializada en pizzas. Fue fundada en 1958 en Wichita, Kansas.",
-  "logo": "pizza-hut.png",
-  "banner": "pizza-hut.jpg",
-  "local": "pizza-hut.jpg",
-  "productos": [
-    {
-      "_id": {
-        "$oid": "62f670acba9dd13936b47604"
-      },
-      "nombre": "Pizza de Pepperoni",
-      "imagen": "pizza-pepperoni.jpg",
-      "precio": 50
-    }
-  ],
-  "reseñas": [
-    {
-      "_id": {
-        "$oid": "62f670acba9dd13936b47605"
-      },
-      "usuario": {
-        "$oid": "62f6773bba9dd13936b4761d"
-      },
-      "comentario": "Muy buena pizza",
-      "puntuacion": 4
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f672acba9dd13936b4760c"
-  },
-  "nombre": "Subway",
-  "correo": "subway@gmail.com",
-  "telefono": "+50487654321",
-  "contraseña": "SW123456",
-  "categoria": "Comida Rápida",
-  "descripcion": "Subway es una cadena de restaurantes de comida rápida estadounidense, especializada en sándwiches. Fue fundada en 1965 en Bridgeport, Connecticut.",
-  "logo": "sub-way.png",
-  "banner": "sub-way.jpg",
-  "local": "sub-way.jpg",
-  "productos": [
-    {
-      "_id": {
-        "$oid": "62f672acba9dd13936b4760d"
-      },
-      "nombre": "Subway Club",
-      "imagen": "subway-club.jpg",
-      "precio": 50
-    },
-    {
-      "_id": {
-        "$oid": "62f672acba9dd13936b4760e"
-      },
-      "nombre": "Subway Melt",
-      "imagen": "subway-melt.jpg",
-      "precio": 25
-    },
-    {
-      "_id": {
-        "$oid": "62f672acba9dd13936b4760f"
-      },
-      "nombre": "Subway Veggie Delite",
-      "imagen": "subway-veggie-delite.jpg",
-      "precio": 30
-    },
-    {
-      "_id": {
-        "$oid": "62f672acba9dd13936b47610"
-      },
-      "nombre": "Subway Tuna",
-      "imagen": "subway-tuna.jpg",
-      "precio": 40
-    }
-  ],
-  "reseñas": [
-    {
-      "_id": {
-        "$oid": "62f672acba9dd13936b47611"
-      },
-      "usuario": {
-        "$oid": "62f67793ba9dd13936b4761f"
-      },
-      "comentario": "No me gusto mucho",
-      "puntuacion": 2
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f67342ba9dd13936b47612"
-  },
-  "nombre": "Wendy's",
-  "correo": "wendy@gmail.com",
-  "telefono": "+50412345678",
-  "contraseña": "W1234567",
-  "categoria": "Comida Rápida",
-  "descripcion": "Subway es una cadena de restaurantes de comida rápida estadounidense, especializada en sándwiches. Fue fundada en 1965 en Bridgeport, Connecticut.",
-  "logo": "sub-way.png",
-  "banner": "sub-way.jpg",
-  "local": "sub-way.jpg",
-  "productos": [
-    {
-      "_id": {
-        "$oid": "62f67342ba9dd13936b47613"
-      },
-      "nombre": "Subway Club",
-      "imagen": "subway-club.jpg",
-      "precio": 50
-    },
-    {
-      "_id": {
-        "$oid": "62f67342ba9dd13936b47614"
-      },
-      "nombre": "Subway Melt",
-      "imagen": "subway-melt.jpg",
-      "precio": 25
-    },
-    {
-      "_id": {
-        "$oid": "62f67342ba9dd13936b47615"
-      },
-      "nombre": "Subway Veggie Delite",
-      "imagen": "subway-veggie-delite.jpg",
-      "precio": 30
-    },
-    {
-      "_id": {
-        "$oid": "62f67342ba9dd13936b47616"
-      },
-      "nombre": "Subway Tuna",
-      "imagen": "subway-tuna.jpg",
-      "precio": 40
-    }
-  ],
-  "reseñas": [
-    {
-      "_id": {
-        "$oid": "62f67342ba9dd13936b47617"
-      },
-      "usuario": {
-        "$oid": "62f67836ba9dd13936b47621"
-      },
-      "comentario": "Subway lo mejor",
-      "puntuacion": 5
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f674c8ba9dd13936b47618"
-  },
-  "nombre": "Restaurante Geranium",
-  "correo": "geranium@gmail.com",
-  "telefono": "+50423645678",
-  "contraseña": "G1234567",
-  "categoria": "Buffet",
-  "descripcion": "Restaurante de comida internacional, especializado en comida italiana.",
-  "logo": "geranium.png",
-  "banner": "geranium.jpg",
-  "local": "geranium.jpg",
-  "productos": [
-    {
-      "_id": {
-        "$oid": "62f674c8ba9dd13936b47619"
-      },
-      "nombre": "Plato de pasta",
-      "imagen": "plato-pasta.jpg",
-      "precio": 50
-    }
-  ],
-  "reseñas": [
-    {
-      "_id": {
-        "$oid": "62f674c8ba9dd13936b4761a"
-      },
-      "usuario": {
-        "$oid": "62f678beba9dd13936b47623"
-      },
-      "comentario": "Es muy caro",
-      "puntuacion": 2
-    }
-  ]
-}]
+{
+    "_id" : ObjectId("62f66f3fba9dd13936b475ff"),
+    "nombre" : "Burger King",
+    "correo" : "burgerking@gmail.com",
+    "telefono" : "+50432311234",
+    "contraseña" : "Bk123456",
+    "categoria" : "Comida Rápida",
+    "descripcion" : "Burger King es una cadena de restaurantes de comida rápida estadounidense, especializada en hamburguesas. Fue fundada en 1954 en Jacksonville.",
+    "logo" : "burger-king.png",
+    "banner" : "burger-king.jpg",
+    "local" : "burger-king.jpg",
+    "productos" : [
+        {
+            "_id" : ObjectId("62f66f3fba9dd13936b47600"),
+            "nombre" : "Whopper",
+            "imagen" : "whooper.jpg",
+            "precio" : "48"
+        },
+        {
+            "_id" : ObjectId("62f66f3fba9dd13936b47601"),
+            "nombre" : "Whopper Jr.",
+            "imagen" : "whooper-jr.jpg",
+            "precio" : "40"
+        }
+    ],
+    "reseñas" : [
+        {
+            "_id" : ObjectId("62f66f3fba9dd13936b47602"),
+            "usuario" : ObjectId("62f676caba9dd13936b4761b"),
+            "comentario" : "Muy buena comida",
+            "puntuacion" : NumberInt(5)
+        }
+    ]
+}
+{
+    "_id" : ObjectId("62f670acba9dd13936b47603"),
+    "nombre" : "Pizza Hut",
+    "correo" : "pizzahut@gmail.com",
+    "telefono" : "+50489784523",
+    "contraseña" : "Ph123456",
+    "categoria" : "Familiar",
+    "descripcion" : "Pizza Hut es una cadena de restaurantes de comida rápida estadounidense, especializada en pizzas. Fue fundada en 1958 en Wichita, Kansas.",
+    "logo" : "pizza-hut.png",
+    "banner" : "pizza-hut.jpg",
+    "local" : "pizza-hut.jpg",
+    "productos" : [
+        {
+            "_id" : ObjectId("62f670acba9dd13936b47604"),
+            "nombre" : "Pizza de Pepperoni",
+            "imagen" : "pizza-pepperoni.jpg",
+            "precio" : NumberInt(50)
+        }
+    ],
+    "reseñas" : [
+        {
+            "_id" : ObjectId("62f670acba9dd13936b47605"),
+            "usuario" : ObjectId("62f6773bba9dd13936b4761d"),
+            "comentario" : "Muy buena pizza",
+            "puntuacion" : NumberInt(4)
+        }
+    ]
+}
+{
+    "_id" : ObjectId("62f672acba9dd13936b4760c"),
+    "nombre" : "Subway",
+    "correo" : "subway@gmail.com",
+    "telefono" : "+50487654321",
+    "contraseña" : "Sw123456",
+    "categoria" : "Comida Rápida",
+    "descripcion" : "Subway es una cadena de restaurantes de comida rápida estadounidense, especializada en sándwiches. Fue fundada en 1965 en Bridgeport, Connecticut.",
+    "logo" : "sub-way.png",
+    "banner" : "sub-way.jpg",
+    "local" : "sub-way.jpg",
+    "productos" : [
+        {
+            "_id" : ObjectId("62f672acba9dd13936b4760d"),
+            "nombre" : "Subway Club",
+            "imagen" : "subway-club.jpg",
+            "precio" : NumberInt(50)
+        },
+        {
+            "_id" : ObjectId("62f672acba9dd13936b4760e"),
+            "nombre" : "Subway Melt",
+            "imagen" : "subway-melt.jpg",
+            "precio" : NumberInt(25)
+        },
+        {
+            "_id" : ObjectId("62f672acba9dd13936b4760f"),
+            "nombre" : "Subway Veggie Delite",
+            "imagen" : "subway-veggie-delite.jpg",
+            "precio" : NumberInt(30)
+        },
+        {
+            "_id" : ObjectId("62f672acba9dd13936b47610"),
+            "nombre" : "Subway Tuna",
+            "imagen" : "subway-tuna.jpg",
+            "precio" : NumberInt(40)
+        }
+    ],
+    "reseñas" : [
+        {
+            "_id" : ObjectId("62f672acba9dd13936b47611"),
+            "usuario" : ObjectId("62f67793ba9dd13936b4761f"),
+            "comentario" : "No me gustó mucho",
+            "puntuacion" : NumberInt(2)
+        }
+    ]
+}
+{
+    "_id" : ObjectId("62f67342ba9dd13936b47612"),
+    "nombre" : "Wendy's",
+    "correo" : "wendy@gmail.com",
+    "telefono" : "+50412345678",
+    "contraseña" : "Wd1234567",
+    "categoria" : "Comida Rápida",
+    "descripcion" : "Esto es Wendy's",
+    "logo" : "wendys.png",
+    "banner" : "wendys.jpg",
+    "local" : "wendys.jpg",
+    "productos" : [
+        {
+            "_id" : ObjectId("62f67342ba9dd13936b47613"),
+            "nombre" : "Empaderado",
+            "imagen" : "subway-club.jpg",
+            "precio" : NumberInt(50)
+        },
+        {
+            "_id" : ObjectId("62f67342ba9dd13936b47614"),
+            "nombre" : "Subway Melt",
+            "imagen" : "subway-melt.jpg",
+            "precio" : NumberInt(25)
+        },
+        {
+            "_id" : ObjectId("62f67342ba9dd13936b47615"),
+            "nombre" : "Subway Veggie Delite",
+            "imagen" : "subway-veggie-delite.jpg",
+            "precio" : NumberInt(30)
+        },
+        {
+            "_id" : ObjectId("62f67342ba9dd13936b47616"),
+            "nombre" : "Subway Tuna",
+            "imagen" : "subway-tuna.jpg",
+            "precio" : NumberInt(40)
+        }
+    ],
+    "reseñas" : [
+        {
+            "_id" : ObjectId("62f67342ba9dd13936b47617"),
+            "usuario" : ObjectId("62f67836ba9dd13936b47621"),
+            "comentario" : "Subway lo mejor",
+            "puntuacion" : NumberInt(5)
+        }
+    ]
+}
+{
+    "_id" : ObjectId("62f674c8ba9dd13936b47618"),
+    "nombre" : "Restaurante Geranium",
+    "correo" : "geranium@gmail.com",
+    "telefono" : "+50498756231",
+    "contraseña" : "Gu123456",
+    "categoria" : "Buffet",
+    "descripcion" : "Restaurante de comida internacional, especializado en comida italiana.",
+    "logo" : "geranium.png",
+    "banner" : "geranium.jpg",
+    "local" : "geranium.jpg",
+    "productos" : [
+        {
+            "_id" : ObjectId("62f674c8ba9dd13936b47619"),
+            "nombre" : "Plato de pasta",
+            "imagen" : "plato-pasta.jpg",
+            "precio" : NumberInt(50)
+        }
+    ],
+    "reseñas" : [
+        {
+            "_id" : ObjectId("62f674c8ba9dd13936b4761a"),
+            "usuario" : ObjectId("62f678beba9dd13936b47623"),
+            "comentario" : "Es muy caro",
+            "puntuacion" : NumberInt(2)
+        }
+    ]
+}

@@ -1,73 +1,37 @@
-[{
-  "_id": {
-    "$oid": "62f67abbba9dd13936b47627"
-  },
-  "nombre": "Cristian",
-  "apellido": "Ramirez",
-  "correo": "cris@gmail.com",
-  "contraseña": "Cris1234",
-  "aprobado": true,
-  "imagen": "10.jpg",
-  "ordenes": [
-    {
-      "tomadas": [
-        {
-          "$oid": "62f6825eba9dd13936b47631"
-        }
-      ],
-      "entregadas": [
-        {
-          "$oid": "62f6825eba9dd13936b47630"
-        }
-      ]
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f67af3ba9dd13936b47628"
-  },
-  "nombre": "Mauricio",
-  "apellido": "Avila",
-  "correo": "mavila1234@gmail.com",
-  "contraseña": "Mauricio1234",
-  "aprobado": true,
-  "imagen": "11.jpg",
-  "ordenes": [
-    {
-      "tomadas": [],
-      "entregadas": []
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f67b29ba9dd13936b47629"
-  },
-  "nombre": "Ramiro",
-  "apellido": "Gonzalez",
-  "correo": "goramiro12@gmail.com",
-  "contraseña": "Ramiro1234",
-  "aprobado": false,
-  "imagen": "12.jpg",
-  "ordenes": [
-    {
-      "tomadas": [],
-      "entregadas": []
-    }
-  ]
-},{
-  "_id": {
-    "$oid": "62f67b6eba9dd13936b4762a"
-  },
-  "nombre": "Eduardo",
-  "apellido": "Garcia",
-  "correo": "edgardr@gmail.com",
-  "contraseña": "Eduardo1234",
-  "aprobado": false,
-  "imagen": "9.jpg",
-  "ordenes": [
-    {
-      "tomadas": [],
-      "entregadas": []
-    }
-  ]
-}]
+{
+    "_id" : ObjectId("62fdd024e302607fae85ee14"),
+    "nombre" : "Maria",
+    "apellido" : "Martinez",
+    "correo" : "maria@gmail.com",
+    "contraseña" : "Maria12345",
+    "imagen" : "05.jpg",
+    "identificacion" : "0816-2001-00222",
+    "ordenes" : {
+        "entregadas" : [
+            "62fdce36e302607fae85edb4",
+            "62fdd12ae302607fae85eed4"
+        ],
+        "tomadas" : [
+            "62fdd0fce302607fae85eeac"
+        ]
+    },
+    "__v" : NumberInt(0)
+}
+{
+    "_id" : ObjectId("62fdd08ae302607fae85ee4b"),
+    "nombre" : "Francisco",
+    "apellido" : "Rosa",
+    "correo" : "dso@gmail.com",
+    "contraseña" : "Yamir12345",
+    "imagen" : "07.jpg",
+    "identificacion" : "3212-3213-32132",
+    "ordenes" : {
+        "entregadas" : [
+
+        ],
+        "tomadas" : [
+
+        ]
+    },
+    "__v" : NumberInt(0)
+}

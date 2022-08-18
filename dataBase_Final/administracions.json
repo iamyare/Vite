@@ -1,269 +1,208 @@
-[{
-  "_id": {
-    "$oid": "62f6825eba9dd13936b4762b"
-  },
-  "nombre": "adm",
-  "contraseña": "adm",
-  "motoristas": {
-    "aprobados": [
-      {
-        "$oid": "62f67abbba9dd13936b47627"
-      },
-      {
-        "$oid": "62f67af3ba9dd13936b47628"
-      }
+{
+    "_id" : ObjectId("62f6825eba9dd13936b4762b"),
+    "nombre" : "adm",
+    "contraseña" : "adm",
+    "motoristas" : {
+        "aprobados" : [
+            ObjectId("62fdd024e302607fae85ee14"),
+            ObjectId("62fdd08ae302607fae85ee4b")
+        ],
+        "pendientes" : [
+
+        ],
+        "rechazados" : [
+
+        ]
+    },
+    "clientes" : [
+
     ],
-    "pendientes": [
-      {
-        "$oid": "62f67b29ba9dd13936b47629"
-      }
+    "proveedores" : [
+        ObjectId("62f66f3fba9dd13936b475ff"),
+        ObjectId("62f670acba9dd13936b47603"),
+        ObjectId("62f672acba9dd13936b4760c"),
+        ObjectId("62f67342ba9dd13936b47612"),
+        ObjectId("62f674c8ba9dd13936b47618")
     ],
-    "rechazados": [
-      {
-        "$oid": "62f67b6eba9dd13936b4762a"
-      }
+    "ordenes" : [
+        {
+            "_id" : ObjectId("62fdce36e302607fae85edb4"),
+            "estado" : "en el destino",
+            "direccion" : {
+                "latitud" : "124",
+                "longitud" : "124",
+                "direccion" : "Csa Naranja"
+            },
+            "productos" : [
+                {
+                    "producto" : ObjectId("62f66f3fba9dd13936b47601"),
+                    "cantidad" : NumberInt(1)
+                },
+                {
+                    "producto" : ObjectId("62f670acba9dd13936b47604"),
+                    "cantidad" : NumberInt(1)
+                }
+            ],
+            "factura" : {
+                "tarjeta" : "MasterCard",
+                "numeroTarjeta" : "5123456789012345",
+                "fechaVencimiento" : "12/22",
+                "codigoSeguridad" : "123",
+                "nombreTitular" : "Yamir Rodas",
+                "subtotal" : "90",
+                "total" : "108",
+                "comision" : {
+                    "motorista" : 1.35,
+                    "adm" : 3.15
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62fdd0fce302607fae85eeac"),
+            "estado" : "tomada",
+            "direccion" : {
+                "latitud" : "321",
+                "longitud" : "321",
+                "direccion" : "Casa Rosa"
+            },
+            "productos" : [
+                {
+                    "producto" : ObjectId("62f66f3fba9dd13936b47600"),
+                    "cantidad" : NumberInt(1)
+                }
+            ],
+            "factura" : {
+                "tarjeta" : "Visa",
+                "numeroTarjeta" : "4123456789012345",
+                "fechaVencimiento" : "02/2112",
+                "codigoSeguridad" : "123",
+                "nombreTitular" : "Ronald",
+                "subtotal" : "48",
+                "total" : "57.6",
+                "comision" : {
+                    "motorista" : 0.7200000000000002,
+                    "adm" : 1.6800000000000004
+                }
+            }
+        },
+        {
+            "_id" : ObjectId("62fdd12ae302607fae85eed4"),
+            "estado" : "en el destino",
+            "direccion" : {
+                "latitud" : "213",
+                "longitud" : "213",
+                "direccion" : "Csa al lado de la rosa"
+            },
+            "productos" : [
+                {
+                    "producto" : ObjectId("62f67342ba9dd13936b47613"),
+                    "cantidad" : NumberInt(1)
+                },
+                {
+                    "producto" : ObjectId("62f67342ba9dd13936b47616"),
+                    "cantidad" : NumberInt(1)
+                },
+                {
+                    "producto" : ObjectId("62f67342ba9dd13936b47615"),
+                    "cantidad" : NumberInt(1)
+                },
+                {
+                    "producto" : ObjectId("62f672acba9dd13936b4760e"),
+                    "cantidad" : NumberInt(1)
+                },
+                {
+                    "producto" : ObjectId("62f672acba9dd13936b4760d"),
+                    "cantidad" : NumberInt(1)
+                },
+                {
+                    "producto" : ObjectId("62f672acba9dd13936b47610"),
+                    "cantidad" : NumberInt(1)
+                }
+            ],
+            "factura" : {
+                "tarjeta" : "Visa",
+                "numeroTarjeta" : "4123456789012345",
+                "fechaVencimiento" : "12/2321",
+                "codigoSeguridad" : "123",
+                "nombreTitular" : "Jose",
+                "subtotal" : "235",
+                "total" : "282",
+                "comision" : {
+                    "motorista" : 3.525,
+                    "adm" : 8.225
+                }
+            }
+        }
+    ],
+    "tarjetas" : [
+        "visa",
+        "mastercard",
+        "american express"
+    ],
+    "categorias" : [
+        "Buffet",
+        "Comida Rapida",
+        "Familiar"
+    ],
+    "estados" : [
+        "en el origen",
+        "en camino",
+        "tomada",
+        "en el destino"
     ]
-  },
-  "clientes": [
-    {
-      "$oid": "62f676caba9dd13936b4761b"
+}
+{
+    "_id" : ObjectId("62fdd0a3aff05d0bf5730133"),
+    "__v" : NumberInt(0),
+    "categorias" : [
+
+    ],
+    "clientes" : [
+
+    ],
+    "estados" : [
+
+    ],
+    "motoristas" : {
+        "aprobados" : [
+            ObjectId("62fdd024e302607fae85ee14"),
+            ObjectId("62fdd08ae302607fae85ee4b")
+        ]
     },
-    {
-      "$oid": "62f6773bba9dd13936b4761d"
+    "ordenes" : [
+
+    ],
+    "proveedores" : [
+
+    ],
+    "tarjetas" : [
+
+    ]
+}
+{
+    "_id" : ObjectId("62fdd0deaff05d0bf5730179"),
+    "__v" : NumberInt(0),
+    "categorias" : [
+
+    ],
+    "clientes" : [
+
+    ],
+    "estados" : [
+
+    ],
+    "motoristas" : {
+        "aprobados" : [
+            ObjectId("62fdd024e302607fae85ee14")
+        ]
     },
-    {
-      "$oid": "62f67793ba9dd13936b4761f"
-    },
-    {
-      "$oid": "62f67836ba9dd13936b47621"
-    },
-    {
-      "$oid": "62f678beba9dd13936b47623"
-    },
-    {
-      "$oid": "62f67922ba9dd13936b47625"
-    }
-  ],
-  "proveedores": [
-    {
-      "$oid": "62f66f3fba9dd13936b475ff"
-    },
-    {
-      "$oid": "62f670acba9dd13936b47603"
-    },
-    {
-      "$oid": "62f672acba9dd13936b4760c"
-    },
-    {
-      "$oid": "62f67342ba9dd13936b47612"
-    },
-    {
-      "$oid": "62f674c8ba9dd13936b47618"
-    }
-  ],
-  "ordenes": [
-    {
-      "_id": {
-        "$oid": "62f6825eba9dd13936b4762c"
-      },
-      "estado": "en el origen",
-      "direccion": {
-        "latitud": 14.123456,
-        "longitud": -87.123456
-      },
-      "productos": [
-        {
-          "$oid": "62f66f3fba9dd13936b47600"
-        },
-        {
-          "$oid": "62f66f3fba9dd13936b47601"
-        },
-        {
-          "$oid": "62f670acba9dd13936b47604"
-        }
-      ],
-      "factura": {
-        "tarjeta": "visa",
-        "numeroTarjeta": "123456789",
-        "fechaVencimiento": "12/12/2020",
-        "codigoSeguridad": "123",
-        "nombreTitular": "Roberto Perez",
-        "subtotal": "1000",
-        "total": "1200",
-        "comision": {
-          "motorista": "100",
-          "adm": "100"
-        }
-      },
-      "total": -1
-    },
-    {
-      "_id": {
-        "$oid": "62f6825eba9dd13936b4762d"
-      },
-      "estado": "en el origen",
-      "direccion": {
-        "latitud": 14.123456,
-        "longitud": -87.123456
-      },
-      "productos": [
-        {
-          "$oid": "62f672acba9dd13936b4760d"
-        },
-        {
-          "$oid": "62f67342ba9dd13936b47613"
-        }
-      ],
-      "factura": {
-        "tarjeta": "visa",
-        "numeroTarjeta": "123456789",
-        "fechaVencimiento": "12/12/2020",
-        "codigoSeguridad": "123",
-        "nombreTitular": "Miguel Sanchez",
-        "subtotal": "1000",
-        "total": "1200",
-        "comision": {
-          "motorista": "100",
-          "adm": "100"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "62f6825eba9dd13936b4762e"
-      },
-      "estado": "en el origen",
-      "direccion": {
-        "latitud": 14.123456,
-        "longitud": -87.123456
-      },
-      "productos": [
-        {
-          "$oid": "62f672acba9dd13936b4760d"
-        },
-        {
-          "$oid": "62f67342ba9dd13936b47614"
-        },
-        {
-          "$oid": "62f67342ba9dd13936b47615"
-        }
-      ],
-      "factura": {
-        "tarjeta": "visa",
-        "numeroTarjeta": "123456789",
-        "fechaVencimiento": "12/12/2020",
-        "codigoSeguridad": "123",
-        "nombreTitular": "Miguel Sanchez",
-        "subtotal": "1000",
-        "total": "1200",
-        "comision": {
-          "motorista": "100",
-          "adm": "100"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "62f6825eba9dd13936b4762f"
-      },
-      "estado": "en el origen",
-      "direccion": {
-        "latitud": 14.123456,
-        "longitud": -87.123456
-      },
-      "productos": [
-        {
-          "$oid": "62f67342ba9dd13936b47616"
-        }
-      ],
-      "factura": {
-        "tarjeta": "visa",
-        "numeroTarjeta": "123456789",
-        "fechaVencimiento": "12/12/2020",
-        "codigoSeguridad": "123",
-        "nombreTitular": "Miguel Sanchez",
-        "subtotal": "1000",
-        "total": "1200",
-        "comision": {
-          "motorista": "100",
-          "adm": "100"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "62f6825eba9dd13936b47630"
-      },
-      "estado": "en el destino",
-      "direccion": {
-        "latitud": 14.123456,
-        "longitud": -87.123456
-      },
-      "productos": [
-        {
-          "$oid": "62f67342ba9dd13936b47616"
-        },
-        {
-          "$oid": "62f67342ba9dd13936b47615"
-        }
-      ],
-      "factura": {
-        "tarjeta": "visa",
-        "numeroTarjeta": "123456789",
-        "fechaVencimiento": "12/12/2020",
-        "codigoSeguridad": "123",
-        "nombreTitular": "Miguel Sanchez",
-        "subtotal": "1000",
-        "total": "1200",
-        "comision": {
-          "motorista": "100",
-          "adm": "100"
-        }
-      }
-    },
-    {
-      "_id": {
-        "$oid": "62f6825eba9dd13936b47631"
-      },
-      "estado": "tomada",
-      "direccion": {
-        "latitud": 14.123456,
-        "longitud": -87.123456
-      },
-      "productos": [
-        {
-          "$oid": "62f674c8ba9dd13936b47619"
-        }
-      ],
-      "factura": {
-        "tarjeta": "visa",
-        "numeroTarjeta": "123456789",
-        "fechaVencimiento": "12/12/2020",
-        "codigoSeguridad": "123",
-        "nombreTitular": "Miguel Sanchez",
-        "subtotal": "1000",
-        "total": "1200",
-        "comision": {
-          "motorista": "100",
-          "adm": "100"
-        }
-      }
-    }
-  ],
-  "tarjetas": [
-    "visa",
-    "mastercard",
-    "american express"
-  ],
-  "categorias": [
-    "Buffet",
-    "Comida Rapida",
-    "Familiar"
-  ],
-  "estados": [
-    "en el origen",
-    "en camino",
-    "tomada",
-    "en el destino"
-  ]
-}]
+    "ordenes" : [
+
+    ],
+    "proveedores" : [
+
+    ],
+    "tarjetas" : [
+
+    ]
+}
