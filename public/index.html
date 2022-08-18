@@ -50,17 +50,13 @@
                             <a class="nav-link active" href="/">Inicio</a>
                         </li>
 
-                        <!-- Nav item 3 Pages -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/productos">Productos</a>
-                        </li>
                         <!-- Nav item 4 Pages -->
                         <li class="nav-item">
-                            <a class="nav-link" href="/categorias">Categorias</a>
+                            <a class="nav-link" href="#categorias">Categorias</a>
                         </li>
                         <!-- Nav item 5 Pages -->
                         <li class="nav-item">
-                            <a class="nav-link" href="/sobre-nosotros">Sobre Nosotros</a>
+                            <a class="nav-link" href="#">Sobre Nosotros</a>
                         </li>
                     </ul>
                     <!-- Nav Main menu END -->
@@ -123,7 +119,7 @@
                         </li>
 
                         <li id="divCerrarSesion" style="display: none;">
-                            <a class="dropdown-item bg-danger-soft-hover" href="/log-out"><i
+                            <a class="dropdown-item bg-danger-soft-hover" onclick="cerrarSesion()"><i
                                     class="bi bi-power fa-fw me-2"></i>Cerrar sesión</a>
                         </li>
 
@@ -175,7 +171,7 @@
                                     impedit?</p>
 
                                 <a href="/login" style="all: unset;">
-                                    <button class="btn btn-orange btn-lg2 and-icon" id="btnComenzar">Comenzar<i
+                                    <button class="btn btn-orange btn-lg2 and-icon" id="btnComenzar"type="button" onclick="divIniciarSesion()">Comenzar<i
                                             class="fa-solid fa-angle-right"></i></button>
                                 </a>
                             </div>
@@ -189,7 +185,7 @@
                 </section>
 
                 <!-- Categorias destacadas -->
-                <section class="container-fluid">
+                <section class="container-fluid" id="categorias">
                     <div class="row">
                         <div class="col-lg-8 mx-auto text-center">
                             <h2 class="fs-1">Categorías Destacadas</h2>
@@ -204,11 +200,12 @@
                     <!-- Categorias -->
                     <div class="container-fluid d-flex justify-content-center">
                         <div class="scrolling-wrapper row flex-row flex-nowrap my-4">
+
                             <!-- Card 1 -->
-                            <div class="card-category position-relative">
+                            <div class="card-category position-relative" onclick="verCartegorias('Familiar')">
                                 <div class="w-100 d-flex justify-content-center">
                                     <div class="position-absolute btn-category bottom-0">
-                                        <a href="#">Familiar</a>
+                                        <a>Familiar</a>
                                         <span class="btn-arrow">
                                             <i class="fa-solid fa-arrow-right"></i>
                                         </span>
@@ -218,8 +215,9 @@
                                     src="assets/img/recursos/otros/categoria-familiar.jpg" alt="">
                             </div>
                             <!-- Card 1 Fin -->
+
                             <!-- Card 1 -->
-                            <div class="card-category position-relative">
+                            <div class="card-category position-relative" onclick="verCartegorias('Buffets')">
                                 <div class="w-100 d-flex justify-content-center">
                                     <div class="position-absolute btn-category bottom-0">
                                         <a href="#">Buffets</a>
@@ -232,8 +230,9 @@
                                     src="assets/img/recursos/otros/categoria-buffet.jpg" alt="">
                             </div>
                             <!-- Card 1 Fin -->
+
                             <!-- Card 1 -->
-                            <div class="card-category position-relative">
+                            <div class="card-category position-relative"onclick="verCartegorias('Comida Rápida')">
                                 <div class="w-100 d-flex justify-content-center">
                                     <div class="position-absolute btn-category bottom-0">
                                         <a href="#">Comida rápida</a>
@@ -253,7 +252,7 @@
                 </section>
 
                 <!-- Ofertas especiales de hoy -->
-                <section class="container-fluid">
+                <section class="container-fluid" style="display: none;">
                     <div class="row mt-4 mb-4">
                         <div class="col-lg-8 mx-auto text-center">
                             <h2 class="fs-1">Ofertas especiales de hoy</h2>
@@ -1167,6 +1166,50 @@
 
     <!--Modales-->
     <section>
+
+        <!--Modal Categorias comida-->
+        <div class="modal fade" id="modal-categorias-comida" tabindex="-1" role="dialog" aria-labelledby="modal-categorias-comida" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title" id="modal-categorias-comida">Categorias de comida</h5>
+                            <h5 class="modal-title" id="modal-categorias-comida-titulo">Familiar</h5>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row gy-4" id="div-categorias-empresas-landing">
+
+                                    <!--Item: Empresas-->
+                                    <div class="col-sm-12 col-md-6 col-xxl-4">
+                                        <div class="card card-proveedores">
+                                            <img class="card-img-top w-100 d-block img-card-proveedores"
+                                                src="assets/img/empresas/banners/burger-king.jpg" />
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h4>Burger Kinng</h4>
+                                                        <p>Descripcion: dsajndnsajdnjasdas</p>
+                                                        <p><i class="fas fa-star icon-reference"></i> 4.8</p>
+                                                    </div><img class="avatar-logo avatar-img" src="assets/img/empresas/logos/burger-king.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Fin Item-->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal Categorias comida-->
+
         <!--Modal editor Motorista-->
         <div class="modal fade" id="modalEditorMotoristaAdministracion" tabindex="-1" aria-labelledby="modalEditorMotoristaAdministracionLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1318,7 +1361,6 @@
                             <option value="pago">Pago</option>
                         </select>
                     </div>
-                    <button onclick="mandarOrden()">Aver</button>
                     <!--Modal Body-->
                     <div class="modal-body">
 
@@ -1532,6 +1574,81 @@
             </div>
         </div>
         <!--/Modal-->
+
+        <!--Modal empresa con Produtos-->
+        <div class="modal fade" id="modalProductosEmpresa" tabindex="-1" aria-labelledby="modalEditorOrdenAdministracionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background-color: rgb(246, 246, 246); box-shadow: 0px 0px 30px rgba(0,0,0,0.5);">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalProductosEmpresanLabel">Productos</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="productos-administracion-modal">
+                            <!--Muestra el banner de la emprea-->
+                            <div class="row">
+                                <div class="col-12">
+                                    <img src="https://via.placeholder.com/1200x300" id="div-banner-empresa" class="img-fluid">
+                                </div>
+                            </div>
+                            <!--Logo, nombre de empresa y descripcion-->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <img src="https://via.placeholder.com/100x100" id="div-logo-empresa" class="avatar-logo avatar-img">
+                                        </div>
+                                        <div class="col-10" id="info-empresas-index">
+                                            <h5 class="m-0">Nombre de la empresa</h5>
+                                            <p class="m-0">Descripcion de la empresa</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <!--Card de productos,  contiene imagen, nombre y precio-->
+                    <div class="container">
+                        <!--Titulo: Productos-->
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="mx-auto">Productos</h3>
+                            </div>
+                        </div>
+                        <div class="row" id="productosEmpresa">
+                            <div class="col-sm-12 col-md-6 col-xxl-4">
+                                <div class="card card-proveedores" onclick="modalEmpresaConOrdenes('${empresas._id}')">
+                                    <img class="card-img-top w-100 d-block img-card-proveedores"
+                                        src="" />
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4>${empresas.nombre}</h4>
+                                                <p>Descripcion: ${empresas.descripcion}</p>
+                                                <p><i class="fas fa-star icon-reference"></i> ${promedio}</p>
+                                            </div>
+                                            <!--Boton añadir al carrito-->
+                                            <div>
+                                                <button class="btn btn-warning" type="button" onclick="modalEmpresaConOrdenes('${empresas._id}')">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </button>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secundary w-100" type="button" data-bs-dismiss="modal" >Cerrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--Modal editar Cliente Administrador-->
         <div class="modal fade" id="modalEditarClienteAdministrador" tabindex="-1" aria-labelledby="modalEditarClienteAdministradorLabel" aria-hidden="true">
@@ -2110,8 +2227,6 @@
             </div>
         </div>
         <!--/Modal-->
-
-
 
         <!--Modal Visaulizar DAtos de Tarjeta-->\
         <div class="modal fade" id="modal-visualizar-datos-tarjeta" tabindex="-3" aria-labelledby="modal-visualizar-datos-tarjeta" aria-hidden="true">

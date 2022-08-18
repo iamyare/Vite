@@ -1,3 +1,4 @@
+
 var administracion = true;
 var ordenSeleccionadaActualmente = null;
 var clienteSeleccionadoActualmente = null;
@@ -64,6 +65,8 @@ const modalEditorEmpresasAdministracion = new bootstrap.Modal("#modalEditorEmpre
 const modalEditorMotoristaAdministracion = new bootstrap.Modal("#modalEditorMotoristaAdministracion");
 const modalVisualizarDatosTarjeta = new bootstrap.Modal("#modal-visualizar-datos-tarjeta");
 const modalCarrito = new bootstrap.Modal("#modal-carrito");
+const modalCategorias = new bootstrap.Modal("#modal-categorias-comida");
+const modalProductosEmpresa = new bootstrap.Modal("#modalProductosEmpresa");
 
 //Divs para rellenar con los datos obtenidos
 const divClientesAdministracion = document.getElementById("contenido-clientes-administracion");
@@ -888,9 +891,27 @@ function eliminarProductoOrden(idProducto){
 
 function agregarItemOrden(idProducto, cantidadProducto){
 
+    if (llamadoDesde == "empresas"){
+        console.log("Llamado desde empresas");
+        let item = {
+            producto: idProducto,
+            cantidad: 1
+        }
+        //http://localhost:3333/cliente/carrito/:idCarrito/producto/:idProducto
+        fetch(`http://localhost:3333/cliente/carrito/${carritoSeleccionadoActualmente}/producto/${idProducto}`, {
+            method: 'PUT',
+            body: JSON.stringify(item),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            llenandoCliente();
+            alert("Producto agregado");
+        }).catch((err) => {
+            console.log(err);
+        });
 
-
-    if (llamadoDesde == "landing page"){
+    }else    if (llamadoDesde == "landing page"){
         console.log("Llamado desde landing page");
         let cantidadPro = document.getElementById(cantidadProducto).value;
         let item = {
@@ -2636,7 +2657,7 @@ function crearCarrito(idCliente){
         if (data.success){
             location.reload();
         } else {
-            alert('No se pudo crear el carrito');
+            console.log('Carrito');
         }
     }).catch(err => {
         console.log(err);
@@ -2825,4 +2846,121 @@ function mandarOrden() {
                     console.log(err);
                 });
         });
+}
+
+
+function verCartegorias(categoria) {
+    if (categoria == "todas") {
+        imprimirModalCategorias('Todas');
+    } else if (categoria == "Familiar") {
+        imprimirModalCategorias('Familiar');
+    } else if (categoria == "Buffets") {
+        imprimirModalCategorias('Buffets');
+    } else if (categoria == "Comida Rápida") {
+        imprimirModalCategorias('Comida Rápida');
+    }
+    modalCategorias.show();
+}
+
+function imprimirModalCategorias(categoria){
+    let div = document.getElementById("div-categorias-empresas-landing");
+    document.getElementById("modal-categorias-comida-titulo").innerHTML = categoria;
+    fetch(`/empresa/categoria/${categoria}`)
+        .then(res => res.json())
+        .then(data => {
+            div.innerHTML = "";
+            //Verificar si empresas esta en 0
+            if (data.length != 0) {
+                data.forEach(empresas => {
+                    //hacer un calculo de las reseñas de la empresa por el promedio de la puntuacion que tiene
+                    let promedio = 0;
+
+                    empresas.reseñas.forEach(review => {
+                        promedio += review.puntuacion;
+                    });
+                    promedio = promedio / empresas.reseñas.length;
+                    div.innerHTML += `
+                    <div class="col-sm-12 col-md-6 col-xxl-4">
+                        <div class="card card-proveedores" onclick="modalEmpresaConOrdenes('${empresas._id}')">
+                            <img class="card-img-top w-100 d-block img-card-proveedores"
+                                src="assets/img/empresas/banners/${empresas.banner}" />
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4>${empresas.nombre}</h4>
+                                        <p>Descripcion: ${empresas.descripcion}</p>
+                                        <p><i class="fas fa-star icon-reference"></i> ${promedio}</p>
+                                    </div><img class="avatar-logo avatar-img" src="assets/img/empresas/logos/${empresas.logo}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+            } else {
+                //Imprime, que no hay empresas en esta categoria, centrado en pantalla
+                div.innerHTML += `
+                <h1 class="text-center">No hay empresas en esta categoria</h1>
+                `;
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+}
+
+function modalEmpresaConOrdenes(idEmpresa){
+
+
+
+    fetch(`/empresa/${idEmpresa}`)
+        .then(res => res.json())
+        .then(empresa => {
+            document.getElementById("div-banner-empresa").src = `assets/img/empresas/banners/${empresa.banner}`;
+            document.getElementById("div-logo-empresa").src = `assets/img/empresas/logos/${empresa.logo}`;
+            document.getElementById("info-empresas-index").innerHTML = 
+            `
+            <h5 class="m-0">${empresa.nombre}</h5>
+            <p class="m-0">${empresa.descripcion}</p>
+            `;
+            productosEmpresa.innerHTML = '';
+            llamadoDesde = 'empresas';
+            empresa.productos.forEach(producto => {
+                productosEmpresa.innerHTML +=
+                `
+                    <div class="col-sm-12 col-md-6 col-xxl-4">
+                        <div class="card card-proveedores">
+                            <img class="card-img-top w-100 d-block img-card-proveedores"
+                                src="assets/img/empresas/productos/${producto.imagen}"/>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4>${producto.nombre}</h4>
+                                    </div>
+                                    <!--Boton añadir al carrito-->
+                                    <div>
+                                        <button class="btn btn-warning" type="button" onclick="agregarItemOrden('${producto._id}')">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+        modalProductosEmpresa.show();   
+        }).catch(err => {
+            console.log(err);
+        });
+
+}
+
+
+
+function cerrarSesion(){
+    //Limpiar el localStorage
+    localStorage.clear();
+    //Redireccionar a la pagina de inicio
+    window.location.href = "/";
 }

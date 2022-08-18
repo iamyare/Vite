@@ -212,5 +212,20 @@ router.put('/:id', (req, res) => {
     );
 });
 
+//Obtener una empresa por su su categoria
+//URL: http://localhost:3333/empresa/categoria/:categoria
+router.get('/categoria/:categoria', (req, res) => {
+    empresas.find({
+        categoria: req.params.categoria
+    })
+    .then((empresa) => {
+        res.send(empresa);
+        res.end();
+    }).catch((err) => {
+        res.send(err);
+        res.end();
+    }
+    );
+});
 
 module.exports = router;
